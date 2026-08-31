@@ -453,7 +453,7 @@
 
     <!-- JAVASCRIPT LOGIC DENGAN KONEKSI GOOGLE SHEETS -->
     <script>
-        // Data Master Petugas Protokol per Tim
+       // 1. Data Master Petugas
 let teamsData = {
     walikota: [
         { id: 1, name: "Ahmad Rifa'i, S.IP", role: "Koordinator Lapangan" },
@@ -470,18 +470,24 @@ let teamsData = {
     penghubung: [
         { id: 9, name: "Budi Santoso, S.STP", role: "Koordinator Penghubung Jakarta" },
         { id: 10, name: "Siska Putri, S.I.Kom", role: "LO Perwakilan Daerah" }
-    ],
+    ]
 };
 
-// Fungsi Render Checkbox Petugas ke dalam Formulir Penugasan
+// 2. Render Checkbox Petugas di Form (Mencegah Duplicate)
 function renderFormOfficers() {
     ['walikota', 'wakil', 'penghubung'].forEach(teamKey => {
         const container = document.getElementById(`container-officers-${teamKey}`);
         if (!container) return;
 
+        if (teamsData[teamKey].length === 0) {
+            container.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-2">Belum ada petugas di tim ini.</p>`;
+            return;
+        }
+
+        // Menggunakan '=' agar menimpa isi lama
         container.innerHTML = teamsData[teamKey].map(officer => `
             <label class="flex items-start space-x-2.5 p-2 bg-white rounded-lg border border-slate-200 hover:border-blue-400 cursor-pointer transition shadow-sm">
-                <input type="checkbox" name="selected-officers" value="${officer.id}" class="mt-0.5 rounded text-protocol-500 focus:ring-protocol-500">
+                <input type="checkbox" name="selected-officers" value="${officer.id}" class="mt-0.5 rounded text-blue-600 focus:ring-blue-500">
                 <div class="text-xs">
                     <p class="font-semibold text-slate-800 leading-tight">${officer.name}</p>
                     <p class="text-[10px] text-slate-500">${officer.role}</p>
@@ -491,7 +497,7 @@ function renderFormOfficers() {
     });
 }
 
-// Fungsi Buka Modal Kelola Tim
+// 3. Kelola Modal Tambah/Hapus Anggota
 function openManageTeamModal(teamKey) {
     document.getElementById('manage-team-key').value = teamKey;
     
@@ -506,7 +512,6 @@ function openManageTeamModal(teamKey) {
     openModal('modalManageTeam');
 }
 
-// Render daftar anggota di dalam modal edit
 function renderManageTeamList(teamKey) {
     const listContainer = document.getElementById('manage-team-list');
     const members = teamsData[teamKey];
@@ -522,45 +527,57 @@ function renderManageTeamList(teamKey) {
                 <p class="font-semibold text-slate-800">${m.name}</p>
                 <p class="text-[10px] text-slate-500">${m.role}</p>
             </div>
-            <button onclick="deleteOfficer('${teamKey}', ${index})" class="text-red-500 hover:text-red-700 px-1.5 py-0.5 text-xs" title="Hapus">
+            <button type="button" onclick="deleteOfficer('${teamKey}', ${index})" class="text-red-500 hover:text-red-700 px-2 py-1 text-xs font-semibold" title="Hapus">
                 <i class="fa-solid fa-trash-can"></i>
             </button>
         </div>
     `).join('');
 }
 
-// Fungsi Tambah Anggota Baru ke Tim
 function handleAddOfficer(e) {
     e.preventDefault();
     const teamKey = document.getElementById('manage-team-key').value;
     const nameInput = document.getElementById('new-officer-name');
     const roleInput = document.getElementById('new-officer-role');
 
-    const newOfficer = {
+    teamsData[teamKey].push({
         id: Date.now(),
         name: nameInput.value,
         role: roleInput.value
-    };
-
-    teamsData[teamKey].push(newOfficer);
+    });
     
     nameInput.value = '';
     roleInput.value = '';
 
     renderManageTeamList(teamKey);
-    renderFormOfficers(); // Perbarui checkbox di formulir
+    renderFormOfficers();
 }
 
-// Fungsi Hapus Anggota Tim
 function deleteOfficer(teamKey, index) {
     if (confirm("Hapus petugas ini dari tim?")) {
         teamsData[teamKey].splice(index, 1);
         renderManageTeamList(teamKey);
-        renderFormOfficers(); // Perbarui checkbox di formulir
+        renderFormOfficers();
     }
 }
 
-// Panggil renderFormOfficers saat halaman dimuat
+// 4. Mencegah Bug Badge Nama Terpisah di Tabel Dashboard
+function renderOfficerBadges(selectedOfficerIds) {
+    // Gabungkan seluruh data petugas dari 3 tim
+    const allOfficers = [...teamsData.walikota, ...teamsData.wakil, ...teamsData.penghubung];
+    
+    // Filter petugas yang dicentang
+    const assignedOfficers = allOfficers.filter(officer => selectedOfficerIds.includes(officer.id));
+
+    // Render Badge utuh tanpa split koma
+    return assignedOfficers.map(officer => `
+        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm">
+            Tim Protokol: ${officer.name}
+        </span>
+    `).join(' ');
+}
+
+// Inisialisasi saat aplikasi pertama dimuat
 document.addEventListener("DOMContentLoaded", function () {
     renderFormOfficers();
 });
