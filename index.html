@@ -453,11 +453,23 @@
 
     <!-- JAVASCRIPT LOGIC DENGAN KONEKSI GOOGLE SHEETS -->
     <script>
-        // BENAR (Menimpa konten lama sehingga tidak duplikat)
-container.innerHTML = teamsData[teamKey].map(officer => `...`).join('');
-
-// SALAH (Akan membuat daftar terduplikasi terus menerus)
-// container.innerHTML += teamsData[teamKey].map(...);
+        // Data Master Petugas Protokol per Tim
+let teamsData = {
+    walikota: [
+        { id: 1, name: "Ahmad Rifa'i, S.IP", role: "Koordinator Lapangan" },
+        { id: 2, name: "Dina Mariana, S.S", role: "Master of Ceremony (MC)" },
+        { id: 3, name: "Reza Rahardian, S.STP", role: "Liaison Officer (LO VIP)" },
+        { id: 4, name: "Hendrik Setiawan, S.IP", role: "Pengawalan & Escort Utama" }
+    ],
+    wakil: [
+        { id: 5, name: "Siti Nurhaliza, S.I.Kom", role: "Koordinator Lapangan" },
+        { id: 6, name: "Fajar Pratama, S.H", role: "Liaison Officer (LO VIP)" },
+        { id: 7, name: "Dewi Lestari, A.Md", role: "Logistik & Souvenir VIP" },
+        { id: 8, name: "Bagus Permana, S.STP", role: "Master of Ceremony (MC)" }
+    ],
+    penghubung: [
+        { id: 9, name: "Budi Santoso, S.STP", role: "Koordinator Penghubung Jakarta" },
+        { id: 10, name: "Siska Putri, S.I.Kom", role: "LO Perwakilan Daerah" }
 };
 
 // Fungsi Render Checkbox Petugas ke dalam Formulir Penugasan
