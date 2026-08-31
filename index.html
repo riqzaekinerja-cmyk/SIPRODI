@@ -69,13 +69,16 @@
                     <div class="h-6 w-px bg-slate-700 hidden sm:block"></div>
 
                     <!-- User Info -->
-                    <div class="flex items-center space-x-3">
-                        <div class="text-right hidden sm:block">
-                            <p class="text-sm font-semibold leading-none">Bambang Wijaya, S.STP</p>
-                            <span class="text-xs text-protocol-gold font-medium">Kasubag Agenda & Protokol</span>
-                        </div>
-                        <img class="h-9 w-9 rounded-full border-2 border-protocol-gold object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Foto Profil Kasubag">
-                    </div>
+                   <div onclick="openProfileModal()" class="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition p-1.5 rounded-lg hover:bg-slate-700/50" title="Klik untuk edit profil">
+    <div class="text-right hidden sm:block">
+        <p class="text-sm font-semibold leading-none" id="user-display-name">Bambang Wijaya, S.STP</p>
+        
+        <span class="text-xs text-protocol-gold font-medium" id="user-display-role">Kasubag Agenda & Protokol</span>
+    </div>
+    
+    <img id="user-display-avatar" class="h-9 w-9 rounded-full border-2 border-protocol-gold object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Foto Profil Kasubag">
+</div>
+                    
                 </div>
             </div>
         </div>
@@ -403,6 +406,37 @@
 
     <!-- JAVASCRIPT LOGIC DENGAN KONEKSI GOOGLE SHEETS -->
     <script>
+        // State data pengguna aktif
+let currentUser = {
+    name: "Bambang Wijaya, S.STP",
+    role: "Kasubag Agenda & Protokol",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
+};
+
+// Fungsi membuka modal & mengisi nilai input awal
+function openProfileModal() {
+    document.getElementById('input-profile-name').value = currentUser.name;
+    document.getElementById('input-profile-role').value = currentUser.role;
+    document.getElementById('input-profile-avatar').value = currentUser.avatar;
+    openModal('modalProfile');
+}
+
+// Fungsi menyimpan perubahan profil
+function handleSaveProfile(e) {
+    e.preventDefault();
+
+    currentUser.name = document.getElementById('input-profile-name').value;
+    currentUser.role = document.getElementById('input-profile-role').value;
+    currentUser.avatar = document.getElementById('input-profile-avatar').value;
+
+    // Perbarui UI di Top Navbar secara instan
+    document.getElementById('user-display-name').innerText = currentUser.name;
+    document.getElementById('user-display-role').innerText = currentUser.role;
+    document.getElementById('user-display-avatar').src = currentUser.avatar;
+
+    closeModal('modalProfile');
+    alert("Profil berhasil diperbarui!");
+}
         // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwC5nvKlLDx4YsYTedhUxlnW2DIDF2x4hf5B3_ya7oQLForiMiE5cO8WWp8GZj5V5to/exec";
 
@@ -843,5 +877,40 @@
         function openModal(modalId) { document.getElementById(modalId).classList.remove('hidden'); }
         function closeModal(modalId) { document.getElementById(modalId).classList.add('hidden'); }
     </script>
+    <div id="modalProfile" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md flex flex-col overflow-hidden">
+        <div class="bg-protocol-500 text-white px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-user-pen text-protocol-gold"></i>
+                <h3 class="font-bold text-base">Edit Profil Pengguna</h3>
+            </div>
+            <button onclick="closeModal('modalProfile')" class="text-slate-300 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="form-edit-profile" onsubmit="handleSaveProfile(event)" class="p-6 space-y-4 text-xs">
+            <div>
+                <label class="block font-semibold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
+                <input type="text" id="input-profile-name" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block font-semibold text-slate-700 mb-1">Jabatan / Peran</label>
+                <input type="text" id="input-profile-role" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block font-semibold text-slate-700 mb-1">URL Foto Profil</label>
+                <input type="url" id="input-profile-avatar" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+
+            <div class="pt-4 border-t border-slate-200 flex justify-end space-x-2">
+                <button type="button" onclick="closeModal('modalProfile')" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100">Batal</button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-protocol-500 text-white font-semibold hover:bg-protocol-600 shadow-md">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>
