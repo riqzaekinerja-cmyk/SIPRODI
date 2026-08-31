@@ -361,12 +361,59 @@
                         <span>Alokasi Tim Petugas Protokol</span>
                         <span class="text-[10px] text-slate-500 font-normal">Pilih petugas dari Tim Walikota dan/atau Tim Wakil Walikota</span>
                     </label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-blue-50/60 p-3 rounded-xl border border-blue-200 space-y-2">
-                            <div class="flex items-center space-x-2 border-b border-blue-200 pb-2">
-                                <div class="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-user-tie"></i></div>
-                                <h5 class="font-bold text-blue-900 text-xs uppercase tracking-wide">Tim Walikota</h5>
-                            </div>
+                    <div class="mt-4">
+    <div class="flex items-center justify-between mb-2">
+        <label class="block font-bold text-slate-700 text-xs uppercase tracking-wider">
+            Alokasi Tim Petugas Protokol
+        </label>
+        <span class="text-[11px] text-slate-500">
+            Pilih petugas dari Tim Walikota, Tim Wakil Walikota, atau Kantor Penghubung
+        </span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        
+        <div class="border border-blue-200 bg-blue-50/30 rounded-xl p-3.5">
+            <div class="flex items-center justify-between pb-2 mb-3 border-b border-blue-200">
+                <div class="flex items-center space-x-2 text-blue-800 font-bold text-xs uppercase">
+                    <i class="fa-solid fa-user-shield text-blue-600"></i>
+                    <span>Tim Walikota</span>
+                </div>
+                <button type="button" onclick="openManageTeamModal('walikota')" class="text-[11px] text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-blue-200 shadow-sm transition">
+                    <i class="fa-solid fa-pen-to-square"></i> Kelola
+                </button>
+            </div>
+            <div id="container-officers-walikota" class="space-y-2"></div>
+        </div>
+
+        <div class="border border-emerald-200 bg-emerald-50/30 rounded-xl p-3.5">
+            <div class="flex items-center justify-between pb-2 mb-3 border-b border-emerald-200">
+                <div class="flex items-center space-x-2 text-emerald-800 font-bold text-xs uppercase">
+                    <i class="fa-solid fa-users text-emerald-600"></i>
+                    <span>Tim Wakil Walikota</span>
+                </div>
+                <button type="button" onclick="openManageTeamModal('wakil')" class="text-[11px] text-emerald-600 hover:text-emerald-800 font-semibold flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-emerald-200 shadow-sm transition">
+                    <i class="fa-solid fa-pen-to-square"></i> Kelola
+                </button>
+            </div>
+            <div id="container-officers-wakil" class="space-y-2"></div>
+        </div>
+
+        <div class="border border-amber-200 bg-amber-50/30 rounded-xl p-3.5">
+            <div class="flex items-center justify-between pb-2 mb-3 border-b border-amber-200">
+                <div class="flex items-center space-x-2 text-amber-800 font-bold text-xs uppercase">
+                    <i class="fa-solid fa-building-flag text-amber-600"></i>
+                    <span>Tim Kantor Penghubung</span>
+                </div>
+                <button type="button" onclick="openManageTeamModal('penghubung')" class="text-[11px] text-amber-600 hover:text-amber-800 font-semibold flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-amber-200 shadow-sm transition">
+                    <i class="fa-solid fa-pen-to-square"></i> Kelola
+                </button>
+            </div>
+            <div id="container-officers-penghubung" class="space-y-2"></div>
+        </div>
+
+    </div>
+</div>
                             <div class="space-y-2 pt-1" id="task-officers-walikota"></div>
                         </div>
                         <div class="bg-emerald-50/60 p-3 rounded-xl border border-emerald-200 space-y-2">
@@ -406,6 +453,117 @@
 
     <!-- JAVASCRIPT LOGIC DENGAN KONEKSI GOOGLE SHEETS -->
     <script>
+        // Data Master Petugas Protokol per Tim
+let teamsData = {
+    walikota: [
+        { id: 1, name: "Ahmad Rifa'i, S.IP", role: "Koordinator Lapangan" },
+        { id: 2, name: "Dina Mariana, S.S", role: "Master of Ceremony (MC)" },
+        { id: 3, name: "Reza Rahardian, S.STP", role: "Liaison Officer (LO VIP)" },
+        { id: 4, name: "Hendrik Setiawan, S.IP", role: "Pengawalan & Escort Utama" }
+    ],
+    wakil: [
+        { id: 5, name: "Siti Nurhaliza, S.I.Kom", role: "Koordinator Lapangan" },
+        { id: 6, name: "Fajar Pratama, S.H", role: "Liaison Officer (LO VIP)" },
+        { id: 7, name: "Dewi Lestari, A.Md", role: "Logistik & Souvenir VIP" },
+        { id: 8, name: "Bagus Permana, S.STP", role: "Master of Ceremony (MC)" }
+    ],
+    penghubung: [
+        { id: 9, name: "Budi Santoso, S.STP", role: "Koordinator Penghubung Jakarta" },
+        { id: 10, name: "Siska Putri, S.I.Kom", role: "LO Perwakilan Daerah" }
+    ]
+};
+
+// Fungsi Render Checkbox Petugas ke dalam Formulir Penugasan
+function renderFormOfficers() {
+    ['walikota', 'wakil', 'penghubung'].forEach(teamKey => {
+        const container = document.getElementById(`container-officers-${teamKey}`);
+        if (!container) return;
+
+        container.innerHTML = teamsData[teamKey].map(officer => `
+            <label class="flex items-start space-x-2.5 p-2 bg-white rounded-lg border border-slate-200 hover:border-blue-400 cursor-pointer transition shadow-sm">
+                <input type="checkbox" name="selected-officers" value="${officer.id}" class="mt-0.5 rounded text-protocol-500 focus:ring-protocol-500">
+                <div class="text-xs">
+                    <p class="font-semibold text-slate-800 leading-tight">${officer.name}</p>
+                    <p class="text-[10px] text-slate-500">${officer.role}</p>
+                </div>
+            </label>
+        `).join('');
+    });
+}
+
+// Fungsi Buka Modal Kelola Tim
+function openManageTeamModal(teamKey) {
+    document.getElementById('manage-team-key').value = teamKey;
+    
+    const titles = {
+        walikota: "Kelola Tim Walikota",
+        wakil: "Kelola Tim Wakil Walikota",
+        penghubung: "Kelola Tim Kantor Penghubung"
+    };
+    
+    document.getElementById('manage-team-title').innerText = titles[teamKey];
+    renderManageTeamList(teamKey);
+    openModal('modalManageTeam');
+}
+
+// Render daftar anggota di dalam modal edit
+function renderManageTeamList(teamKey) {
+    const listContainer = document.getElementById('manage-team-list');
+    const members = teamsData[teamKey];
+
+    if (members.length === 0) {
+        listContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-2">Belum ada anggota di tim ini.</p>`;
+        return;
+    }
+
+    listContainer.innerHTML = members.map((m, index) => `
+        <div class="flex items-center justify-between p-2 bg-white rounded border border-slate-200 text-xs">
+            <div>
+                <p class="font-semibold text-slate-800">${m.name}</p>
+                <p class="text-[10px] text-slate-500">${m.role}</p>
+            </div>
+            <button onclick="deleteOfficer('${teamKey}', ${index})" class="text-red-500 hover:text-red-700 px-1.5 py-0.5 text-xs" title="Hapus">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        </div>
+    `).join('');
+}
+
+// Fungsi Tambah Anggota Baru ke Tim
+function handleAddOfficer(e) {
+    e.preventDefault();
+    const teamKey = document.getElementById('manage-team-key').value;
+    const nameInput = document.getElementById('new-officer-name');
+    const roleInput = document.getElementById('new-officer-role');
+
+    const newOfficer = {
+        id: Date.now(),
+        name: nameInput.value,
+        role: roleInput.value
+    };
+
+    teamsData[teamKey].push(newOfficer);
+    
+    nameInput.value = '';
+    roleInput.value = '';
+
+    renderManageTeamList(teamKey);
+    renderFormOfficers(); // Perbarui checkbox di formulir
+}
+
+// Fungsi Hapus Anggota Tim
+function deleteOfficer(teamKey, index) {
+    if (confirm("Hapus petugas ini dari tim?")) {
+        teamsData[teamKey].splice(index, 1);
+        renderManageTeamList(teamKey);
+        renderFormOfficers(); // Perbarui checkbox di formulir
+    }
+}
+
+// Panggil renderFormOfficers saat halaman dimuat
+document.addEventListener("DOMContentLoaded", function () {
+    renderFormOfficers();
+});
         // State data pengguna aktif
 let currentUser = {
     name: "Bambang Wijaya, S.STP",
@@ -910,6 +1068,43 @@ function handleSaveProfile(e) {
                 <button type="submit" class="px-4 py-2 rounded-lg bg-protocol-500 text-white font-semibold hover:bg-protocol-600 shadow-md">Simpan Perubahan</button>
             </div>
         </form>
+    </div>
+</div>
+    <div id="modalManageTeam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md flex flex-col overflow-hidden">
+        <div class="bg-slate-800 text-white px-5 py-3.5 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-users-gear text-protocol-gold"></i>
+                <h3 class="font-bold text-sm" id="manage-team-title">Kelola Anggota Tim</h3>
+            </div>
+            <button onclick="closeModal('modalManageTeam')" class="text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="form-add-officer" onsubmit="handleAddOfficer(event)" class="p-5 space-y-3 text-xs">
+            <input type="hidden" id="manage-team-key">
+            
+            <div>
+                <label class="block font-semibold text-slate-700 mb-1">Nama Petugas & Gelar</label>
+                <input type="text" id="new-officer-name" required placeholder="Contoh: Rahmat Hidayat, S.IP" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block font-semibold text-slate-700 mb-1">Peran / Peran Protokol</label>
+                <input type="text" id="new-officer-role" required placeholder="Contoh: LO Kantor Penghubung / MC" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+
+            <button type="submit" class="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-lg shadow transition">
+                + Tambahkan ke Tim
+            </button>
+        </form>
+
+        <div class="px-5 pb-5">
+            <label class="block font-bold text-slate-700 text-xs mb-2">Daftar Anggota Tim Saat Ini:</label>
+            <div id="manage-team-list" class="max-h-48 overflow-y-auto space-y-1.5 border border-slate-200 rounded-lg p-2 bg-slate-50">
+                </div>
+        </div>
     </div>
 </div>
 </body>
