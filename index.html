@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Digital Penugasan Petugas Protokol</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
@@ -44,11 +41,9 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
 
-    <!-- TOP NAVBAR -->
     <header class="bg-protocol-500 text-white shadow-md sticky top-0 z-30 no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <!-- Logo & Title -->
                 <div class="flex items-center space-x-3">
                     <div class="bg-protocol-gold p-2 rounded-lg text-slate-900 font-bold shadow-sm">
                         <i class="fa-solid me-1 fa-shield-halved"></i> PROTOKOL
@@ -59,7 +54,6 @@
                     </div>
                 </div>
 
-                <!-- Right Actions -->
                 <div class="flex items-center space-x-4">
                     <button onclick="openModal('modalTask')" class="bg-protocol-gold hover:bg-protocol-goldhover text-slate-950 font-semibold px-3 py-2 rounded-lg text-sm transition flex items-center space-x-2 shadow-sm">
                         <i class="fa-solid fa-plus"></i>
@@ -68,23 +62,20 @@
                     
                     <div class="h-6 w-px bg-slate-700 hidden sm:block"></div>
 
-                    <!-- User Info -->
                     <div onclick="openProfileModal()" class="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition p-1.5 rounded-lg hover:bg-slate-700/50" title="Klik untuk edit profil">
-    <div class="text-right hidden sm:block">
-        <p class="text-sm font-semibold leading-none" id="user-display-name">Bambang Wijaya, S.STP</p>
-        <span class="text-xs text-protocol-gold font-medium" id="user-display-role">Kasubag Agenda & Protokol</span>
-    </div>
-    <img id="user-display-avatar" class="h-9 w-9 rounded-full border-2 border-protocol-gold object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Foto Profil Kasubag">
-</div>
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-semibold leading-none" id="user-display-name">Bambang Wijaya, S.STP</p>
+                            <span class="text-xs text-protocol-gold font-medium" id="user-display-role">Kasubag Agenda & Protokol</span>
+                        </div>
+                        <img id="user-display-avatar" class="h-9 w-9 rounded-full border-2 border-protocol-gold object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Foto Profil Kasubag">
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- MAIN WRAPPER -->
     <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row gap-6">
 
-        <!-- SIDE NAVIGATION -->
         <aside class="w-full md:w-64 flex-shrink-0 no-print">
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sticky top-22">
                 <nav class="space-y-1">
@@ -124,12 +115,9 @@
             </div>
         </aside>
 
-        <!-- CONTENT AREA -->
         <main class="flex-1 min-w-0">
 
-            <!-- TAB 1: DASHBOARD RINGKASAN -->
             <section id="tab-dashboard" class="tab-content space-y-6">
-                <!-- Welcome Banner -->
                 <div class="bg-gradient-to-r from-protocol-500 via-slate-800 to-protocol-600 rounded-xl p-6 text-white shadow-md relative overflow-hidden">
                     <div class="absolute right-0 top-0 h-full w-1/3 opacity-10 flex items-center justify-end pr-8">
                         <i class="fa-solid fa-award text-9xl"></i>
@@ -137,11 +125,10 @@
                     <div class="relative z-10 max-w-2xl">
                         <span class="bg-protocol-gold/20 text-protocol-gold border border-protocol-gold/40 text-xs px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider">Dashboard Protokol Terintegrasi</span>
                         <h2 class="text-2xl font-bold mt-2">Optimalisasi Penugasan Petugas Protokol</h2>
-                        <p class="text-slate-300 text-sm mt-1">Pencatatan agenda keprotokolan, alokasi personel Tim Walikota & Tim Wakil Walikota secara terstruktur dan digital.</p>
+                        <p class="text-slate-300 text-sm mt-1">Pencatatan agenda keprotokolan, alokasi personel Tim Walikota, Tim Wakil Walikota, & Kantor Penghubung secara terstruktur dan digital.</p>
                     </div>
                 </div>
 
-                <!-- KPI Metric Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
                         <div>
@@ -166,8 +153,8 @@
                     <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Petugas Standby</p>
-                            <h3 class="text-2xl font-bold text-emerald-600 mt-1" id="stat-ready-officers">0 / 8</h3>
-                            <p class="text-xs text-slate-500 mt-1">Tim Walikota & Wakil Walikota</p>
+                            <h3 class="text-2xl font-bold text-emerald-600 mt-1" id="stat-ready-officers">10</h3>
+                            <p class="text-xs text-slate-500 mt-1">Tim Walikota, Wakil & Penghubung</p>
                         </div>
                         <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl">
                             <i class="fa-solid fa-user-check"></i>
@@ -185,7 +172,6 @@
                     </div>
                 </div>
 
-                <!-- Main Content Grid -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
                         <div class="p-4 border-b border-slate-100 flex items-center justify-between">
@@ -226,13 +212,12 @@
                 </div>
             </section>
 
-            <!-- TAB 2: JADWAL PENUGASAN LENGKAP -->
             <section id="tab-assignments" class="tab-content space-y-6 hidden">
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <h2 class="text-lg font-bold text-slate-900">Jadwal Penugasan Protokol</h2>
-                            <p class="text-xs text-slate-500">Kelola daftar seluruh kegiatan, alokasi personel Tim Walikota & Wakil Walikota, serta status keprotokolan.</p>
+                            <p class="text-xs text-slate-500">Kelola daftar seluruh kegiatan, alokasi personel Tim Walikota, Wakil Walikota, & Kantor Penghubung.</p>
                         </div>
                         <div class="flex flex-wrap items-center gap-2">
                             <div class="relative">
@@ -241,8 +226,8 @@
                             </div>
                             <select id="filter-status" onchange="filterAssignments()" class="text-xs py-1.5 px-3 rounded-lg border border-slate-300 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="ALL">Semua Status</option>
+                                <option value="Terjadwal">Terjadwal</option>
                                 <option value="Berlangsung">Berlangsung</option>
-                                <option value="Mendatang">Mendatang</option>
                                 <option value="Selesai">Selesai</option>
                             </select>
                             <button onclick="openModal('modalTask')" class="bg-protocol-500 hover:bg-protocol-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1">
@@ -272,26 +257,24 @@
                 </div>
             </section>
 
-            <!-- TAB 3: DIREKTORI PETUGAS -->
             <section id="tab-officers" class="tab-content space-y-6 hidden">
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-wrap justify-between items-center gap-3">
                     <div>
                         <h2 class="text-lg font-bold text-slate-900">Direktori & Status Ketersediaan Petugas</h2>
-                        <p class="text-xs text-slate-500">Daftar anggota protokol berdasarkan pembagian Tim Walikota & Tim Wakil Walikota.</p>
+                        <p class="text-xs text-slate-500">Daftar anggota protokol berdasarkan Tim Walikota, Tim Wakil Walikota, & Tim Kantor Penghubung.</p>
                     </div>
                     <div class="flex items-center space-x-2 text-xs">
                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-medium">
                             <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Standby
                         </span>
                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-medium">
-                            <span class="w-2 h-2 rounded-full bg-amber-500"></span> Bertugas
+                            <span class="w-2 h-2 rounded-full bg-amber-500"></span> Dalam Tugas
                         </span>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="officers-grid"></div>
             </section>
 
-            <!-- TAB 4: LAPORAN & ANALISIS -->
             <section id="tab-analytics" class="tab-content space-y-6 hidden">
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                     <h2 class="text-lg font-bold text-slate-900">Analisis Beban Kerja & Evaluasi Penugasan</h2>
@@ -311,9 +294,8 @@
         </main>
     </div>
 
-    <!-- MODAL 1: TAMBAH PENUGASAN BARU -->
     <div id="modalTask" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
             <div class="bg-protocol-500 text-white px-6 py-4 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <i class="fa-solid fa-calendar-plus text-protocol-gold text-lg"></i>
@@ -353,58 +335,55 @@
                         <input type="text" id="task-location" required placeholder="Contoh: Aula Utama Gedung Perkantoran Lt. 3" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                     </div>
                 </div>
+
                 <div class="mt-4">
-    <div class="flex items-center justify-between mb-2">
-        <label class="block font-bold text-slate-700 text-xs uppercase tracking-wider">Alokasi Tim Petugas Protokol</label>
-        <span class="text-[11px] text-slate-500">Pilih petugas dari Tim Walikota, Tim Wakil Walikota, atau Kantor Penghubung</span>
-    </div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block font-bold text-slate-700 text-xs uppercase tracking-wider">Alokasi Tim Petugas Protokol</label>
+                        <span class="text-[11px] text-slate-500">Pilih petugas dari Tim Walikota, Tim Wakil Walikota, atau Kantor Penghubung</span>
+                    </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        
-        <div class="border border-blue-200 bg-blue-50/30 rounded-xl p-3.5">
-            <div class="flex items-center justify-between pb-2 mb-3 border-b border-blue-200">
-                <div class="flex items-center space-x-2 text-blue-800 font-bold text-xs uppercase">
-                    <i class="fa-solid fa-user-shield text-blue-600"></i>
-                    <span>Tim Walikota</span>
-                </div>
-                <button type="button" onclick="openManageTeamModal('walikota')" class="text-[11px] text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-blue-200 shadow-sm transition">
-                    <i class="fa-solid fa-pen-to-square"></i> Kelola
-                </button>
-            </div>
-            <div id="container-officers-walikota" class="space-y-2">
-                </div>
-        </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div class="border border-blue-200 bg-blue-50/30 rounded-xl p-3.5">
+                            <div class="flex items-center justify-between pb-2 mb-3 border-b border-blue-200">
+                                <div class="flex items-center space-x-2 text-blue-800 font-bold text-xs uppercase">
+                                    <i class="fa-solid fa-user-shield text-blue-600"></i>
+                                    <span>Tim Walikota</span>
+                                </div>
+                                <button type="button" onclick="openManageTeamModal('walikota')" class="text-[11px] text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-blue-200 shadow-sm transition">
+                                    <i class="fa-solid fa-pen-to-square"></i> Kelola
+                                </button>
+                            </div>
+                            <div id="container-officers-walikota" class="space-y-2"></div>
+                        </div>
 
-        <div class="border border-emerald-200 bg-emerald-50/30 rounded-xl p-3.5">
-            <div class="flex items-center justify-between pb-2 mb-3 border-b border-emerald-200">
-                <div class="flex items-center space-x-2 text-emerald-800 font-bold text-xs uppercase">
-                    <i class="fa-solid fa-users text-emerald-600"></i>
-                    <span>Tim Wakil Walikota</span>
-                </div>
-                <button type="button" onclick="openManageTeamModal('wakil')" class="text-[11px] text-emerald-600 hover:text-emerald-800 font-semibold flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-emerald-200 shadow-sm transition">
-                    <i class="fa-solid fa-pen-to-square"></i> Kelola
-                </button>
-            </div>
-            <div id="container-officers-wakil" class="space-y-2">
-                </div>
-        </div>
+                        <div class="border border-emerald-200 bg-emerald-50/30 rounded-xl p-3.5">
+                            <div class="flex items-center justify-between pb-2 mb-3 border-b border-emerald-200">
+                                <div class="flex items-center space-x-2 text-emerald-800 font-bold text-xs uppercase">
+                                    <i class="fa-solid fa-users text-emerald-600"></i>
+                                    <span>Tim Wakil Walikota</span>
+                                </div>
+                                <button type="button" onclick="openManageTeamModal('wakil')" class="text-[11px] text-emerald-600 hover:text-emerald-800 font-semibold flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-emerald-200 shadow-sm transition">
+                                    <i class="fa-solid fa-pen-to-square"></i> Kelola
+                                </button>
+                            </div>
+                            <div id="container-officers-wakil" class="space-y-2"></div>
+                        </div>
 
-        <div class="border border-amber-200 bg-amber-50/30 rounded-xl p-3.5">
-            <div class="flex items-center justify-between pb-2 mb-3 border-b border-amber-200">
-                <div class="flex items-center space-x-2 text-amber-800 font-bold text-xs uppercase">
-                    <i class="fa-solid fa-building-flag text-amber-600"></i>
-                    <span>Tim Kantor Penghubung</span>
+                        <div class="border border-amber-200 bg-amber-50/30 rounded-xl p-3.5">
+                            <div class="flex items-center justify-between pb-2 mb-3 border-b border-amber-200">
+                                <div class="flex items-center space-x-2 text-amber-800 font-bold text-xs uppercase">
+                                    <i class="fa-solid fa-building-flag text-amber-600"></i>
+                                    <span>Tim Kantor Penghubung</span>
+                                </div>
+                                <button type="button" onclick="openManageTeamModal('penghubung')" class="text-[11px] text-amber-600 hover:text-amber-800 font-semibold flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-amber-200 shadow-sm transition">
+                                    <i class="fa-solid fa-pen-to-square"></i> Kelola
+                                </button>
+                            </div>
+                            <div id="container-officers-penghubung" class="space-y-2"></div>
+                        </div>
+                    </div>
                 </div>
-                <button type="button" onclick="openManageTeamModal('penghubung')" class="text-[11px] text-amber-600 hover:text-amber-800 font-semibold flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-amber-200 shadow-sm transition">
-                    <i class="fa-solid fa-pen-to-square"></i> Kelola
-                </button>
-            </div>
-            <div id="container-officers-penghubung" class="space-y-2">
-                </div>
-        </div>
 
-    </div>
-</div>
                 <div>
                     <label class="block font-semibold text-slate-700 mb-1">Keterangan Acara</label>
                     <textarea id="task-notes" rows="2" placeholder="Informasi pakaian resmi (PSL/PSR)..." class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
@@ -417,7 +396,6 @@
         </div>
     </div>
 
-    <!-- MODAL 2: DETAIL PENUGASAN -->
     <div id="modalDetail" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
@@ -431,585 +409,522 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC DENGAN KONEKSI GOOGLE SHEETS -->
+    <div id="modalProfile" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md flex flex-col overflow-hidden">
+            <div class="bg-protocol-500 text-white px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-user-pen text-protocol-gold"></i>
+                    <h3 class="font-bold text-base">Edit Profil Pengguna</h3>
+                </div>
+                <button onclick="closeModal('modalProfile')" class="text-slate-300 hover:text-white text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="form-edit-profile" onsubmit="handleSaveProfile(event)" class="p-6 space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
+                    <input type="text" id="input-profile-name" required placeholder="Contoh: Bambang Wijaya, S.STP" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Jabatan / Peran</label>
+                    <input type="text" id="input-profile-role" required placeholder="Contoh: Kasubag Agenda & Protokol" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">URL Foto Profil</label>
+                    <input type="url" id="input-profile-avatar" required placeholder="https://..." class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div class="pt-4 border-t border-slate-200 flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('modalProfile')" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 transition">Batal</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-protocol-500 text-white font-semibold hover:bg-protocol-600 shadow-md transition">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalManageTeam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md flex flex-col overflow-hidden">
+            <div class="bg-slate-800 text-white px-5 py-3.5 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-users-gear text-protocol-gold"></i>
+                    <h3 class="font-bold text-sm" id="manage-team-title">Kelola Anggota Tim</h3>
+                </div>
+                <button onclick="closeModal('modalManageTeam')" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="form-add-officer" onsubmit="handleAddOfficer(event)" class="p-5 space-y-3 text-xs">
+                <input type="hidden" id="manage-team-key">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Nama Petugas & Gelar</label>
+                    <input type="text" id="new-officer-name" required placeholder="Contoh: Rahmat Hidayat, S.IP" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Peran / Tugas Keprotokolan</label>
+                    <input type="text" id="new-officer-role" required placeholder="Contoh: LO Kantor Penghubung / MC" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+                <button type="submit" class="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-lg shadow transition">
+                    + Tambahkan ke Tim
+                </button>
+            </form>
+            <div class="px-5 pb-5">
+                <label class="block font-bold text-slate-700 text-xs mb-2">Daftar Anggota Tim Saat Ini:</label>
+                <div id="manage-team-list" class="max-h-48 overflow-y-auto space-y-1.5 border border-slate-200 rounded-lg p-2 bg-slate-50"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-	// State data pengguna aktif
-let currentUser = {
-    name: "Bambang Wijaya, S.STP",
-    role: "Kasubag Agenda & Protokol",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
-};
-
-// Fungsi membuka modal & mengisi nilai input awal
-function openProfileModal() {
-    document.getElementById('input-profile-name').value = currentUser.name;
-    document.getElementById('input-profile-role').value = currentUser.role;
-    document.getElementById('input-profile-avatar').value = currentUser.avatar;
-    openModal('modalProfile');
-}
-
-// Fungsi menyimpan perubahan profil
-function handleSaveProfile(e) {
-    e.preventDefault();
-
-    currentUser.name = document.getElementById('input-profile-name').value;
-    currentUser.role = document.getElementById('input-profile-role').value;
-    currentUser.avatar = document.getElementById('input-profile-avatar').value;
-
-    // Perbarui UI di Top Navbar secara instan
-    document.getElementById('user-display-name').innerText = currentUser.name;
-    document.getElementById('user-display-role').innerText = currentUser.role;
-    document.getElementById('user-display-avatar').src = currentUser.avatar;
-
-    closeModal('modalProfile');
-    alert("Profil berhasil diperbarui!");
-}
-        // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLNejKTGqpx-mhLv2HnswEh1nmvE5mY65foaUiFlUV1m-Qe7hJGwdtUQz_pF1ZbTuL/exec";
 
-        let officers = [
-            { id: 1, name: "Ahmad Rifa'i, S.IP", nip: "19900312 201402 1 001", team: "Tim Walikota", role: "Koordinator Lapangan", status: "Dalam Tugas", tasksCount: 0, phone: "0812-3456-7890", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" },
-            { id: 2, name: "Dina Mariana, S.S", nip: "19940825 201801 2 004", team: "Tim Walikota", role: "Master of Ceremony (MC)", status: "Standby", tasksCount: 0, phone: "0813-9876-5432", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150" },
-            { id: 3, name: "Reza Rahardian, S.STP", nip: "19921104 201503 1 002", team: "Tim Walikota", role: "Liaison Officer (LO VIP)", status: "Dalam Tugas", tasksCount: 0, phone: "0811-2233-4455", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" },
-            { id: 4, name: "Hendrik Setiawan, S.IP", nip: "19930411 201601 1 007", team: "Tim Walikota", role: "Pengawalan & Escort Utama", status: "Standby", tasksCount: 0, phone: "0812-7788-9900", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150" },
-            { id: 5, name: "Siti Nurhaliza, S.I.Kom", nip: "19960517 201903 2 008", team: "Tim Wakil Walikota", role: "Koordinator Lapangan", status: "Standby", tasksCount: 0, phone: "0857-1122-3344", avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150" },
-            { id: 6, name: "Fajar Pratama, S.H", nip: "19910109 201602 1 005", team: "Tim Wakil Walikota", role: "Liaison Officer (LO VIP)", status: "Standby", tasksCount: 0, phone: "0818-7788-9900", avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150" },
-            { id: 7, name: "Dewi Lestari, A.Md", nip: "19970930 202001 2 010", team: "Tim Wakil Walikota", role: "Logistik & Souvenir VIP", status: "Standby", tasksCount: 0, phone: "0819-4455-6677", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" },
-            { id: 8, name: "Bagus Permana, S.STP", nip: "19951212 201802 1 009", team: "Tim Wakil Walikota", role: "Master of Ceremony (MC)", status: "Standby", tasksCount: 0, phone: "0813-3344-5566", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" }
+        // State Profil Pengguna
+        let currentUser = {
+            name: "Bambang Wijaya, S.STP",
+            role: "Kasubag Agenda & Protokol",
+            avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
+        };
+
+        // Data Master Tim (3 Tim)
+        let teamsData = {
+            walikota: [
+                { id: 1, name: "Ahmad Rifa'i, S.IP", role: "Koordinator Lapangan" },
+                { id: 2, name: "Dina Mariana, S.S", role: "Master of Ceremony (MC)" },
+                { id: 3, name: "Reza Rahardian, S.STP", role: "Liaison Officer (LO VIP)" },
+                { id: 4, name: "Hendrik Setiawan, S.IP", role: "Pengawalan & Escort Utama" }
+            ],
+            wakil: [
+                { id: 5, name: "Siti Nurhaliza, S.I.Kom", role: "Koordinator Lapangan" },
+                { id: 6, name: "Fajar Pratama, S.H", role: "Liaison Officer (LO VIP)" },
+                { id: 7, name: "Dewi Lestari, A.Md", role: "Logistik & Souvenir VIP" },
+                { id: 8, name: "Bagus Permana, S.STP", role: "Master of Ceremony (MC)" }
+            ],
+            penghubung: [
+                { id: 9, name: "Budi Santoso, S.STP", role: "Koordinator Penghubung Jakarta" },
+                { id: 10, name: "Siska Putri, S.I.Kom", role: "LO Perwakilan Daerah" }
+            ]
+        };
+
+        // Data Direktori Petugas
+        let officersList = [
+            { id: 1, name: "Ahmad Rifa'i, S.IP", nip: "19900312 201402 1 001", team: "Tim Walikota", role: "Koordinator Lapangan", status: "Dalam Tugas", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" },
+            { id: 2, name: "Dina Mariana, S.S", nip: "19940825 201801 2 004", team: "Tim Walikota", role: "Master of Ceremony (MC)", status: "Standby", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150" },
+            { id: 3, name: "Reza Rahardian, S.STP", nip: "19921104 201503 1 002", team: "Tim Walikota", role: "Liaison Officer (LO VIP)", status: "Dalam Tugas", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" },
+            { id: 4, name: "Hendrik Setiawan, S.IP", nip: "19930411 201601 1 007", team: "Tim Walikota", role: "Pengawalan & Escort Utama", status: "Standby", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150" },
+            { id: 5, name: "Siti Nurhaliza, S.I.Kom", nip: "19960517 201903 2 008", team: "Tim Wakil Walikota", role: "Koordinator Lapangan", status: "Standby", avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150" },
+            { id: 6, name: "Fajar Pratama, S.H", nip: "19910214 201602 1 005", team: "Tim Wakil Walikota", role: "Liaison Officer (LO VIP)", status: "Dalam Tugas", avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150" },
+            { id: 7, name: "Dewi Lestari, A.Md", nip: "19970930 202001 2 010", team: "Tim Wakil Walikota", role: "Logistik & Souvenir VIP", status: "Standby", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" },
+            { id: 8, name: "Bagus Permana, S.STP", nip: "19950112 201802 1 003", team: "Tim Wakil Walikota", role: "Master of Ceremony (MC)", status: "Standby", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" },
+            { id: 9, name: "Budi Santoso, S.STP", nip: "19890615 201302 1 009", team: "Tim Kantor Penghubung", role: "Koordinator Penghubung", status: "Standby", avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150" },
+            { id: 10, name: "Siska Putri, S.I.Kom", nip: "19980321 202101 2 011", team: "Tim Kantor Penghubung", role: "LO Perwakilan", status: "Standby", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" }
         ];
 
-        let assignments = [];
-        let categoryChartInstance = null;
-        let workloadChartInstance = null;
-        let trendChartInstance = null;
-
-        document.addEventListener("DOMContentLoaded", function () {
-            populateFormCheckboxes();
-            initCharts();
-            fetchDataFromSheet();
-        });
-
-        // FUNGSI MENGAMBIL DATA DARI GOOGLE SHEETS
-        function fetchDataFromSheet() {
-            if(!SCRIPT_URL || SCRIPT_URL.includes("MASUKKAN_URL")) {
-                console.warn("URL Apps Script belum diatur dengan benar.");
-                return;
+        // Data Penugasan
+        let tasks = [
+            {
+                id: "PRT-2026-001",
+                title: "SADDAAAFAAF",
+                category: "Kegiatan Seremonial & Protokol",
+                vip: "ADADAADAD",
+                date: "2026-08-06T22:53",
+                location: "ADAFAFAF",
+                officers: ["Dina Mariana, S.S", "Fajar Pratama, S.H"],
+                status: "Terjadwal",
+                notes: "-"
             }
+        ];
 
-            fetch(SCRIPT_URL)
-                .then(res => res.json())
-                .then(response => {
-                    if(response.status === "success") {
-                        assignments = response.data || [];
-                        calculateOfficerTasksCount();
-                        renderDashboardData();
-                        renderAllAssignments();
-                        renderOfficersGrid();
-                        updateCategoryChart();
-                        updateWorkloadChart();
-                    }
-                })
-                .catch(err => console.error("Gagal memuat data dari Spreadsheet:", err));
+        // Fungsi Utilitas Modal
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
         }
 
-        // HITUNG JUMLAH TUGAS TIGA PETUGAS BERDASARKAN DATA SHEET
-        function calculateOfficerTasksCount() {
-            officers.forEach(o => o.tasksCount = 0);
-            assignments.forEach(task => {
-                if(task.officers) {
-                    task.officers.forEach(oid => {
-                        const found = officers.find(o => o.id == oid || o.name === oid);
-                        if(found) found.tasksCount += 1;
-                    });
-                }
-            });
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
         }
 
-        // TAB NAVIGATION
+        // Navigasi Tab
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('bg-protocol-500', 'text-white', 'shadow-sm');
-                btn.classList.add('text-slate-600', 'hover:bg-slate-100');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-100', 'hover:text-slate-900');
             });
+
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
             const activeNav = document.getElementById(`nav-${tabId}`);
-            activeNav.classList.remove('text-slate-600', 'hover:bg-slate-100');
-            activeNav.classList.add('bg-protocol-500', 'text-white', 'shadow-sm');
-        }
-
-        // RENDER DASHBOARD
-        function renderDashboardData() {
-            document.getElementById('stat-total-tasks').innerText = assignments.length;
-            const activeCount = assignments.filter(a => a.status === 'Berlangsung').length;
-            document.getElementById('stat-active-tasks').innerText = activeCount;
-            document.getElementById('badge-active-count').innerText = activeCount;
-
-            const readyOfficers = officers.filter(o => o.status === 'Standby').length;
-            document.getElementById('stat-ready-officers').innerText = `${readyOfficers} / ${officers.length}`;
-
-            const recentBody = document.getElementById('recent-tasks-body');
-            recentBody.innerHTML = '';
-
-            if(assignments.length === 0) {
-                recentBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada data penugasan masuk dari spreadsheet.</td></tr>`;
-                return;
+            if (activeNav) {
+                activeNav.classList.add('bg-protocol-500', 'text-white', 'shadow-sm');
+                activeNav.classList.remove('text-slate-600', 'hover:bg-slate-100', 'hover:text-slate-900');
             }
-
-            assignments.slice(0, 4).forEach(task => {
-                const assignedOfficerNames = (task.officers || []).map(id => {
-                    const found = officers.find(o => o.id == id || o.name === id);
-                    const name = found ? found.name : id;
-                    const team = found ? found.team : 'Tim Protokol';
-                    const isWalikota = team === 'Tim Walikota';
-                    const colorClass = isWalikota ? 'bg-blue-50 text-blue-800 border-blue-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200';
-                    return `<span class="${colorClass} border px-1.5 py-0.5 rounded text-[10px] mr-1 mb-1 inline-block font-medium">
-                                <i class="fa-solid ${isWalikota ? 'fa-user-tie text-blue-600' : 'fa-user-shield text-emerald-600'} me-1"></i>${name.split(',')[0]}
-                            </span>`;
-                }).join('');
-
-                recentBody.innerHTML += `
-                    <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3">
-                            <p class="font-bold text-slate-800">${task.title}</p>
-                            <span class="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">${task.category}</span>
-                        </td>
-                        <td class="p-3">
-                            <p class="font-medium text-slate-700">${formatDate(task.date)}</p>
-                            <p class="text-[10px] text-slate-500 truncate max-w-[140px]"><i class="fa-solid fa-location-dot me-1 text-red-400"></i>${task.location}</p>
-                        </td>
-                        <td class="p-3"><div class="flex flex-wrap">${assignedOfficerNames}</div></td>
-                        <td class="p-3">${getStatusBadge(task.status)}</td>
-                        <td class="p-3 text-right">
-                            <button onclick="viewDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold text-xs">Detail</button>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            const coordContainer = document.getElementById('today-coordinators-list');
-            coordContainer.innerHTML = '';
-            officers.slice(0, 3).forEach(c => {
-                const isWalikota = c.team === 'Tim Walikota';
-                coordContainer.innerHTML += `
-                    <div class="flex items-center space-x-3 p-2 rounded-lg border border-slate-100 bg-slate-50">
-                        <img src="${c.avatar}" class="w-8 h-8 rounded-full object-cover">
-                        <div class="flex-1 min-w-0">
-                            <p class="text-xs font-bold text-slate-800 truncate">${c.name}</p>
-                            <div class="flex items-center space-x-1">
-                                <span class="text-[9px] font-semibold ${isWalikota ? 'text-blue-600' : 'text-emerald-600'}">[${c.team}]</span>
-                                <span class="text-[10px] text-slate-500 truncate">${c.role}</span>
-                            </div>
-                        </div>
-                        <span class="text-[10px] px-2 py-0.5 rounded ${c.status === 'Standby' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'} font-semibold">${c.status}</span>
-                    </div>
-                `;
-            });
         }
 
-        // RENDER ALL ASSIGNMENTS
-        function renderAllAssignments() {
-            const tbody = document.getElementById('all-assignments-body');
-            tbody.innerHTML = '';
-
-            if(assignments.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada data penugasan.</td></tr>`;
-                return;
-            }
-
-            assignments.forEach(task => {
-                const assignedOfficers = (task.officers || []).map(id => {
-                    const found = officers.find(o => o.id == id || o.name === id);
-                    const name = found ? found.name : id;
-                    const team = found ? found.team : 'Tim Protokol';
-                    const isWalikota = team === 'Tim Walikota';
-                    const colorClass = isWalikota ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200';
-                    return `<span class="${colorClass} border px-2 py-0.5 rounded text-[10px] mr-1 mb-1 inline-block font-medium">
-                                <span class="font-bold">${team}:</span> ${name}
-                            </span>`;
-                }).join('');
-
-                tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                        <td class="p-3 font-medium">
-                            <span class="font-mono text-[10px] text-slate-400 block">${task.id}</span>
-                            <span class="font-bold text-slate-800 block">${task.title}</span>
-                            <span class="text-[10px] text-slate-500 font-normal bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 inline-block mt-1">${task.category}</span>
-                        </td>
-                        <td class="p-3">
-                            <p class="font-bold text-amber-700"><i class="fa-solid fa-crown me-1 text-amber-500"></i>${task.vip}</p>
-                            <p class="text-slate-500 text-[11px] mt-0.5"><i class="fa-regular fa-clock me-1"></i>${formatDate(task.date)}</p>
-                        </td>
-                        <td class="p-3 text-slate-700">${task.location}</td>
-                        <td class="p-3"><div class="flex flex-wrap">${assignedOfficers}</div></td>
-                        <td class="p-3">${getStatusBadge(task.status)}</td>
-                        <td class="p-3 text-center">
-                            <button onclick="viewDetail('${task.id}')" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded" title="Lihat Detail"><i class="fa-solid fa-eye"></i></button>
-                        </td>
-                    </tr>
-                `;
-            });
+        // Fungsi Profil
+        function openProfileModal() {
+            document.getElementById('input-profile-name').value = currentUser.name;
+            document.getElementById('input-profile-role').value = currentUser.role;
+            document.getElementById('input-profile-avatar').value = currentUser.avatar;
+            openModal('modalProfile');
         }
 
-        function filterAssignments() {
-            const searchVal = document.getElementById('search-input').value.toLowerCase();
-            const statusVal = document.getElementById('filter-status').value;
-            const filtered = assignments.filter(task => {
-                const matchesSearch = task.title.toLowerCase().includes(searchVal) || task.vip.toLowerCase().includes(searchVal) || task.location.toLowerCase().includes(searchVal);
-                const matchesStatus = (statusVal === 'ALL') || (task.status === statusVal);
-                return matchesSearch && matchesStatus;
-            });
-            // Render filtered... (bisa disesuaikan dengan fungsi render)
+        function handleSaveProfile(e) {
+            e.preventDefault();
+            currentUser.name = document.getElementById('input-profile-name').value;
+            currentUser.role = document.getElementById('input-profile-role').value;
+            currentUser.avatar = document.getElementById('input-profile-avatar').value;
+
+            document.getElementById('user-display-name').innerText = currentUser.name;
+            document.getElementById('user-display-role').innerText = currentUser.role;
+            document.getElementById('user-display-avatar').src = currentUser.avatar;
+
+            closeModal('modalProfile');
+            alert("Profil berhasil diperbarui!");
         }
 
-        function renderOfficersGrid() {
-            const grid = document.getElementById('officers-grid');
-            grid.innerHTML = '';
-            officers.forEach(o => {
-                const isWalikota = o.team === 'Tim Walikota';
-                const teamBadge = isWalikota 
-                    ? `<span class="bg-blue-100 text-blue-800 border border-blue-300 font-bold px-2 py-0.5 rounded text-[10px]"><i class="fa-solid fa-user-tie me-1"></i>Tim Walikota</span>`
-                    : `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2 py-0.5 rounded text-[10px]"><i class="fa-solid fa-user-shield me-1"></i>Tim Wakil Walikota</span>`;
+        // Render Checkbox Petugas di Form Penugasan
+        function renderFormOfficers() {
+            ['walikota', 'wakil', 'penghubung'].forEach(teamKey => {
+                const container = document.getElementById(`container-officers-${teamKey}`);
+                if (!container) return;
 
-                grid.innerHTML += `
-                    <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-start justify-between mb-2">
-                                ${teamBadge}
-                                <span class="text-[10px] font-semibold text-emerald-600 flex items-center gap-1">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ${o.status}
-                                </span>
-                            </div>
-                            <div class="flex items-center space-x-3 mb-3">
-                                <img src="${o.avatar}" class="w-12 h-12 rounded-full object-cover border-2 border-slate-100">
-                                <div>
-                                    <h4 class="font-bold text-slate-900 text-xs">${o.name}</h4>
-                                    <p class="text-[11px] text-slate-500">NIP. ${o.nip}</p>
-                                    <span class="inline-block mt-1 text-[10px] font-semibold text-protocol-500 bg-slate-100 px-2 py-0.5 rounded">${o.role}</span>
-                                </div>
-                            </div>
-                            <div class="text-[11px] space-y-1 border-t border-slate-100 pt-2 text-slate-600">
-                                <p><i class="fa-solid fa-phone me-2 text-slate-400"></i>${o.phone}</p>
-                                <p><i class="fa-solid fa-calendar-check me-2 text-slate-400"></i>${o.tasksCount} Total Penugasan</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function populateFormCheckboxes() {
-            const containerWalikota = document.getElementById('task-officers-walikota');
-            const containerWakilWalikota = document.getElementById('task-officers-wakil-walikota');
-            containerWalikota.innerHTML = '';
-            containerWakilWalikota.innerHTML = '';
-
-            officers.forEach(o => {
-                const checkboxHTML = `
-                    <label class="flex items-start space-x-2 bg-white p-2 rounded-lg border border-slate-200 cursor-pointer hover:border-blue-400 transition shadow-sm">
-                        <input type="checkbox" name="selected-officers" value="${o.id}" class="rounded text-blue-600 focus:ring-blue-500 mt-0.5">
-                        <div class="min-w-0">
-                            <p class="font-bold text-slate-800 text-[11px] truncate">${o.name}</p>
-                            <p class="text-[10px] text-slate-500">${o.role}</p>
+                container.innerHTML = teamsData[teamKey].map(officer => `
+                    <label class="flex items-start space-x-2.5 p-2 bg-white rounded-lg border border-slate-200 hover:border-blue-400 cursor-pointer transition shadow-sm">
+                        <input type="checkbox" name="selected-officers" value="${officer.name}" class="mt-0.5 rounded text-protocol-500 focus:ring-protocol-500">
+                        <div class="text-xs">
+                            <p class="font-semibold text-slate-800 leading-tight">${officer.name}</p>
+                            <p class="text-[10px] text-slate-500">${officer.role}</p>
                         </div>
                     </label>
-                `;
-                if(o.team === 'Tim Walikota') {
-                    containerWalikota.innerHTML += checkboxHTML;
-                } else {
-                    containerWakilWalikota.innerHTML += checkboxHTML;
-                }
+                `).join('');
             });
         }
 
-        // KIRIM DATA KE GOOGLE APPS SCRIPT (SUBMIT FORM)
-        function handleAddTask(e) {
+        // Kelola Tim
+        function openManageTeamModal(teamKey) {
+            document.getElementById('manage-team-key').value = teamKey;
+            const titles = {
+                walikota: "Kelola Tim Walikota",
+                wakil: "Kelola Tim Wakil Walikota",
+                penghubung: "Kelola Tim Kantor Penghubung"
+            };
+            document.getElementById('manage-team-title').innerText = titles[teamKey];
+            renderManageTeamList(teamKey);
+            openModal('modalManageTeam');
+        }
+
+        function renderManageTeamList(teamKey) {
+            const listContainer = document.getElementById('manage-team-list');
+            const members = teamsData[teamKey];
+
+            if (!members || members.length === 0) {
+                listContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-2">Belum ada anggota di tim ini.</p>`;
+                return;
+            }
+
+            listContainer.innerHTML = members.map((m, index) => `
+                <div class="flex items-center justify-between p-2 bg-white rounded border border-slate-200 text-xs">
+                    <div>
+                        <p class="font-semibold text-slate-800">${m.name}</p>
+                        <p class="text-[10px] text-slate-500">${m.role}</p>
+                    </div>
+                    <button onclick="deleteOfficer('${teamKey}', ${index})" class="text-red-500 hover:text-red-700 px-1.5 py-0.5 text-xs" title="Hapus">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function handleAddOfficer(e) {
             e.preventDefault();
-            
-            if(!SCRIPT_URL || SCRIPT_URL.includes("MASUKKAN_URL")) {
-                alert("Harap masukkan SCRIPT_URL Google Web App Anda di baris kode JS terlebih dahulu!");
-                return;
-            }
+            const teamKey = document.getElementById('manage-team-key').value;
+            const nameInput = document.getElementById('new-officer-name');
+            const roleInput = document.getElementById('new-officer-role');
 
-            const title = document.getElementById('task-title').value;
-            const category = document.getElementById('task-category').value;
-            const vip = document.getElementById('task-vip').value || "Tamu VIP Daerah";
-            const date = document.getElementById('task-date').value;
-            const location = document.getElementById('task-location').value;
-            const notes = document.getElementById('task-notes').value || "Sesuai SOP Protokol Standar.";
-
-            const checkedIDs = Array.from(document.querySelectorAll('input[name="selected-officers"]:checked')).map(cb => parseInt(cb.value));
-
-            if(checkedIDs.length === 0) {
-                alert("Harap pilih minimal 1 petugas protokol!");
-                return;
-            }
-
-            // Ambil nama petugas yang dipilih untuk disimpan ke spreadsheet
-            const selectedOfficerNames = checkedIDs.map(id => {
-                const found = officers.find(o => o.id === id);
-                return found ? found.name : id;
-            });
-
-            const newId = `PRT-2026-00${assignments.length + 1}`;
-            const payload = {
-                action: "CREATE",
-                id: newId,
-                title: title,
-                category: category,
-                vip: vip,
-                date: date,
-                location: location,
-                officers: selectedOfficerNames,
-                status: "Mendatang",
-                notes: notes
+            const newOfficer = {
+                id: Date.now(),
+                name: nameInput.value,
+                role: roleInput.value
             };
 
-            const submitBtn = document.getElementById('btn-submit');
-            submitBtn.innerText = "Menyimpan ke Sheets...";
-            submitBtn.disabled = true;
+            teamsData[teamKey].push(newOfficer);
+            nameInput.value = '';
+            roleInput.value = '';
 
-            fetch(SCRIPT_URL, {
-                method: "POST",
-                mode: "no-cors", // Diperlukan untuk Google Apps Script Web App
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                alert("Data penugasan berhasil dikirim dan disimpan ke Google Spreadsheet!");
-                closeModal('modalTask');
-                document.getElementById('form-add-task').reset();
-                submitBtn.innerText = "Simpan & Terbitkan Penugasan";
-                submitBtn.disabled = false;
-                
-                // Refresh data otomatis dari spreadsheet setelah 1.5 detik
-                setTimeout(fetchDataFromSheet, 1500);
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Terjadi kesalahan saat menyimpan data.");
-                submitBtn.innerText = "Simpan & Terbitkan Penugasan";
-                submitBtn.disabled = false;
-            });
+            renderManageTeamList(teamKey);
+            renderFormOfficers();
         }
 
-        function viewDetail(id) {
-            const task = assignments.find(a => a.id === id);
-            if(!task) return;
-            document.getElementById('detail-modal-title').innerText = `${task.id} - ${task.title}`;
-            
-            const officerList = (task.officers || []).map(oid => {
-                const o = officers.find(x => x.id == oid || x.name === oid);
-                const name = o ? o.name : oid;
-                const role = o ? o.role : 'Petugas Protokol';
-                const team = o ? o.team : 'Tim Protokol';
-                const isWalikota = team === 'Tim Walikota';
-                return `<li class="py-1.5 border-b border-slate-100 flex items-center justify-between">
-                    <div>
-                        <span class="font-bold text-slate-800">${name}</span>
-                        <span class="text-[10px] text-slate-500 block">${role}</span>
-                    </div>
-                    <span class="text-[10px] font-semibold ${isWalikota ? 'bg-blue-100 text-blue-800' : 'bg-emerald-100 text-emerald-800'} px-2 py-0.5 rounded">${team}</span>
-                </li>`;
+        function deleteOfficer(teamKey, index) {
+            if (confirm("Hapus petugas ini dari tim?")) {
+                teamsData[teamKey].splice(index, 1);
+                renderManageTeamList(teamKey);
+                renderFormOfficers();
+            }
+        }
+
+        // Form Penugasan
+        function handleAddTask(e) {
+            e.preventDefault();
+            const selectedCheckboxes = document.querySelectorAll('input[name="selected-officers"]:checked');
+            const selectedOfficers = Array.from(selectedCheckboxes).map(cb => cb.value);
+
+            const newTask = {
+                id: `PRT-2026-00${tasks.length + 1}`,
+                title: document.getElementById('task-title').value,
+                category: document.getElementById('task-category').value,
+                vip: document.getElementById('task-vip').value || "-",
+                date: document.getElementById('task-date').value,
+                location: document.getElementById('task-location').value,
+                officers: selectedOfficers,
+                status: "Terjadwal",
+                notes: document.getElementById('task-notes').value || "-"
+            };
+
+            tasks.unshift(newTask);
+            renderTasks();
+            updateDashboardStats();
+            closeModal('modalTask');
+            document.getElementById('form-add-task').reset();
+            alert("Penugasan berhasil ditambahkan!");
+        }
+
+        function renderTasks() {
+            const recentBody = document.getElementById('recent-tasks-body');
+            const allBody = document.getElementById('all-assignments-body');
+
+            const formatOfficers = (officerList) => {
+                if (!officerList || officerList.length === 0) return '<span class="text-slate-400 italic">Belum ditentukan</span>';
+                return officerList.map(name => `<span class="inline-block bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded text-[10px] font-medium mr-1 mb-1"><i class="fa-solid fa-user-check mr-1"></i>${name}</span>`).join('');
+            };
+
+            const rowsHtml = tasks.map(t => {
+                const formattedDate = t.date ? new Date(t.date).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '-';
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3">
+                            <span class="font-mono text-[10px] text-slate-400 block">${t.id}</span>
+                            <strong class="text-slate-800 font-semibold">${t.title}</strong>
+                            <span class="block text-[10px] text-slate-500 mt-0.5">${t.category}</span>
+                        </td>
+                        <td class="p-3">
+                            <div class="flex items-center gap-1 text-slate-700 font-medium">
+                                <i class="fa-solid fa-crown text-amber-500 text-[10px]"></i> ${t.vip}
+                            </div>
+                            <div class="text-[10px] text-slate-500 mt-1">
+                                <i class="fa-regular fa-clock mr-1"></i>${formattedDate} WIB
+                            </div>
+                        </td>
+                        <td class="p-3 text-slate-600">${t.location}</td>
+                        <td class="p-3">${formatOfficers(t.officers)}</td>
+                        <td class="p-3">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-blue-100 text-blue-800 inline-flex items-center gap-1">
+                                <i class="fa-regular fa-clock"></i> ${t.status}
+                            </span>
+                        </td>
+                        <td class="p-3 text-center">
+                            <button onclick="showTaskDetail('${t.id}')" class="text-blue-600 hover:text-blue-800 p-1 rounded" title="Lihat Detail">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
             }).join('');
 
-            document.getElementById('detail-modal-body').innerHTML = `
+            if (recentBody) recentBody.innerHTML = rowsHtml || `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada penugasan</td></tr>`;
+            if (allBody) allBody.innerHTML = rowsHtml || `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada penugasan</td></tr>`;
+        }
+
+        function showTaskDetail(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            const body = document.getElementById('detail-modal-body');
+            const formattedDate = task.date ? new Date(task.date).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : '-';
+
+            body.innerHTML = `
                 <div class="space-y-3">
-                    <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                        <span class="text-[10px] font-bold uppercase text-blue-600 tracking-wider">Kategori Acara</span>
-                        <h4 class="font-bold text-slate-900 text-sm">${task.category}</h4>
+                    <div>
+                        <span class="font-mono text-[10px] text-slate-400">${task.id}</span>
+                        <h4 class="text-base font-bold text-slate-900">${task.title}</h4>
+                        <span class="inline-block mt-1 px-2.5 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-medium">${task.category}</span>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div><p class="text-slate-400 text-[10px]">Tamu VIP</p><p class="font-bold text-amber-600">${task.vip}</p></div>
-                        <div><p class="text-slate-400 text-[10px]">Waktu Pelaksanaan</p><p class="font-semibold text-slate-800">${formatDate(task.date)}</p></div>
+                    <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                        <div>
+                            <strong class="text-slate-500 block text-[10px] uppercase">Tamu VIP Utama</strong>
+                            <p class="font-semibold text-slate-800">${task.vip}</p>
+                        </div>
+                        <div>
+                            <strong class="text-slate-500 block text-[10px] uppercase">Waktu Pelaksanaan</strong>
+                            <p class="font-semibold text-slate-800">${formattedDate} WIB</p>
+                        </div>
                     </div>
-                    <div><p class="text-slate-400 text-[10px]">Lokasi Acara</p><p class="font-semibold text-slate-800">${task.location}</p></div>
-                    <div><p class="text-slate-400 text-[10px] mb-1">Petugas Protokol Ditugaskan</p><ul class="bg-slate-50 rounded-lg p-3 border border-slate-200 space-y-1">${officerList}</ul></div>
-                    <div><p class="text-slate-400 text-[10px]">Keterangan Acara</p><p class="bg-amber-50 text-amber-900 p-2.5 rounded border border-amber-200 italic">${task.notes}</p></div>
+                    <div class="pt-2 border-t border-slate-100">
+                        <strong class="text-slate-500 block text-[10px] uppercase">Lokasi Kegiatan</strong>
+                        <p class="font-semibold text-slate-800">${task.location}</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-100">
+                        <strong class="text-slate-500 block text-[10px] uppercase mb-1.5">Personel Protokol Ditugaskan</strong>
+                        <div class="flex flex-wrap gap-1">
+                            ${task.officers.map(o => `<span class="bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-md text-xs font-medium">${o}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="pt-2 border-t border-slate-100">
+                        <strong class="text-slate-500 block text-[10px] uppercase">Keterangan Tambahan</strong>
+                        <p class="text-slate-700 mt-0.5">${task.notes}</p>
+                    </div>
                 </div>
             `;
             openModal('modalDetail');
         }
 
-        function initCharts() {
-            const ctxCat = document.getElementById('chartCategory').getContext('2d');
-            categoryChartInstance = new Chart(ctxCat, {
-                type: 'doughnut',
-                data: getCategoryChartData(),
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
+        function filterAssignments() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const status = document.getElementById('filter-status').value;
+
+            const filtered = tasks.filter(t => {
+                const matchQuery = t.title.toLowerCase().includes(query) || t.vip.toLowerCase().includes(query) || t.location.toLowerCase().includes(query);
+                const matchStatus = status === 'ALL' || t.status === status;
+                return matchQuery && matchStatus;
             });
 
-            const ctxWork = document.getElementById('chartWorkload').getContext('2d');
-            workloadChartInstance = new Chart(ctxWork, {
-                type: 'bar',
-                data: getWorkloadChartData(),
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
-            });
-
-            const ctxTrend = document.getElementById('chartTrend').getContext('2d');
-            trendChartInstance = new Chart(ctxTrend, {
-                type: 'line',
-                data: {
-                    labels: ['Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus'],
-                    datasets: [{ label: 'Jumlah Kegiatan Keprotokolan', data: [18, 22, 19, 25, 30, 28], borderColor: '#102a43', backgroundColor: 'rgba(16, 42, 67, 0.1)', fill: true, tension: 0.3 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
+            const allBody = document.getElementById('all-assignments-body');
+            allBody.innerHTML = filtered.map(t => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="p-3">
+                        <span class="font-mono text-[10px] text-slate-400 block">${t.id}</span>
+                        <strong class="text-slate-800 font-semibold">${t.title}</strong>
+                        <span class="block text-[10px] text-slate-500 mt-0.5">${t.category}</span>
+                    </td>
+                    <td class="p-3">
+                        <div class="flex items-center gap-1 text-slate-700 font-medium">
+                            <i class="fa-solid fa-crown text-amber-500 text-[10px]"></i> ${t.vip}
+                        </div>
+                        <div class="text-[10px] text-slate-500 mt-1">
+                            <i class="fa-regular fa-clock mr-1"></i>${t.date}
+                        </div>
+                    </td>
+                    <td class="p-3 text-slate-600">${t.location}</td>
+                    <td class="p-3">${t.officers.map(o => `<span class="inline-block bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded text-[10px] font-medium mr-1 mb-1">${o}</span>`).join('')}</td>
+                    <td class="p-3">
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-blue-100 text-blue-800 inline-flex items-center gap-1">${t.status}</span>
+                    </td>
+                    <td class="p-3 text-center">
+                        <button onclick="showTaskDetail('${t.id}')" class="text-blue-600 hover:text-blue-800 p-1"><i class="fa-solid fa-eye"></i></button>
+                    </td>
+                </tr>
+            `).join('') || `<tr><td colspan="6" class="p-4 text-center text-slate-400">Tidak ada penugasan sesuai filter</td></tr>`;
         }
 
-        function getCategoryChartData() {
-            const counts = {};
-            assignments.forEach(a => {
-                counts[a.category] = (counts[a.category] || 0) + 1;
-            });
-            return {
-                labels: Object.keys(counts).length > 0 ? Object.keys(counts) : ['Belum Ada Data'],
-                datasets: [{ data: Object.values(counts).length > 0 ? Object.values(counts) : [1], backgroundColor: ['#102a43', '#d4af37', '#0bcc94', '#3b82f6', '#8b5cf6', '#f59e0b'] }]
-            };
+        function updateDashboardStats() {
+            document.getElementById('stat-total-tasks').innerText = tasks.length;
+            document.getElementById('stat-active-tasks').innerText = tasks.filter(t => t.status === "Terjadwal" || t.status === "Berlangsung").length;
+            document.getElementById('badge-active-count').innerText = tasks.length;
         }
 
-        function getWorkloadChartData() {
-            return {
-                labels: officers.map(o => o.name.split(',')[0]),
-                datasets: [{ label: 'Total Penugasan Selesai', data: officers.map(o => o.tasksCount), backgroundColor: '#102a43' }]
-            };
-        }
+        function renderOfficers() {
+            const grid = document.getElementById('officers-grid');
+            if (!grid) return;
 
-        function updateCategoryChart() {
-            if(categoryChartInstance) {
-                categoryChartInstance.data = getCategoryChartData();
-                categoryChartInstance.update();
-            }
-        }
-
-        function updateWorkloadChart() {
-            if(workloadChartInstance) {
-                workloadChartInstance.data = getWorkloadChartData();
-                workloadChartInstance.update();
-            }
-        }
-
-        function getStatusBadge(status) {
-            if(status === 'Berlangsung') return `<span class="bg-amber-100 text-amber-800 border border-amber-300 px-2.5 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1"><i class="fa-solid fa-spinner fa-spin"></i> Berlangsung</span>`;
-            if(status === 'Mendatang') return `<span class="bg-blue-100 text-blue-800 border border-blue-300 px-2.5 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1"><i class="fa-solid fa-clock"></i> Terjadwal</span>`;
-            return `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 px-2.5 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1"><i class="fa-solid fa-check"></i> Selesai</span>`;
-        }
-
-        function formatDate(dateStr) {
-            if(!dateStr) return "-";
-            const date = new Date(dateStr);
-            return isNaN(date) ? dateStr : date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' WIB';
-        }
-
-        function openModal(modalId) { document.getElementById(modalId).classList.remove('hidden'); }
-        function closeModal(modalId) { document.getElementById(modalId).classList.add('hidden'); }
-    </script>
-	<div id="modalProfile" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md flex flex-col overflow-hidden">
-        <div class="bg-protocol-500 text-white px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-user-pen text-protocol-gold"></i>
-                <h3 class="font-bold text-base">Edit Profil Pengguna</h3>
-            </div>
-            <button onclick="closeModal('modalProfile')" class="text-slate-300 hover:text-white text-xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-
-        <form id="form-edit-profile" onsubmit="handleSaveProfile(event)" class="p-6 space-y-4 text-xs">
-            <div>
-                <label class="block font-semibold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
-                <input type="text" id="input-profile-name" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            </div>
-
-            <div>
-                <label class="block font-semibold text-slate-700 mb-1">Jabatan / Peran</label>
-                <input type="text" id="input-profile-role" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            </div>
-
-            <div>
-                <label class="block font-semibold text-slate-700 mb-1">URL Foto Profil</label>
-                <input type="url" id="input-profile-avatar" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            </div>
-
-            <div class="pt-4 border-t border-slate-200 flex justify-end space-x-2">
-                <button type="button" onclick="closeModal('modalProfile')" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100">Batal</button>
-                <button type="submit" class="px-4 py-2 rounded-lg bg-protocol-500 text-white font-semibold hover:bg-protocol-600 shadow-md">Simpan Perubahan</button>
-            </div>
-        </form>
-    </div>
-</div>
-<div id="modalProfile" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md flex flex-col overflow-hidden">
-        <div class="bg-protocol-500 text-white px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-user-pen text-protocol-gold"></i>
-                <h3 class="font-bold text-base">Edit Profil Pengguna</h3>
-            </div>
-            <button onclick="closeModal('modalProfile')" class="text-slate-300 hover:text-white text-xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-
-        <form id="form-edit-profile" onsubmit="handleSaveProfile(event)" class="p-6 space-y-4 text-xs">
-            <div>
-                <label class="block font-semibold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
-                <input type="text" id="input-profile-name" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            </div>
-
-            <div>
-                <label class="block font-semibold text-slate-700 mb-1">Jabatan / Peran</label>
-                <input type="text" id="input-profile-role" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            </div>
-
-            <div>
-                <label class="block font-semibold text-slate-700 mb-1">URL Foto Profil</label>
-                <input type="url" id="input-profile-avatar" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            </div>
-
-            <div class="pt-4 border-t border-slate-200 flex justify-end space-x-2">
-                <button type="button" onclick="closeModal('modalProfile')" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100">Batal</button>
-                <button type="submit" class="px-4 py-2 rounded-lg bg-protocol-500 text-white font-semibold hover:bg-protocol-600 shadow-md">Simpan Perubahan</button>
-            </div>
-        </form>
-    </div>
-</div>
-<div id="modalManageTeam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md flex flex-col overflow-hidden">
-        <div class="bg-slate-800 text-white px-5 py-3.5 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-users-gear text-protocol-gold"></i>
-                <h3 class="font-bold text-sm" id="manage-team-title">Kelola Anggota Tim</h3>
-            </div>
-            <button onclick="closeModal('modalManageTeam')" class="text-slate-400 hover:text-white text-lg">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-
-        <form id="form-add-officer" onsubmit="handleAddOfficer(event)" class="p-5 space-y-3 text-xs">
-            <input type="hidden" id="manage-team-key">
-            
-            <div>
-                <label class="block font-semibold text-slate-700 mb-1">Nama Petugas & Gelar</label>
-                <input type="text" id="new-officer-name" required placeholder="Contoh: Rahmat Hidayat, S.IP" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            </div>
-
-            <div>
-                <label class="block font-semibold text-slate-700 mb-1">Peran / Peran Protokol</label>
-                <input type="text" id="new-officer-role" required placeholder="Contoh: LO Kantor Penghubung / MC" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            </div>
-
-            <button type="submit" class="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-lg shadow transition">
-                + Tambahkan ke Tim
-            </button>
-        </form>
-
-        <div class="px-5 pb-5">
-            <label class="block font-bold text-slate-700 text-xs mb-2">Daftar Anggota Tim Saat Ini:</label>
-            <div id="manage-team-list" class="max-h-48 overflow-y-auto space-y-1.5 border border-slate-200 rounded-lg p-2 bg-slate-50">
+            grid.innerHTML = officersList.map(o => `
+                <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex items-start space-x-3.5">
+                    <img class="w-12 h-12 rounded-full object-cover border-2 border-slate-200" src="${o.avatar}" alt="${o.name}">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">${o.team}</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${o.status === 'Standby' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                                <span class="w-1.5 h-1.5 rounded-full ${o.status === 'Standby' ? 'bg-emerald-500' : 'bg-amber-500'}"></span> ${o.status}
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-xs truncate mt-1">${o.name}</h4>
+                        <p class="text-[11px] text-slate-500">${o.role}</p>
+                        <p class="text-[10px] font-mono text-slate-400 mt-1">NIP: ${o.nip}</p>
+                    </div>
                 </div>
-        </div>
-    </div>
-</div>
+            `).join('');
+        }
+
+        function renderTodayCoordinators() {
+            const list = document.getElementById('today-coordinators-list');
+            if (!list) return;
+
+            const coords = [
+                { name: "Ahmad Rifa'i, S.IP", team: "Tim Walikota", role: "Korlap Utama" },
+                { name: "Siti Nurhaliza, S.I.Kom", team: "Tim Wakil Walikota", role: "Korlap Pendamping" }
+            ];
+
+            list.innerHTML = coords.map(c => `
+                <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-lg border border-slate-100 text-xs">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-7 h-7 bg-protocol-500 text-white rounded-full flex items-center justify-center font-bold text-[10px]">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-slate-800 leading-tight">${c.name}</p>
+                            <p class="text-[10px] text-slate-500">${c.team}</p>
+                        </div>
+                    </div>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-700 font-semibold rounded text-[10px]">${c.role}</span>
+                </div>
+            `).join('');
+        }
+
+        function initCharts() {
+            const ctxCategory = document.getElementById('chartCategory');
+            if (ctxCategory) {
+                new Chart(ctxCategory, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Seremonial', 'Kunker VIP', 'Rakor', 'Audiensi'],
+                        datasets: [{
+                            data: [45, 25, 20, 10],
+                            backgroundColor: ['#102a43', '#d4af37', '#0bcc94', '#627d98']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            const ctxWorkload = document.getElementById('chartWorkload');
+            if (ctxWorkload) {
+                new Chart(ctxWorkload, {
+                    type: 'bar',
+                    data: {
+                        labels: ["Ahmad Rifa'i", 'Dina M.', 'Reza R.', 'Hendrik S.', 'Siti N.', 'Fajar P.'],
+                        datasets: [{
+                            label: 'Jumlah Penugasan',
+                            data: [12, 19, 14, 8, 15, 11],
+                            backgroundColor: '#102a43'
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            const ctxTrend = document.getElementById('chartTrend');
+            if (ctxTrend) {
+                new Chart(ctxTrend, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mei', 'Juni', 'Juli', 'Agustus'],
+                        datasets: [{
+                            label: 'Penugasan Keprotokolan',
+                            data: [28, 35, 42, 50],
+                            borderColor: '#d4af37',
+                            tension: 0.3
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
+
+        // Inisialisasi Saat Halaman Dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            renderFormOfficers();
+            renderTasks();
+            renderOfficers();
+            renderTodayCoordinators();
+            updateDashboardStats();
+            initCharts();
+        });
+    </script>
 </body>
 </html>
