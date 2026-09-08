@@ -625,6 +625,9 @@
 
     <!-- SCRIPT LOGIKA OTOMATISASI & LOGIK SIPRODI -->
     <script>
+        // URL Apps Script Google Spreadsheet
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7G-vWVNtDcIkMXwnXY4xLqkoTey-Sr6FY9dWR-19FnBtv2FqWXtxaHa8g5usKAWh6/exec";
+
         // Data Default & State awal
         const defaultOfficers = [
             { id: 1, name: "Fitrah Ramadhan", role: "Koordinator Lapangan", team: "walikota", status: "Standby", tasksCount: 12, phone: "081234567890", photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" },
@@ -1205,89 +1208,12 @@
         }
 
         function handleAddTask(e) {
-		// 1. Tambahkan konstanta URL Apps Script di bagian atas script JavaScript Anda
-const GOOGLE_SCRIPT_URL = https://script.google.com/macros/s/AKfycbwdM2XPseu63fcW0ePG36VRJafiDNRUKEhkcDf_1VY0VDgEHhyzJqj_UotRHIqO9DJ1/exec;
-
-// 2. Perbarui fungsi handleAddTask menjadi seperti berikut:
-function handleAddTask(e) {
-    e.preventDefault();
-    
-    const btnSubmit = document.getElementById('btn-submit');
-    btnSubmit.disabled = true;
-    btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Menyimpan...';
-
-    const title = document.getElementById('task-title').value;
-    const category = document.getElementById('task-category').value;
-    const vip = document.getElementById('task-vip').value;
-    const date = document.getElementById('task-date').value;
-    const location = document.getElementById('task-location').value;
-    const notes = document.getElementById('task-notes').value;
-
-    const selectedOfficerEls = document.querySelectorAll('input[name="selected_officers"]:checked');
-    const selectedOfficerIds = Array.from(selectedOfficerEls).map(el => parseInt(el.value));
-
-    // Pemetaan nama petugas untuk dikirim ke Google Sheets
-    const assignedNames = selectedOfficerIds.map(id => {
-        const off = officers.find(o => o.id === id);
-        return off ? off.name : '';
-    }).filter(Boolean).join(', ');
-
-    const newTask = {
-        id: `PRT-2026-00${tasks.length + 1}`,
-        title: title,
-        category: category,
-        vip: vip,
-        date: date,
-        location: location,
-        status: "Terjadwal",
-        officers: selectedOfficerIds,
-        notes: notes
-    };
-
-    // Update jumlah penugasan petugas
-    selectedOfficerIds.forEach(id => {
-        const off = officers.find(o => o.id === id);
-        if (off) off.tasksCount += 1;
-    });
-
-    tasks.unshift(newTask);
-    saveState();
-    renderDashboard();
-    renderAssignments();
-    renderOfficers();
-
-    // Mengirim data ke Google Spreadsheet via Fetch API
-    if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== https://script.google.com/macros/s/AKfycbwdM2XPseu63fcW0ePG36VRJafiDNRUKEhkcDf_1VY0VDgEHhyzJqj_UotRHIqO9DJ1/exec) {
-        fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: newTask.id,
-                title: newTask.title,
-                category: newTask.category,
-                vip: newTask.vip,
-                date: new Date(newTask.date).toLocaleString('id-ID'),
-                location: newTask.location,
-                status: newTask.status,
-                officers: assignedNames,
-                notes: newTask.notes
-            })
-        }).then(() => {
-            console.log('Data penugasan berhasil disinkronkan ke Google Spreadsheet.');
-        }).catch(err => {
-            console.error('Gagal mengirim data ke Google Spreadsheet:', err);
-        });
-    }
-
-    btnSubmit.disabled = false;
-    btnSubmit.innerText = 'Simpan & Terbitkan Penugasan';
-    closeModal('modalTask');
-    document.getElementById('form-add-task').reset();
-}
             e.preventDefault();
+            
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Menyimpan...';
+
             const title = document.getElementById('task-title').value;
             const category = document.getElementById('task-category').value;
             const vip = document.getElementById('task-vip').value;
@@ -1297,6 +1223,12 @@ function handleAddTask(e) {
 
             const selectedOfficerEls = document.querySelectorAll('input[name="selected_officers"]:checked');
             const selectedOfficerIds = Array.from(selectedOfficerEls).map(el => parseInt(el.value));
+
+            // Pemetaan nama petugas untuk dikirim ke Google Sheets
+            const assignedNames = selectedOfficerIds.map(id => {
+                const off = officers.find(o => o.id === id);
+                return off ? off.name : '';
+            }).filter(Boolean).join(', ');
 
             const newTask = {
                 id: `PRT-2026-00${tasks.length + 1}`,
@@ -1310,7 +1242,7 @@ function handleAddTask(e) {
                 notes: notes
             };
 
-            // Update Officer task counts
+            // Update jumlah penugasan petugas
             selectedOfficerIds.forEach(id => {
                 const off = officers.find(o => o.id === id);
                 if (off) off.tasksCount += 1;
@@ -1322,6 +1254,34 @@ function handleAddTask(e) {
             renderAssignments();
             renderOfficers();
 
+            // Mengirim data ke Google Spreadsheet via Fetch API
+            if (GOOGLE_SCRIPT_URL) {
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: newTask.id,
+                        title: newTask.title,
+                        category: newTask.category,
+                        vip: newTask.vip,
+                        date: new Date(newTask.date).toLocaleString('id-ID'),
+                        location: newTask.location,
+                        status: newTask.status,
+                        officers: assignedNames,
+                        notes: newTask.notes
+                    })
+                }).then(() => {
+                    console.log('Data penugasan berhasil disinkronkan ke Google Spreadsheet.');
+                }).catch(err => {
+                    console.error('Gagal mengirim data ke Google Spreadsheet:', err);
+                });
+            }
+
+            btnSubmit.disabled = false;
+            btnSubmit.innerText = 'Simpan & Terbitkan Penugasan';
             closeModal('modalTask');
             document.getElementById('form-add-task').reset();
         }
