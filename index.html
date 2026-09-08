@@ -1206,7 +1206,7 @@
 
         function handleAddTask(e) {
 		// 1. Tambahkan konstanta URL Apps Script di bagian atas script JavaScript Anda
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdM2XPseu63fcW0ePG36VRJafiDNRUKEhkcDf_1VY0VDgEHhyzJqj_UotRHIqO9DJ1/exec";
+const GOOGLE_SCRIPT_URL = https://script.google.com/macros/s/AKfycbwdM2XPseu63fcW0ePG36VRJafiDNRUKEhkcDf_1VY0VDgEHhyzJqj_UotRHIqO9DJ1/exec;
 
 // 2. Perbarui fungsi handleAddTask menjadi seperti berikut:
 function handleAddTask(e) {
@@ -1257,7 +1257,7 @@ function handleAddTask(e) {
     renderOfficers();
 
     // Mengirim data ke Google Spreadsheet via Fetch API
-    if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbwdM2XPseu63fcW0ePG36VRJafiDNRUKEhkcDf_1VY0VDgEHhyzJqj_UotRHIqO9DJ1/exec") {
+    if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== https://script.google.com/macros/s/AKfycbwdM2XPseu63fcW0ePG36VRJafiDNRUKEhkcDf_1VY0VDgEHhyzJqj_UotRHIqO9DJ1/exec) {
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
