@@ -630,7 +630,7 @@
         // Data utama disimpan di Google Sheets melalui Google Apps Script.
         // localStorage hanya dipakai untuk session login + cache sementara.
         // ============================================================
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuud2_J3vW0KbKQnHnVTac1CoN_vwZm_yBQmjOBY965zQ0c8eMuiPDyR4kjYvngbCc/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDfZz8Se91gZRYr4YrxtDNS_BrV-1ovxGAoTQ3oNhfPjZ70xof8Sd_QrvEqDMADx5b/exec";
 
         const defaultOfficers = [
             { id: 1, name: "Fitrah Ramadhan", role: "Koordinator Lapangan", team: "walikota", status: "Standby", tasksCount: 12, phone: "081234567890", photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" },
@@ -685,35 +685,148 @@
             localStorage.setItem('siprodi_auth', JSON.stringify(authSession));
         }
 
-        async function apiRequest(action, payload = {}) {
+        // ============================================================
+        // KONEKSI STABIL TANPA CORS
+        // GET  -> JSONP (aman untuk HTML static/Vercel/GitHub Pages)
+        // POST -> hidden form + iframe (tidak membutuhkan CORS/preflight)
+        // ============================================================
+        let syncQueue = Promise.resolve();
+        let jsonpCounter = 0;
+
+        function buildApiUrl(action) {
             if (!GOOGLE_SCRIPT_URL) throw new Error('GOOGLE_SCRIPT_URL belum diisi.');
             const url = new URL(GOOGLE_SCRIPT_URL);
             url.searchParams.set('action', action);
-
-            const response = await fetch(url.toString(), {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action, ...payload })
-            });
-
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const text = await response.text();
-            let data;
-            try { data = JSON.parse(text); }
-            catch { throw new Error('Respons server bukan JSON yang valid.'); }
-            if (!data.ok) throw new Error(data.message || 'Operasi gagal.');
-            return data;
+            return url;
         }
 
-        async function getRemoteData() {
-            const url = new URL(GOOGLE_SCRIPT_URL);
-            url.searchParams.set('action', 'getAll');
-            url.searchParams.set('_', Date.now().toString());
-            const response = await fetch(url.toString(), { method: 'GET', cache: 'no-store' });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const data = await response.json();
-            if (!data.ok) throw new Error(data.message || 'Gagal membaca database.');
-            return data;
+        function getRemoteData() {
+            return new Promise((resolve, reject) => {
+                const callbackName = `siprodiJsonp_${Date.now()}_${++jsonpCounter}`;
+                const script = document.createElement('script');
+                const url = buildApiUrl('getAll');
+                url.searchParams.set('callback', callbackName);
+                url.searchParams.set('_', Date.now().toString());
+
+                let finished = false;
+                const cleanup = () => {
+                    if (finished) return;
+                    finished = true;
+                    clearTimeout(timer);
+                    try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
+                    script.remove();
+                };
+                const timer = setTimeout(() => {
+                    cleanup();
+                    reject(new Error('Timeout membaca database. Periksa URL Web App dan deployment Apps Script.'));
+                }, 15000);
+
+                window[callbackName] = data => {
+                    cleanup();
+                    if (!data || !data.ok) reject(new Error((data && data.message) || 'Gagal membaca database.'));
+                    else resolve(data);
+                };
+                script.onerror = () => {
+                    cleanup();
+                    reject(new Error('Web App Apps Script tidak dapat diakses.'));
+                };
+                script.src = url.toString();
+                script.async = true;
+                document.head.appendChild(script);
+            });
+        }
+
+        function postViaHiddenForm(action, payload = {}) {
+            return new Promise((resolve, reject) => {
+                const iframeName = `siprodi_post_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+                const iframe = document.createElement('iframe');
+                iframe.name = iframeName;
+                iframe.style.display = 'none';
+                iframe.setAttribute('aria-hidden', 'true');
+                iframe.src = 'about:blank';
+                document.body.appendChild(iframe);
+
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = buildApiUrl(action).toString();
+                form.target = iframeName;
+                form.style.display = 'none';
+
+                const actionInput = document.createElement('input');
+                actionInput.type = 'hidden';
+                actionInput.name = 'action';
+                actionInput.value = action;
+                form.appendChild(actionInput);
+
+                const payloadInput = document.createElement('input');
+                payloadInput.type = 'hidden';
+                payloadInput.name = 'payload';
+                payloadInput.value = JSON.stringify(payload || {});
+                form.appendChild(payloadInput);
+
+                document.body.appendChild(form);
+                let finished = false;
+                const finish = (err) => {
+                    if (finished) return;
+                    finished = true;
+                    clearTimeout(timer);
+                    setTimeout(() => { form.remove(); iframe.remove(); }, 1000);
+                    if (err) reject(err); else resolve({ ok: true });
+                };
+
+                // Tidak membaca response iframe karena cross-origin. Kita tunggu
+                // sebentar lalu apiRequest() memverifikasi hasil lewat JSONP GET.
+                const timer = setTimeout(() => finish(null), 1200);
+                try {
+                    form.submit();
+                } catch (err) {
+                    finish(err);
+                }
+            });
+        }
+
+        function mutationVerified(action, payload, data) {
+            const remote = data?.data || {};
+            const remoteTasks = Array.isArray(remote.tasks) ? remote.tasks : [];
+            const remoteOfficers = Array.isArray(remote.officers) ? remote.officers : [];
+            const profile = remote.profile || {};
+
+            if (action === 'addTask') return remoteTasks.some(t => String(t.id) === String(payload?.task?.id));
+            if (action === 'updateTask') {
+                const t = remoteTasks.find(x => String(x.id) === String(payload?.task?.id));
+                return !!t && String(t.status || '') === String(payload?.task?.status || '') && String(t.title || '') === String(payload?.task?.title || '');
+            }
+            if (action === 'deleteTask') return !remoteTasks.some(t => String(t.id) === String(payload?.id));
+            if (action === 'addOfficer') return remoteOfficers.some(o => String(o.id) === String(payload?.officer?.id));
+            if (action === 'updateOfficer') {
+                const o = remoteOfficers.find(x => String(x.id) === String(payload?.officer?.id));
+                return !!o && String(o.name || '') === String(payload?.officer?.name || '') && String(o.status || '') === String(payload?.officer?.status || '');
+            }
+            if (action === 'deleteOfficer') return !remoteOfficers.some(o => String(o.id) === String(payload?.id));
+            if (action === 'saveProfile') return String(profile.name || '') === String(payload?.profile?.name || '') && String(profile.role || '') === String(payload?.profile?.role || '');
+            if (action === 'replaceAll') return true;
+            return true;
+        }
+
+        async function apiRequest(action, payload = {}) {
+            const run = async () => {
+                await postViaHiddenForm(action, payload);
+                let lastError = null;
+                for (let i = 0; i < 8; i++) {
+                    try {
+                        const result = await getRemoteData();
+                        if (mutationVerified(action, payload, result)) return result;
+                        lastError = new Error('Server belum mencerminkan perubahan ' + action + '.');
+                    } catch (err) {
+                        lastError = err;
+                    }
+                    await new Promise(r => setTimeout(r, 600 + i * 350));
+                }
+                throw lastError || new Error('Server belum dapat diverifikasi.');
+            };
+            const result = syncQueue.then(run, run);
+            syncQueue = result.catch(() => {});
+            return result;
         }
 
         async function loadRemoteData(firstLoad = false) {
@@ -743,7 +856,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                setSyncStatus('Offline / gagal terhubung ke server', 'error');
+                setSyncStatus('Offline • ' + (err.message || 'gagal terhubung'), 'error');
                 if (firstLoad) {
                     showToast('Database online belum dapat diakses. Data lokal sementara digunakan.', 'warning');
                 }
