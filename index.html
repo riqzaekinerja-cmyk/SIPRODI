@@ -625,44 +625,72 @@
 
     <!-- SCRIPT LOGIKA OTOMATISASI & LOGIK SIPRODI -->
     <script>
-        // ============================================================
-        // SIPRODI-DIGITAL - MODE MULTI-PERANGKAT
-        // Data utama disimpan di Google Sheets melalui Google Apps Script.
-        // localStorage hanya dipakai untuk session login + cache sementara.
-        // ============================================================
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDfZz8Se91gZRYr4YrxtDNS_BrV-1ovxGAoTQ3oNhfPjZ70xof8Sd_QrvEqDMADx5b/exec";
+        // URL Apps Script Google Spreadsheet
+        const GOOGLE_SCRIPT_URL = https://script.google.com/macros/s/AKfycbzXioBUBBuRF1T8EQc2I172Z8UwHb_95oUCjNIVoGbjl2WDgRcJ7vUgBpTSD7e7X6f2/exec";
 
+        // Data Default & State awal
         const defaultOfficers = [
             { id: 1, name: "Fitrah Ramadhan", role: "Koordinator Lapangan", team: "walikota", status: "Standby", tasksCount: 12, phone: "081234567890", photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" },
             { id: 2, name: "Rifaldy Pratama", role: "Petugas Pendamping VIP", team: "walikota", status: "Bertugas", tasksCount: 15, phone: "081298765432", photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150" },
-            { id: 3, name: "Siti Rahmawati", role: "Petugas Protokol", team: "wakil", status: "Standby", tasksCount: 8, phone: "081355667788", photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" },
-            { id: 4, name: "Andi Saputra", role: "Petugas Pendamping", team: "penghubung", status: "Standby", tasksCount: 10, phone: "081377889900", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" },
-            { id: 5, name: "Dewi Lestari", role: "Petugas Protokol", team: "wakil", status: "Standby", tasksCount: 7, phone: "081244556677", photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" }
+            { id: 3, name: "Siti Rahmawati", role: "Master of Ceremony (MC)", team: "wakil", status: "Standby", tasksCount: 9, phone: "081311223344", photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150" },
+            { id: 4, name: "Hendra Wijaya", role: "Koordinator Acara", team: "wakil", status: "Standby", tasksCount: 11, phone: "081555667788", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" },
+            { id: 5, name: "Dedi Kurniawan", role: "Petugas Penghubung Lembaga", team: "penghubung", status: "Standby", tasksCount: 8, phone: "081999887766", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" }
         ];
 
         const defaultTasks = [
-            { id: "PRT-2026-001", title: "Rapat Koordinasi Forum Komunikasi Pimpinan Daerah (Forkopimda)", category: "Rapat / Audiensi", vip: "Walikota Ambon", date: "2026-09-10T09:00", location: "Aula Utama Kantor Walikota Lt. 1", status: "Terjadwal", officers: [1, 2], notes: "Pakaian PSH / Pakaian Dinas Harian." },
-            { id: "PRT-2026-002", title: "Penerimaan Kunjungan Kerja Spesifik Komisi II DPR RI", category: "Kunjungan Kerja VIP", vip: "Ketua & Anggota Komisi II DPR RI", date: "2026-09-08T14:00", location: "Ruang Rapat VIP Bandara & Gedung Pemkot", status: "Berlangsung", officers: [2, 5], notes: "Penjemputan VIP di garbarata bandara jam 13.30 WIT." },
-            { id: "PRT-2026-003", title: "Upacara Peringatan Hari Jadi Kota", category: "Kegiatan Seremonial & Protokol", vip: "Gubernur & Walikota", date: "2026-09-07T07:30", location: "Lapangan Merdeka", status: "Selesai", officers: [1, 3, 4], notes: "Gladi bersih selesai H-1. Pakaian PSL Lengkap." }
+            {
+                id: "PRT-2026-001",
+                title: "Rapat Koordinasi Forum Komunikasi Pimpinan Daerah (Forkopimda)",
+                category: "Konferensi / Rakor",
+                vip: "Walikota & Jajaran Forkopimda",
+                date: "2026-09-10T09:00",
+                location: "Aula Utama Kantor Walikota Lt. 3",
+                status: "Terjadwal",
+                officers: [1, 2],
+                notes: "Pakaian PSH / Pakaian Dinas Harian."
+            },
+            {
+                id: "PRT-2026-002",
+                title: "Penerimaan Kunjungan Kerja Spesifik Komisi II DPR RI",
+                category: "Kunjungan Kerja VIP",
+                vip: "Ketua & Anggota Komisi II DPR RI",
+                date: "2026-09-08T14:00",
+                location: "Ruang Rapat VIP Bandara & Gedung Pemkot",
+                status: "Berlangsung",
+                officers: [2, 5],
+                notes: "Penjemputan VIP di garbarata bandara jam 13.30 WIT."
+            },
+            {
+                id: "PRT-2026-003",
+                title: "Upacara Peringatan Hari Jadi Kota",
+                category: "Kegiatan Seremonial & Protokol",
+                vip: "Gubernur & Walikota",
+                date: "2026-09-07T07:30",
+                location: "Lapangan Merdeka",
+                status: "Selesai",
+                officers: [1, 3, 4],
+                notes: "Gladi bersih selesai H-1. Pakaian PSL Lengkap."
+            }
         ];
 
-        let officers = JSON.parse(localStorage.getItem('siprodi_officers_cache') || 'null') || [...defaultOfficers];
-        let tasks = JSON.parse(localStorage.getItem('siprodi_tasks_cache') || 'null') || [...defaultTasks];
-        let userProfile = JSON.parse(localStorage.getItem('siprodi_profile_cache') || 'null') || {
+        // System Initialization & Storage Loading
+        let officers = JSON.parse(localStorage.getItem('siprodi_officers')) || defaultOfficers;
+        let tasks = JSON.parse(localStorage.getItem('siprodi_tasks')) || defaultTasks;
+        let userProfile = JSON.parse(localStorage.getItem('siprodi_profile')) || {
             name: "Bambang Wijaya, S.STP",
             role: "Kasubag Agenda & Protokol",
             avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
         };
-        let authSession = JSON.parse(localStorage.getItem('siprodi_auth') || 'false');
+        let authSession = JSON.parse(localStorage.getItem('siprodi_auth')) || false;
+
         let tempProfileAvatar = '';
         let tempOfficerPhoto = '';
+
         let chartCategoryInstance = null;
         let chartWorkloadInstance = null;
         let chartTrendInstance = null;
-        let isLoadingRemote = false;
-        let refreshTimer = null;
 
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', () => {
             checkAuth();
             initProfile();
             renderDashboard();
@@ -670,245 +698,16 @@
             renderOfficers();
             renderFormOfficerCheckboxes();
             initCharts();
-            await loadRemoteData(true);
-            startAutoRefresh();
         });
 
-        function cacheState() {
-            localStorage.setItem('siprodi_officers_cache', JSON.stringify(officers));
-            localStorage.setItem('siprodi_tasks_cache', JSON.stringify(tasks));
-            localStorage.setItem('siprodi_profile_cache', JSON.stringify(userProfile));
-        }
+        // Event Listener untuk Update Real-Time saat dibuka di tab/perangkat lain (storage event)
+        window.addEventListener('storage', () => {
+            officers = JSON.parse(localStorage.getItem('siprodi_officers')) || defaultOfficers;
+            tasks = JSON.parse(localStorage.getItem('siprodi_tasks')) || defaultTasks;
+            userProfile = JSON.parse(localStorage.getItem('siprodi_profile')) || userProfile;
+            authSession = JSON.parse(localStorage.getItem('siprodi_auth')) || false;
 
-        // Session login tetap lokal; DATA APLIKASI tidak lagi disimpan sebagai sumber utama di localStorage.
-        function saveAuthSession() {
-            localStorage.setItem('siprodi_auth', JSON.stringify(authSession));
-        }
-
-        // ============================================================
-        // KONEKSI STABIL TANPA CORS
-        // GET  -> JSONP (aman untuk HTML static/Vercel/GitHub Pages)
-        // POST -> hidden form + iframe (tidak membutuhkan CORS/preflight)
-        // ============================================================
-        let syncQueue = Promise.resolve();
-        let jsonpCounter = 0;
-
-        function buildApiUrl(action) {
-            if (!GOOGLE_SCRIPT_URL) throw new Error('GOOGLE_SCRIPT_URL belum diisi.');
-            const url = new URL(GOOGLE_SCRIPT_URL);
-            url.searchParams.set('action', action);
-            return url;
-        }
-
-        function getRemoteData() {
-            return new Promise((resolve, reject) => {
-                const callbackName = `siprodiJsonp_${Date.now()}_${++jsonpCounter}`;
-                const script = document.createElement('script');
-                const url = buildApiUrl('getAll');
-                url.searchParams.set('callback', callbackName);
-                url.searchParams.set('_', Date.now().toString());
-
-                let finished = false;
-                const cleanup = () => {
-                    if (finished) return;
-                    finished = true;
-                    clearTimeout(timer);
-                    try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
-                    script.remove();
-                };
-                const timer = setTimeout(() => {
-                    cleanup();
-                    reject(new Error('Timeout membaca database. Periksa URL Web App dan deployment Apps Script.'));
-                }, 15000);
-
-                window[callbackName] = data => {
-                    cleanup();
-                    if (!data || !data.ok) reject(new Error((data && data.message) || 'Gagal membaca database.'));
-                    else resolve(data);
-                };
-                script.onerror = () => {
-                    cleanup();
-                    reject(new Error('Web App Apps Script tidak dapat diakses.'));
-                };
-                script.src = url.toString();
-                script.async = true;
-                document.head.appendChild(script);
-            });
-        }
-
-        function postViaHiddenForm(action, payload = {}) {
-            return new Promise((resolve, reject) => {
-                const iframeName = `siprodi_post_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-                const iframe = document.createElement('iframe');
-                iframe.name = iframeName;
-                iframe.style.display = 'none';
-                iframe.setAttribute('aria-hidden', 'true');
-                iframe.src = 'about:blank';
-                document.body.appendChild(iframe);
-
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = buildApiUrl(action).toString();
-                form.target = iframeName;
-                form.style.display = 'none';
-
-                const actionInput = document.createElement('input');
-                actionInput.type = 'hidden';
-                actionInput.name = 'action';
-                actionInput.value = action;
-                form.appendChild(actionInput);
-
-                const payloadInput = document.createElement('input');
-                payloadInput.type = 'hidden';
-                payloadInput.name = 'payload';
-                payloadInput.value = JSON.stringify(payload || {});
-                form.appendChild(payloadInput);
-
-                document.body.appendChild(form);
-                let finished = false;
-                const finish = (err) => {
-                    if (finished) return;
-                    finished = true;
-                    clearTimeout(timer);
-                    setTimeout(() => { form.remove(); iframe.remove(); }, 1000);
-                    if (err) reject(err); else resolve({ ok: true });
-                };
-
-                // Tidak membaca response iframe karena cross-origin. Kita tunggu
-                // sebentar lalu apiRequest() memverifikasi hasil lewat JSONP GET.
-                const timer = setTimeout(() => finish(null), 1200);
-                try {
-                    form.submit();
-                } catch (err) {
-                    finish(err);
-                }
-            });
-        }
-
-        function mutationVerified(action, payload, data) {
-            const remote = data?.data || {};
-            const remoteTasks = Array.isArray(remote.tasks) ? remote.tasks : [];
-            const remoteOfficers = Array.isArray(remote.officers) ? remote.officers : [];
-            const profile = remote.profile || {};
-
-            if (action === 'addTask') return remoteTasks.some(t => String(t.id) === String(payload?.task?.id));
-            if (action === 'updateTask') {
-                const t = remoteTasks.find(x => String(x.id) === String(payload?.task?.id));
-                return !!t && String(t.status || '') === String(payload?.task?.status || '') && String(t.title || '') === String(payload?.task?.title || '');
-            }
-            if (action === 'deleteTask') return !remoteTasks.some(t => String(t.id) === String(payload?.id));
-            if (action === 'addOfficer') return remoteOfficers.some(o => String(o.id) === String(payload?.officer?.id));
-            if (action === 'updateOfficer') {
-                const o = remoteOfficers.find(x => String(x.id) === String(payload?.officer?.id));
-                return !!o && String(o.name || '') === String(payload?.officer?.name || '') && String(o.status || '') === String(payload?.officer?.status || '');
-            }
-            if (action === 'deleteOfficer') return !remoteOfficers.some(o => String(o.id) === String(payload?.id));
-            if (action === 'saveProfile') return String(profile.name || '') === String(payload?.profile?.name || '') && String(profile.role || '') === String(payload?.profile?.role || '');
-            if (action === 'replaceAll') return true;
-            return true;
-        }
-
-        async function apiRequest(action, payload = {}) {
-            const run = async () => {
-                await postViaHiddenForm(action, payload);
-                let lastError = null;
-                for (let i = 0; i < 8; i++) {
-                    try {
-                        const result = await getRemoteData();
-                        if (mutationVerified(action, payload, result)) return result;
-                        lastError = new Error('Server belum mencerminkan perubahan ' + action + '.');
-                    } catch (err) {
-                        lastError = err;
-                    }
-                    await new Promise(r => setTimeout(r, 600 + i * 350));
-                }
-                throw lastError || new Error('Server belum dapat diverifikasi.');
-            };
-            const result = syncQueue.then(run, run);
-            syncQueue = result.catch(() => {});
-            return result;
-        }
-
-        async function loadRemoteData(firstLoad = false) {
-            if (isLoadingRemote) return;
-            isLoadingRemote = true;
-            setSyncStatus('Memuat data server...', 'loading');
-            try {
-                const result = await getRemoteData();
-                const remote = result.data || {};
-                const remoteHasData = (remote.officers?.length || 0) > 0 || (remote.tasks?.length || 0) > 0 || remote.profile?.name;
-
-                if (remoteHasData) {
-                    officers = Array.isArray(remote.officers) ? remote.officers : [];
-                    tasks = Array.isArray(remote.tasks) ? remote.tasks : [];
-                    userProfile = remote.profile || userProfile;
-                    cacheState();
-                    refreshUI();
-                    setSyncStatus(`Tersinkronisasi • ${new Date().toLocaleTimeString('id-ID')}`, 'ok');
-                } else if (firstLoad) {
-                    // Migrasi satu kali: jika database masih kosong, data yang sudah ada di laptop ini dikirim ke server.
-                    await apiRequest('replaceAll', { data: { officers, tasks, profile: userProfile } });
-                    cacheState();
-                    refreshUI();
-                    setSyncStatus('Data awal berhasil dipindahkan ke server', 'ok');
-                } else {
-                    setSyncStatus('Database kosong', 'warn');
-                }
-            } catch (err) {
-                console.error(err);
-                setSyncStatus('Offline • ' + (err.message || 'gagal terhubung'), 'error');
-                if (firstLoad) {
-                    showToast('Database online belum dapat diakses. Data lokal sementara digunakan.', 'warning');
-                }
-            } finally {
-                isLoadingRemote = false;
-            }
-        }
-
-        function startAutoRefresh() {
-            if (refreshTimer) clearInterval(refreshTimer);
-            refreshTimer = setInterval(() => loadRemoteData(false), 15000);
-        }
-
-        async function syncOperation(action, payload) {
-            setSyncStatus('Menyimpan ke server...', 'loading');
-            const result = await apiRequest(action, payload);
-            if (result.data) {
-                officers = result.data.officers || officers;
-                tasks = result.data.tasks || tasks;
-                userProfile = result.data.profile || userProfile;
-                cacheState();
-                refreshUI();
-            }
-            setSyncStatus(`Tersimpan • ${new Date().toLocaleTimeString('id-ID')}`, 'ok');
-            return result;
-        }
-
-        function setSyncStatus(text, state) {
-            let el = document.getElementById('siprodi-sync-status');
-            if (!el) {
-                el = document.createElement('div');
-                el.id = 'siprodi-sync-status';
-                el.className = 'fixed bottom-4 right-4 z-[70] px-3 py-2 rounded-lg shadow-lg text-xs font-semibold border bg-white';
-                document.body.appendChild(el);
-            }
-            el.innerText = `● ${text}`;
-            el.classList.remove('text-emerald-700','text-amber-700','text-red-700','text-slate-600');
-            el.classList.add(state === 'ok' ? 'text-emerald-700' : state === 'warn' ? 'text-amber-700' : state === 'error' ? 'text-red-700' : 'text-slate-600');
-        }
-
-        function showToast(message, type = 'info') {
-            const el = document.createElement('div');
-            el.className = 'fixed top-4 right-4 z-[80] max-w-sm px-4 py-3 rounded-xl shadow-xl border bg-white text-xs font-semibold';
-            el.innerText = message;
-            if (type === 'warning') el.classList.add('text-amber-800','border-amber-300');
-            else if (type === 'error') el.classList.add('text-red-800','border-red-300');
-            else el.classList.add('text-slate-700','border-slate-200');
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 3500);
-        }
-
-        function refreshUI() {
+            checkAuth();
             initProfile();
             renderDashboard();
             renderAssignments();
@@ -916,12 +715,20 @@
             renderFormOfficerCheckboxes();
             renderManageTeamList();
             updateCharts();
+        });
+
+        function saveState() {
+            localStorage.setItem('siprodi_officers', JSON.stringify(officers));
+            localStorage.setItem('siprodi_tasks', JSON.stringify(tasks));
+            localStorage.setItem('siprodi_profile', JSON.stringify(userProfile));
+            localStorage.setItem('siprodi_auth', JSON.stringify(authSession));
         }
 
         // --- SISTEM LOGIN & LOGOUT ---
         function checkAuth() {
             const loginScreen = document.getElementById('login-screen');
             const appContainer = document.getElementById('app-container');
+
             if (authSession) {
                 loginScreen.classList.add('hidden');
                 appContainer.classList.remove('hidden');
@@ -936,20 +743,22 @@
             const user = document.getElementById('login-username').value.trim();
             const pass = document.getElementById('login-password').value.trim();
             const errorMsg = document.getElementById('login-error-msg');
+
             if (user === 'admin' && pass === 'protokol123') {
                 authSession = true;
-                saveAuthSession();
+                saveState();
                 errorMsg.classList.add('hidden');
                 document.getElementById('form-login').reset();
                 checkAuth();
-                loadRemoteData(true);
-            } else errorMsg.classList.remove('hidden');
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
         }
 
         function handleLogout() {
-            if (confirm('Apakah Anda yakin ingin keluar dari sistem?')) {
+            if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
                 authSession = false;
-                saveAuthSession();
+                saveState();
                 checkAuth();
             }
         }
@@ -961,25 +770,29 @@
                 btn.classList.remove('bg-protocol-500', 'text-white', 'shadow-sm');
                 btn.classList.add('text-slate-600', 'hover:bg-slate-100');
             });
+
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
             const activeNav = document.getElementById(`nav-${tabId}`);
             activeNav.classList.add('bg-protocol-500', 'text-white', 'shadow-sm');
             activeNav.classList.remove('text-slate-600', 'hover:bg-slate-100');
-            if (tabId === 'analytics') updateCharts();
+
+            if (tabId === 'analytics') {
+                updateCharts();
+            }
         }
 
-        // Profile Functions
+        // Profile Functions (Memproses Upload File & URL Gambar)
         function initProfile() {
-            document.getElementById('user-display-name').innerText = userProfile.name || '-';
-            document.getElementById('user-display-role').innerText = userProfile.role || '-';
-            document.getElementById('user-display-avatar').src = userProfile.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile.name || 'Protokol')}`;
+            document.getElementById('user-display-name').innerText = userProfile.name;
+            document.getElementById('user-display-role').innerText = userProfile.role;
+            document.getElementById('user-display-avatar').src = userProfile.avatar;
         }
 
         function openProfileModal() {
-            document.getElementById('input-profile-name').value = userProfile.name || '';
-            document.getElementById('input-profile-role').value = userProfile.role || '';
-            document.getElementById('input-profile-avatar').value = userProfile.avatar || '';
-            document.getElementById('preview-profile-avatar').src = userProfile.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile.name || 'Protokol')}`;
+            document.getElementById('input-profile-name').value = userProfile.name;
+            document.getElementById('input-profile-role').value = userProfile.role;
+            document.getElementById('input-profile-avatar').value = userProfile.avatar;
+            document.getElementById('preview-profile-avatar').src = userProfile.avatar;
             document.getElementById('input-profile-file').value = '';
             tempProfileAvatar = '';
             openModal('modalProfile');
@@ -989,7 +802,7 @@
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = evt => {
+                reader.onload = function(evt) {
                     tempProfileAvatar = evt.target.result;
                     document.getElementById('preview-profile-avatar').src = tempProfileAvatar;
                 };
@@ -997,26 +810,29 @@
             }
         }
 
-        async function handleSaveProfile(e) {
+        function handleSaveProfile(e) {
             e.preventDefault();
-            const name = document.getElementById('input-profile-name').value.trim();
-            const role = document.getElementById('input-profile-role').value.trim();
-            const urlAvatar = document.getElementById('input-profile-avatar').value.trim();
-            const newProfile = { name, role, avatar: tempProfileAvatar || urlAvatar || userProfile.avatar };
-            try {
-                await syncOperation('saveProfile', { profile: newProfile });
-                closeModal('modalProfile');
-                showToast('Profil berhasil disimpan dan disinkronkan.');
-            } catch (err) {
-                showToast('Gagal menyimpan profil: ' + err.message, 'error');
-            }
+            userProfile.name = document.getElementById('input-profile-name').value;
+            userProfile.role = document.getElementById('input-profile-role').value;
+            
+            const urlAvatar = document.getElementById('input-profile-avatar').value;
+            userProfile.avatar = tempProfileAvatar || urlAvatar || userProfile.avatar;
+
+            saveState();
+            initProfile();
+            closeModal('modalProfile');
         }
 
         // Modal Helpers
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
 
-        // Manage Team Functions
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        // Manage Team Functions (Tambah, Edit, Hapus & Upload Gambar)
         function openManageTeamModal() {
             resetOfficerForm();
             renderManageTeamList();
@@ -1041,7 +857,7 @@
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = evt => {
+                reader.onload = function(evt) {
                     tempOfficerPhoto = evt.target.result;
                     document.getElementById('preview-officer-photo').src = tempOfficerPhoto;
                 };
@@ -1049,84 +865,134 @@
             }
         }
 
-        async function handleSaveTeamMember(e) {
+        function handleSaveTeamMember(e) {
             e.preventDefault();
             const editId = document.getElementById('officer-edit-id').value;
             const team = document.getElementById('team-select').value;
-            const name = document.getElementById('officer-name-input').value.trim();
-            const role = document.getElementById('officer-role-input').value.trim();
-            const phone = document.getElementById('officer-phone-input').value.trim();
-            const photoUrl = document.getElementById('officer-photo-input').value.trim();
-            const finalPhoto = tempOfficerPhoto || photoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=102a43&color=fff`;
-            const submit = document.getElementById('btn-submit-officer-text');
-            submit.innerText = 'Menyimpan...';
-            try {
-                if (editId) {
-                    const current = officers.find(o => String(o.id) === String(editId));
-                    if (!current) throw new Error('Petugas tidak ditemukan. Silakan refresh data.');
-                    await syncOperation('updateOfficer', { officer: { ...current, team, name, role, phone: phone || '-', photo: finalPhoto } });
-                } else {
-                    const newOfficer = { id: Date.now(), name, role, team, status: 'Standby', tasksCount: 0, phone: phone || '-', photo: finalPhoto };
-                    await syncOperation('addOfficer', { officer: newOfficer });
+            const name = document.getElementById('officer-name-input').value;
+            const role = document.getElementById('officer-role-input').value;
+            const phone = document.getElementById('officer-phone-input').value;
+            const photoUrl = document.getElementById('officer-photo-input').value;
+
+            const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=102a43&color=fff`;
+            const finalPhoto = tempOfficerPhoto || photoUrl || fallbackAvatar;
+
+            if (editId) {
+                // Mode Edit
+                const off = officers.find(o => o.id === parseInt(editId));
+                if (off) {
+                    off.team = team;
+                    off.name = name;
+                    off.role = role;
+                    off.phone = phone || '-';
+                    off.photo = finalPhoto;
                 }
-                resetOfficerForm();
-                showToast('Data petugas berhasil disimpan dan tersinkronisasi.');
-            } catch (err) {
-                showToast('Gagal menyimpan petugas: ' + err.message, 'error');
-                submit.innerText = editId ? 'Simpan Edit' : 'Tambah Petugas';
+            } else {
+                // Mode Tambah
+                const newOfficer = {
+                    id: Date.now(),
+                    name: name,
+                    role: role,
+                    team: team,
+                    status: "Standby",
+                    tasksCount: 0,
+                    phone: phone || '-',
+                    photo: finalPhoto
+                };
+                officers.push(newOfficer);
             }
+
+            saveState();
+            renderOfficers();
+            renderFormOfficerCheckboxes();
+            renderDashboard();
+            renderManageTeamList();
+            resetOfficerForm();
         }
 
         function renderManageTeamList() {
             const tbody = document.getElementById('manage-team-list-body');
             const countEl = document.getElementById('total-officers-count');
             if (!tbody) return;
+
             tbody.innerHTML = '';
             countEl.innerText = `Total: ${officers.length} Anggota`;
-            if (!officers.length) {
+
+            if (officers.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">Belum ada anggota tim terdaftar.</td></tr>`;
                 return;
             }
+
             officers.forEach(off => {
-                const teamLabel = off.team === 'walikota' ? 'Walikota' : (off.team === 'wakil' ? 'Wakil Walikota' : 'Penghubung');
-                const teamBadge = off.team === 'walikota' ? 'bg-blue-100 text-blue-800' : (off.team === 'wakil' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800');
-                const photoUrl = off.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}`;
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition">
-                    <td class="p-2.5"><div class="flex items-center space-x-2.5"><img src="${photoUrl}" class="w-8 h-8 rounded-full object-cover border border-slate-200"><div><p class="font-bold text-slate-800">${off.name}</p></div></div></td>
-                    <td class="p-2.5"><p class="text-[11px] font-medium text-slate-700">${off.role}</p><p class="text-[10px] text-slate-500"><i class="fa-solid fa-phone text-slate-400 me-1"></i>${off.phone || '-'}</p></td>
-                    <td class="p-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${teamBadge}">Tim ${teamLabel}</span></td>
-                    <td class="p-2.5 text-center space-x-1">
-                        <button onclick="editOfficer(${off.id})" class="px-2 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 font-semibold text-[11px]" title="Edit Anggota"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="deleteOfficer(${off.id})" class="px-2 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100 font-semibold text-[11px]" title="Hapus Anggota"><i class="fa-solid fa-trash"></i></button>
-                    </td></tr>`;
+                let teamLabel = off.team === 'walikota' ? 'Walikota' : (off.team === 'wakil' ? 'Wakil Walikota' : 'Penghubung');
+                let teamBadge = off.team === 'walikota' ? 'bg-blue-100 text-blue-800' : (off.team === 'wakil' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800');
+                let photoUrl = off.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff`;
+                let phoneDisplay = off.phone ? off.phone : '-';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-2.5">
+                            <div class="flex items-center space-x-2.5">
+                                <img src="${photoUrl}" alt="${off.name}" class="w-8 h-8 rounded-full object-cover border border-slate-200 flex-shrink-0">
+                                <div>
+                                    <p class="font-bold text-slate-800">${off.name}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-2.5">
+                            <p class="text-[11px] font-medium text-slate-700">${off.role}</p>
+                            <p class="text-[10px] text-slate-500"><i class="fa-solid fa-phone text-slate-400 me-1"></i>${phoneDisplay}</p>
+                        </td>
+                        <td class="p-2.5">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${teamBadge}">Tim ${teamLabel}</span>
+                        </td>
+                        <td class="p-2.5 text-center space-x-1">
+                            <button onclick="editOfficer(${off.id})" class="px-2 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 font-semibold text-[11px] transition" title="Edit Anggota">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button onclick="deleteOfficer(${off.id})" class="px-2 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100 font-semibold text-[11px] transition" title="Hapus Anggota">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
             });
         }
 
         function editOfficer(id) {
-            const off = officers.find(o => String(o.id) === String(id));
+            const off = officers.find(o => o.id === id);
             if (!off) return;
+
             document.getElementById('officer-edit-id').value = off.id;
             document.getElementById('team-select').value = off.team;
             document.getElementById('officer-name-input').value = off.name;
             document.getElementById('officer-role-input').value = off.role;
             document.getElementById('officer-phone-input').value = off.phone || '';
-            document.getElementById('officer-photo-input').value = (off.photo || '').startsWith('data:') ? '' : (off.photo || '');
-            document.getElementById('preview-officer-photo').src = off.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}`;
+            document.getElementById('officer-photo-input').value = off.photo || '';
+            document.getElementById('preview-officer-photo').src = off.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff`;
+
             document.getElementById('form-team-heading').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-500 me-2"></i> Edit Data Anggota`;
             document.getElementById('btn-submit-officer-text').innerText = 'Simpan Edit';
             document.getElementById('btn-submit-officer-icon').className = 'fa-solid fa-floppy-disk me-1';
             document.getElementById('btn-cancel-edit-officer').classList.remove('hidden');
         }
 
-        async function deleteOfficer(id) {
-            const off = officers.find(o => String(o.id) === String(id));
+        function deleteOfficer(id) {
+            const off = officers.find(o => o.id === id);
             if (!off) return;
-            if (!confirm(`Apakah Anda yakin ingin menghapus "${off.name}" dari tim?`)) return;
-            try {
-                await syncOperation('deleteOfficer', { id });
-                if (String(document.getElementById('officer-edit-id').value) === String(id)) resetOfficerForm();
-                showToast('Petugas berhasil dihapus.');
-            } catch (err) { showToast('Gagal menghapus petugas: ' + err.message, 'error'); }
+
+            if (confirm(`Apakah Anda yakin ingin menghapus "${off.name}" dari tim?`)) {
+                officers = officers.filter(o => o.id !== id);
+                saveState();
+                renderOfficers();
+                renderFormOfficerCheckboxes();
+                renderDashboard();
+                renderManageTeamList();
+
+                if (document.getElementById('officer-edit-id').value == id) {
+                    resetOfficerForm();
+                }
+            }
         }
 
         // Dashboard & Render Functions
@@ -1135,153 +1001,408 @@
             const activeTasks = tasks.filter(t => t.status === 'Berlangsung' || t.status === 'Terjadwal');
             document.getElementById('stat-active-tasks').innerText = activeTasks.length;
             document.getElementById('badge-active-count').innerText = activeTasks.length;
-            document.getElementById('stat-ready-officers').innerText = officers.filter(o => o.status === 'Standby').length;
+            
+            const readyOfficers = officers.filter(o => o.status === 'Standby');
+            document.getElementById('stat-ready-officers').innerText = readyOfficers.length;
+
+            // Render Recent Table
             const tbody = document.getElementById('recent-tasks-body');
             tbody.innerHTML = '';
-            [...tasks].slice(0, 5).forEach(task => {
-                const assignedNames = (task.officers || []).map(id => { const off = officers.find(o => String(o.id) === String(id)); return off ? off.name : 'Unknown'; }).join(', ');
+
+            const sortedTasks = [...tasks].slice(0, 5);
+            if (sortedTasks.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada agenda penugasan.</td></tr>`;
+                return;
+            }
+
+            sortedTasks.forEach(task => {
+                const assignedNames = task.officers.map(id => {
+                    const off = officers.find(o => o.id === id);
+                    return off ? off.name : 'Unknown';
+                }).join(', ');
+
                 const formattedDate = new Date(task.date).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
-                let badgeColor = 'bg-blue-100 text-blue-800';
-                if (task.status === 'Berlangsung') badgeColor = 'bg-amber-100 text-amber-800';
-                if (task.status === 'Selesai') badgeColor = 'bg-emerald-100 text-emerald-800';
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition"><td class="p-3 font-semibold text-slate-800">${task.title}</td><td class="p-3 text-slate-600">${formattedDate}<br><span class="text-[10px] text-slate-400">${task.location}</span></td><td class="p-3 text-slate-700">${assignedNames || '-'}</td><td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeColor}">${task.status}</span></td><td class="p-3 text-right"><button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold text-xs">Detail</button></td></tr>`;
+
+                let badgeColor = "bg-blue-100 text-blue-800";
+                if(task.status === "Berlangsung") badgeColor = "bg-amber-100 text-amber-800";
+                if(task.status === "Selesai") badgeColor = "bg-emerald-100 text-emerald-800";
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3 font-semibold text-slate-800">${task.title}</td>
+                        <td class="p-3 text-slate-600">${formattedDate}<br><span class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot me-1"></i>${task.location}</span></td>
+                        <td class="p-3 text-slate-700">${assignedNames || '-'}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeColor}">${task.status}</span></td>
+                        <td class="p-3 text-right">
+                            <button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold text-xs">Detail</button>
+                        </td>
+                    </tr>
+                `;
             });
-            if (!tasks.length) tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada agenda penugasan.</td></tr>`;
+
+            // Coordinators today list
             const coordContainer = document.getElementById('today-coordinators-list');
-            if (coordContainer) {
-                const coords = officers.filter(o => (o.role || '').toLowerCase().includes('koordinator'));
-                coordContainer.innerHTML = coords.length ? coords.map(c => `<div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs"><div><p class="font-bold text-slate-800">${c.name}</p><p class="text-[10px] text-slate-500">${String(c.team || '').toUpperCase()} - ${c.role}</p></div><span class="px-2 py-0.5 text-[10px] rounded-full font-bold ${c.status === 'Standby' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${c.status}</span></div>`).join('') : `<p class="text-xs text-slate-400 italic">Belum ada koordinator terdaftar.</p>`;
+            coordContainer.innerHTML = '';
+            const coords = officers.filter(o => o.role.toLowerCase().includes('koordinator'));
+            if (coords.length === 0) {
+                coordContainer.innerHTML = `<p class="text-xs text-slate-400 italic">Belum ada koordinator terdaftar.</p>`;
+            } else {
+                coords.forEach(c => {
+                    coordContainer.innerHTML += `
+                        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-user-tie text-protocol-500"></i>
+                                <div>
+                                    <p class="font-bold text-slate-800">${c.name}</p>
+                                    <p class="text-[10px] text-slate-500">${c.team.toUpperCase()} - ${c.role}</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-0.5 text-[10px] rounded-full font-bold ${c.status === 'Standby' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${c.status}</span>
+                        </div>
+                    `;
+                });
             }
         }
 
         function renderAssignments() {
             const tbody = document.getElementById('all-assignments-body');
-            if (!tbody) return;
             tbody.innerHTML = '';
-            if (!tasks.length) { tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada penugasan tercatat.</td></tr>`; return; }
+
+            if (tasks.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada penugasan tercatat.</td></tr>`;
+                return;
+            }
+
             tasks.forEach(task => {
-                const assignedNames = (task.officers || []).map(id => { const off = officers.find(o => String(o.id) === String(id)); return off ? off.name : 'Unknown'; }).join(', ');
+                const assignedNames = task.officers.map(id => {
+                    const off = officers.find(o => o.id === id);
+                    return off ? off.name : 'Unknown';
+                }).join(', ');
+
                 const formattedDate = new Date(task.date).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
-                let badgeColor = 'bg-blue-100 text-blue-800';
-                if (task.status === 'Berlangsung') badgeColor = 'bg-amber-100 text-amber-800';
-                if (task.status === 'Selesai') badgeColor = 'bg-emerald-100 text-emerald-800';
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-slate-100"><td class="p-3 font-semibold text-slate-800"><span class="text-[10px] font-mono text-slate-400 block">${task.id}</span>${task.title}</td><td class="p-3 text-slate-600"><span class="font-medium text-slate-800 block">${task.vip || '-'}</span><span class="text-[10px]">${formattedDate}</span></td><td class="p-3 text-slate-600"><i class="fa-solid fa-location-dot me-1 text-red-400"></i>${task.location}</td><td class="p-3 text-slate-700 font-medium">${assignedNames || 'Belum Diisi'}</td><td class="p-3"><select onchange="changeTaskStatus('${task.id}', this.value)" class="text-xs px-2 py-1 rounded border border-slate-200 bg-white font-semibold ${badgeColor}"><option value="Terjadwal" ${task.status === 'Terjadwal' ? 'selected' : ''}>Terjadwal</option><option value="Berlangsung" ${task.status === 'Berlangsung' ? 'selected' : ''}>Berlangsung</option><option value="Selesai" ${task.status === 'Selesai' ? 'selected' : ''}>Selesai</option></select></td><td class="p-3 text-center space-x-2"><button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold"><i class="fa-solid fa-eye"></i></button><button onclick="deleteTask('${task.id}')" class="text-red-500 hover:text-red-700 font-semibold"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+
+                let badgeColor = "bg-blue-100 text-blue-800";
+                if(task.status === "Berlangsung") badgeColor = "bg-amber-100 text-amber-800";
+                if(task.status === "Selesai") badgeColor = "bg-emerald-100 text-emerald-800";
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="p-3 font-semibold text-slate-800">
+                            <span class="text-[10px] font-mono text-slate-400 block">${task.id}</span>
+                            ${task.title}
+                        </td>
+                        <td class="p-3 text-slate-600">
+                            <span class="font-medium text-slate-800 block">${task.vip || 'Tidak Ada Tamu VIP'}</span>
+                            <span class="text-[11px] text-slate-500">${formattedDate}</span>
+                        </td>
+                        <td class="p-3 text-slate-600"><i class="fa-solid fa-location-dot me-1 text-red-400"></i>${task.location}</td>
+                        <td class="p-3 text-slate-700 font-medium">${assignedNames || 'Belum Diisi'}</td>
+                        <td class="p-3">
+                            <select onchange="changeTaskStatus('${task.id}', this.value)" class="text-xs px-2 py-1 rounded border border-slate-200 bg-white font-semibold ${badgeColor}">
+                                <option value="Terjadwal" ${task.status === 'Terjadwal' ? 'selected' : ''}>Terjadwal</option>
+                                <option value="Berlangsung" ${task.status === 'Berlangsung' ? 'selected' : ''}>Berlangsung</option>
+                                <option value="Selesai" ${task.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
+                            </select>
+                        </td>
+                        <td class="p-3 text-center space-x-2">
+                            <button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold"><i class="fa-solid fa-eye"></i></button>
+                            <button onclick="deleteTask('${task.id}')" class="text-red-500 hover:text-red-700 font-semibold"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
             });
         }
 
         function filterAssignments() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const statusFilter = document.getElementById('filter-status').value;
-            document.querySelectorAll('#all-assignments-body tr').forEach(row => {
+
+            const rows = document.querySelectorAll('#all-assignments-body tr');
+            rows.forEach(row => {
                 const text = row.innerText.toLowerCase();
-                row.style.display = (text.includes(query) && (statusFilter === 'ALL' || text.includes(statusFilter.toLowerCase()))) ? '' : 'none';
+                const matchesSearch = text.includes(query);
+                const matchesStatus = statusFilter === 'ALL' || text.includes(statusFilter.toLowerCase());
+
+                if (matchesSearch && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
             });
         }
 
         function renderOfficers() {
             const grid = document.getElementById('officers-grid');
-            if (!grid) return;
             grid.innerHTML = '';
-            if (!officers.length) { grid.innerHTML = `<div class="col-span-3 text-center py-8 text-slate-400">Belum ada petugas terdaftar.</div>`; return; }
+
+            if (officers.length === 0) {
+                grid.innerHTML = `<div class="col-span-3 text-center py-8 text-slate-400">Belum ada petugas terdaftar. Klik "Kelola Anggota Tim" untuk menambahkan.</div>`;
+                return;
+            }
+
             officers.forEach(off => {
-                const badgeStatus = off.status === 'Standby' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
-                const teamColor = off.team === 'walikota' ? 'border-blue-200 bg-blue-50/20' : (off.team === 'wakil' ? 'border-emerald-200 bg-emerald-50/20' : 'border-amber-200 bg-amber-50/20');
-                const photoUrl = off.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}`;
-                grid.innerHTML += `<div class="bg-white p-4 rounded-xl shadow-sm border ${teamColor} flex flex-col justify-between"><div><div class="flex items-center justify-between mb-3"><span class="text-[10px] uppercase font-bold text-slate-400">Tim ${off.team}</span><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeStatus}">${off.status}</span></div><div class="flex items-start space-x-3"><img src="${photoUrl}" alt="${off.name}" class="w-12 h-12 rounded-full object-cover border-2 border-slate-200 flex-shrink-0 shadow-sm"><div><h4 class="font-bold text-slate-900 text-sm leading-tight">${off.name}</h4><p class="text-xs text-slate-500 mt-0.5">${off.role}</p><p class="text-[11px] text-slate-600 mt-1 flex items-center"><i class="fa-solid fa-phone text-slate-400 me-1.5 text-[10px]"></i><span>${off.phone || '-'}</span></p></div></div></div><div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600"><span><i class="fa-solid fa-briefcase text-slate-400 me-1"></i>${off.tasksCount || 0} Penugasan</span><button onclick="toggleOfficerStatus(${off.id})" class="text-blue-600 hover:text-blue-800 font-semibold text-[11px]">Ubah Status</button></div></div>`;
+                let badgeStatus = off.status === 'Standby' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
+                let teamColor = off.team === 'walikota' ? 'border-blue-200 bg-blue-50/20' : (off.team === 'wakil' ? 'border-emerald-200 bg-emerald-50/20' : 'border-amber-200 bg-amber-50/20');
+                let photoUrl = off.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff`;
+                let phoneDisplay = off.phone ? off.phone : '-';
+
+                grid.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl shadow-sm border ${teamColor} flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-[10px] uppercase font-bold text-slate-400">Tim ${off.team}</span>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeStatus}">${off.status}</span>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <img src="${photoUrl}" alt="${off.name}" class="w-12 h-12 rounded-full object-cover border-2 border-slate-200 flex-shrink-0 shadow-sm">
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm leading-tight">${off.name}</h4>
+                                    <p class="text-xs text-slate-500 mt-0.5">${off.role}</p>
+                                    <p class="text-[11px] text-slate-600 mt-1 flex items-center">
+                                        <i class="fa-solid fa-phone text-slate-400 me-1.5 text-[10px]"></i>
+                                        <span>${phoneDisplay}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                            <span><i class="fa-solid fa-briefcase text-slate-400 me-1"></i>${off.tasksCount} Penugasan</span>
+                            <button onclick="toggleOfficerStatus(${off.id})" class="text-blue-600 hover:text-blue-800 font-semibold text-[11px]">Ubah Status</button>
+                        </div>
+                    </div>
+                `;
             });
         }
 
-        async function toggleOfficerStatus(id) {
-            const off = officers.find(o => String(o.id) === String(id));
-            if (!off) return;
-            try {
-                await syncOperation('updateOfficer', { officer: { ...off, status: off.status === 'Standby' ? 'Bertugas' : 'Standby' } });
-            } catch (err) { showToast('Gagal mengubah status: ' + err.message, 'error'); }
+        function toggleOfficerStatus(id) {
+            const off = officers.find(o => o.id === id);
+            if (off) {
+                off.status = off.status === 'Standby' ? 'Bertugas' : 'Standby';
+                saveState();
+                renderOfficers();
+                renderDashboard();
+            }
         }
 
         function renderFormOfficerCheckboxes() {
             const containerWalikota = document.getElementById('container-officers-walikota');
             const containerWakil = document.getElementById('container-officers-wakil');
             const containerPenghubung = document.getElementById('container-officers-penghubung');
-            if (!containerWalikota) return;
-            containerWalikota.innerHTML = ''; containerWakil.innerHTML = ''; containerPenghubung.innerHTML = '';
+
+            containerWalikota.innerHTML = '';
+            containerWakil.innerHTML = '';
+            containerPenghubung.innerHTML = '';
+
             officers.forEach(off => {
-                const item = `<label class="flex items-center space-x-2 cursor-pointer text-xs"><input type="checkbox" name="selected_officers" value="${off.id}" class="rounded border-slate-300 text-protocol-500 focus:ring-blue-500"><span class="text-slate-700">${off.name}</span></label>`;
+                const item = `
+                    <label class="flex items-center space-x-2 cursor-pointer text-xs">
+                        <input type="checkbox" name="selected_officers" value="${off.id}" class="rounded border-slate-300 text-protocol-500 focus:ring-blue-500">
+                        <span class="text-slate-700">${off.name}</span>
+                    </label>
+                `;
+
                 if (off.team === 'walikota') containerWalikota.innerHTML += item;
                 else if (off.team === 'wakil') containerWakil.innerHTML += item;
                 else containerPenghubung.innerHTML += item;
             });
         }
 
-        async function handleAddTask(e) {
+        function handleAddTask(e) {
             e.preventDefault();
+            
             const btnSubmit = document.getElementById('btn-submit');
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Menyimpan...';
-            try {
-                const selectedOfficerIds = Array.from(document.querySelectorAll('input[name="selected_officers"]:checked')).map(el => Number(el.value));
-                const newTask = {
-                    id: `PRT-${new Date().getFullYear()}-${Date.now()}`,
-                    title: document.getElementById('task-title').value.trim(),
-                    category: document.getElementById('task-category').value,
-                    vip: document.getElementById('task-vip').value.trim(),
-                    date: document.getElementById('task-date').value,
-                    location: document.getElementById('task-location').value.trim(),
-                    status: 'Terjadwal',
-                    officers: selectedOfficerIds,
-                    notes: document.getElementById('task-notes').value.trim()
-                };
-                await syncOperation('addTask', { task: newTask });
-                closeModal('modalTask');
-                document.getElementById('form-add-task').reset();
-                showToast('Penugasan berhasil disimpan ke database pusat.');
-            } catch (err) {
-                showToast('Gagal menyimpan penugasan: ' + err.message, 'error');
-            } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = 'Simpan & Terbitkan Penugasan';
+
+            const title = document.getElementById('task-title').value;
+            const category = document.getElementById('task-category').value;
+            const vip = document.getElementById('task-vip').value;
+            const date = document.getElementById('task-date').value;
+            const location = document.getElementById('task-location').value;
+            const notes = document.getElementById('task-notes').value;
+
+            const selectedOfficerEls = document.querySelectorAll('input[name="selected_officers"]:checked');
+            const selectedOfficerIds = Array.from(selectedOfficerEls).map(el => parseInt(el.value));
+
+            // Pemetaan nama petugas untuk dikirim ke Google Sheets
+            const assignedNames = selectedOfficerIds.map(id => {
+                const off = officers.find(o => o.id === id);
+                return off ? off.name : '';
+            }).filter(Boolean).join(', ');
+
+            const newTask = {
+                id: `PRT-2026-00${tasks.length + 1}`,
+                title: title,
+                category: category,
+                vip: vip,
+                date: date,
+                location: location,
+                status: "Terjadwal",
+                officers: selectedOfficerIds,
+                notes: notes
+            };
+
+            // Update jumlah penugasan petugas
+            selectedOfficerIds.forEach(id => {
+                const off = officers.find(o => o.id === id);
+                if (off) off.tasksCount += 1;
+            });
+
+            tasks.unshift(newTask);
+            saveState();
+            renderDashboard();
+            renderAssignments();
+            renderOfficers();
+
+            // Mengirim data ke Google Spreadsheet via Fetch API
+            if (GOOGLE_SCRIPT_URL) {
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: newTask.id,
+                        title: newTask.title,
+                        category: newTask.category,
+                        vip: newTask.vip,
+                        date: new Date(newTask.date).toLocaleString('id-ID'),
+                        location: newTask.location,
+                        status: newTask.status,
+                        officers: assignedNames,
+                        notes: newTask.notes
+                    })
+                }).then(() => {
+                    console.log('Data penugasan berhasil disinkronkan ke Google Spreadsheet.');
+                }).catch(err => {
+                    console.error('Gagal mengirim data ke Google Spreadsheet:', err);
+                });
+            }
+
+            btnSubmit.disabled = false;
+            btnSubmit.innerText = 'Simpan & Terbitkan Penugasan';
+            closeModal('modalTask');
+            document.getElementById('form-add-task').reset();
+        }
+
+        function changeTaskStatus(taskId, newStatus) {
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                task.status = newStatus;
+                saveState();
+                renderDashboard();
+                renderAssignments();
             }
         }
 
-        async function changeTaskStatus(taskId, newStatus) {
-            const task = tasks.find(t => String(t.id) === String(taskId));
-            if (!task) return;
-            try {
-                await syncOperation('updateTask', { task: { ...task, status: newStatus } });
-            } catch (err) { showToast('Gagal mengubah status: ' + err.message, 'error'); renderAssignments(); }
-        }
-
-        async function deleteTask(taskId) {
-            if (!confirm('Apakah Anda yakin ingin menghapus penugasan ini?')) return;
-            try {
-                await syncOperation('deleteTask', { id: taskId });
-                showToast('Penugasan berhasil dihapus.');
-            } catch (err) { showToast('Gagal menghapus penugasan: ' + err.message, 'error'); }
+        function deleteTask(taskId) {
+            if (confirm("Apakah Anda yakin ingin menghapus penugasan ini?")) {
+                tasks = tasks.filter(t => t.id !== taskId);
+                saveState();
+                renderDashboard();
+                renderAssignments();
+            }
         }
 
         function viewTaskDetail(taskId) {
-            const task = tasks.find(t => String(t.id) === String(taskId));
+            const task = tasks.find(t => t.id === taskId);
             if (!task) return;
-            const assignedNames = (task.officers || []).map(id => { const off = officers.find(o => String(o.id) === String(id)); return off ? `${off.name} (${off.role})` : 'Unknown'; }).join('<br>• ');
+
+            const assignedNames = task.officers.map(id => {
+                const off = officers.find(o => o.id === id);
+                return off ? `${off.name} (${off.role})` : 'Unknown';
+            }).join('<br>• ');
+
+            const body = document.getElementById('detail-modal-body');
             document.getElementById('detail-modal-title').innerText = `Detail - ${task.id}`;
-            document.getElementById('detail-modal-body').innerHTML = `<div><h4 class="font-bold text-slate-900 text-sm mb-1">${task.title}</h4><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">${task.category}</span></div><div class="space-y-2 border-t border-b border-slate-100 py-3 text-slate-700"><p><strong>Tamu VIP:</strong> ${task.vip || '-'}</p><p><strong>Waktu:</strong> ${new Date(task.date).toLocaleString('id-ID')}</p><p><strong>Lokasi:</strong> ${task.location}</p><p><strong>Status:</strong> ${task.status}</p></div><div><p class="font-bold text-slate-800 mb-1">Petugas Pendamping Assigned:</p><p class="text-slate-600">${assignedNames ? '• ' + assignedNames : 'Belum ada petugas assigned'}</p></div><div class="bg-amber-50 p-3 rounded-lg border border-amber-200"><p class="font-bold text-amber-900">Catatan / Pakaian Resmi:</p><p class="text-amber-800">${task.notes || 'Tidak ada catatan khusus.'}</p></div>`;
+
+            body.innerHTML = `
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm mb-1">${task.title}</h4>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">${task.category}</span>
+                </div>
+                <div class="space-y-2 border-t border-b border-slate-100 py-3 text-slate-700">
+                    <p><strong>Tamu VIP:</strong> ${task.vip || '-'}</p>
+                    <p><strong>Waktu:</strong> ${new Date(task.date).toLocaleString('id-ID')}</p>
+                    <p><strong>Lokasi:</strong> ${task.location}</p>
+                    <p><strong>Status:</strong> ${task.status}</p>
+                </div>
+                <div>
+                    <p class="font-bold text-slate-800 mb-1">Petugas Pendamping Assigned:</p>
+                    <p class="text-slate-600">${assignedNames ? '• ' + assignedNames : 'Belum ada petugas assigned'}</p>
+                </div>
+                <div class="bg-amber-50 p-3 rounded-lg border border-amber-200">
+                    <p class="font-bold text-amber-900">Catatan / Pakaian Resmi:</p>
+                    <p class="text-amber-800">${task.notes || 'Tidak ada catatan khusus.'}</p>
+                </div>
+            `;
+
             openModal('modalDetail');
         }
 
-        // Charts
+        // Charts Initialization
         function initCharts() {
-            const ctxCategory = document.getElementById('chartCategory')?.getContext('2d');
-            if (ctxCategory) chartCategoryInstance = new Chart(ctxCategory, { type: 'doughnut', data: { labels: ['Seremonial', 'Kunjungan VIP', 'Rakor / Audiensi', 'Lainnya'], datasets: [{ data: [40,25,20,15], backgroundColor: ['#102a43','#d4af37','#0bcc94','#94a3b8'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } } });
-            const ctxWorkload = document.getElementById('chartWorkload')?.getContext('2d');
-            if (ctxWorkload) chartWorkloadInstance = new Chart(ctxWorkload, { type: 'bar', data: { labels: officers.map(o => o.name.split(' ')[0]), datasets: [{ label: 'Jumlah Penugasan', data: officers.map(o => o.tasksCount || 0), backgroundColor: '#102a43' }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } } });
-            const ctxTrend = document.getElementById('chartTrend')?.getContext('2d');
-            if (ctxTrend) chartTrendInstance = new Chart(ctxTrend, { type: 'line', data: { labels: ['Minggu 1','Minggu 2','Minggu 3','Minggu 4'], datasets: [{ label: 'Total Agenda', data: [8,12,15,10], borderColor: '#d4af37', tension: 0.3, fill: false }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } } });
+            const ctxCategory = document.getElementById('chartCategory').getContext('2d');
+            chartCategoryInstance = new Chart(ctxCategory, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Seremonial', 'Kunjungan VIP', 'Rakor / Audiensi', 'Lainnya'],
+                    datasets: [{
+                        data: [40, 25, 20, 15],
+                        backgroundColor: ['#102a43', '#d4af37', '#0bcc94', '#94a3b8']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
+                }
+            });
+
+            const ctxWorkload = document.getElementById('chartWorkload').getContext('2d');
+            chartWorkloadInstance = new Chart(ctxWorkload, {
+                type: 'bar',
+                data: {
+                    labels: officers.map(o => o.name.split(' ')[0]),
+                    datasets: [{
+                        label: 'Jumlah Penugasan',
+                        data: officers.map(o => o.tasksCount),
+                        backgroundColor: '#102a43'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            const ctxTrend = document.getElementById('chartTrend').getContext('2d');
+            chartTrendInstance = new Chart(ctxTrend, {
+                type: 'line',
+                data: {
+                    labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
+                    datasets: [{
+                        label: 'Total Agenda',
+                        data: [8, 12, 15, 10],
+                        borderColor: '#d4af37',
+                        tension: 0.3,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
         }
 
         function updateCharts() {
             if (chartWorkloadInstance) {
                 chartWorkloadInstance.data.labels = officers.map(o => o.name.split(' ')[0]);
-                chartWorkloadInstance.data.datasets[0].data = officers.map(o => o.tasksCount || 0);
+                chartWorkloadInstance.data.datasets[0].data = officers.map(o => o.tasksCount);
                 chartWorkloadInstance.update();
             }
         }
