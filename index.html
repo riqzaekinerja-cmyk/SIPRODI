@@ -393,15 +393,19 @@
                         <input type="text" id="task-vip" placeholder="Contoh: Gubernur, Menteri, atau Duta Besar" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                     </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="sm:col-span-2">
                         <label class="block font-semibold text-slate-700 mb-1">Waktu Pelaksanaan <span class="text-red-500">*</span></label>
                         <input type="datetime-local" id="task-date" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Lokasi Kegiatan <span class="text-red-500">*</span></label>
-                        <input type="text" id="task-location" required placeholder="Contoh: Aula Utama Gedung Perkantoran Lt. 3" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <label class="block font-semibold text-slate-700 mb-1">Estimasi Durasi (Jam)</label>
+                        <input type="number" id="task-duration" min="0.5" step="0.5" value="2" placeholder="2" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                     </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Lokasi Kegiatan <span class="text-red-500">*</span></label>
+                    <input type="text" id="task-location" required placeholder="Contoh: Aula Utama Gedung Perkantoran Lt. 3" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 </div>
 
                 <div class="mt-4">
@@ -485,7 +489,6 @@
                 </button>
             </div>
             <form id="form-edit-profile" onsubmit="handleSaveProfile(event)" class="p-6 space-y-4 text-xs">
-                <!-- Preview Foto Profil -->
                 <div class="flex items-center space-x-4 p-3 bg-slate-50 rounded-xl border border-slate-200">
                     <img id="preview-profile-avatar" class="w-16 h-16 rounded-full object-cover border-2 border-protocol-gold shadow-sm" src="" alt="Preview Avatar">
                     <div>
@@ -503,7 +506,6 @@
                     <input type="text" id="input-profile-role" required placeholder="Contoh: Kasubag Agenda & Protokol" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 </div>
 
-                <!-- Opsi Upload Foto dari Komputer/Laptop/HP -->
                 <div>
                     <label class="block font-semibold text-slate-700 mb-1">Upload Gambar dari Perangkat (PC/HP)</label>
                     <input type="file" id="input-profile-file" accept="image/*" onchange="handleProfileFileSelect(event)" class="w-full px-2 py-1.5 border border-slate-300 rounded-lg bg-white text-xs file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-protocol-500 file:text-white hover:file:bg-protocol-600">
@@ -522,7 +524,7 @@
         </div>
     </div>
 
-    <!-- MODAL: KELOLA TIM PETUGAS (TAMBAH, EDIT, HAPUS) -->
+    <!-- MODAL: KELOLA TIM PETUGAS -->
     <div id="modalManageTeam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
             <div class="bg-protocol-500 text-white px-6 py-4 flex items-center justify-between">
@@ -536,14 +538,12 @@
             </div>
             
             <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6 text-xs">
-                <!-- FORM TAMBAH / EDIT PETUGAS -->
                 <form id="form-manage-team" onsubmit="handleSaveTeamMember(event)" class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
                     <input type="hidden" id="officer-edit-id" value="">
                     <h4 class="font-bold text-slate-800 text-xs border-b border-slate-200 pb-2 flex items-center" id="form-team-heading">
                         <i class="fa-solid fa-user-plus text-protocol-500 me-2"></i> Tambah Anggota Baru
                     </h4>
 
-                    <!-- Preview Foto Petugas -->
                     <div class="flex items-center space-x-3 p-2 bg-white rounded-lg border border-slate-200">
                         <img id="preview-officer-photo" class="w-10 h-10 rounded-full object-cover border border-slate-300" src="https://ui-avatars.com/api/?name=Protokol&background=102a43&color=fff" alt="Preview Photo">
                         <span class="text-[11px] text-slate-500">Preview Foto Anggota Tim</span>
@@ -571,7 +571,6 @@
                             <input type="tel" id="officer-phone-input" placeholder="Contoh: 081234567890" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
 
-                        <!-- Upload File Komputer / HP -->
                         <div>
                             <label class="block font-semibold text-slate-700 mb-1">Upload Foto (Komputer/HP)</label>
                             <input type="file" id="officer-photo-file" accept="image/*" onchange="handleOfficerFileSelect(event)" class="w-full px-2 py-1 border border-slate-300 rounded-lg bg-white text-[11px] file:mr-2 file:py-0.5 file:px-2 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-protocol-500 file:text-white">
@@ -591,7 +590,6 @@
                     </div>
                 </form>
 
-                <!-- DAFTAR ANGGOTA TIM SAAT INI (EDIT & HAPUS) -->
                 <div>
                     <h4 class="font-bold text-slate-800 text-xs mb-3 flex items-center justify-between">
                         <span>Daftar Anggota Tim Terdaftar</span>
@@ -609,7 +607,6 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100" id="manage-team-list-body">
-                                    <!-- Rendered dynamically -->
                                 </tbody>
                             </table>
                         </div>
@@ -625,13 +622,11 @@
 
     <!-- SCRIPT LOGIKA OTOMATISASI & LOGIK SIPRODI TERHUBUNG CLOUD -->
 <script>
-    // URL Apps Script Google Spreadsheet Anda
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwu76AlBNUUuZfpFpnqE3g3zVL4XOKoEFH6SrhqIZFOuosTkinoTuLLwXIRsfDyLMg8/exec";
 
-    // Data Default
     const defaultOfficers = [
         { id: 1, name: "Fitrah Ramadhan", role: "Koordinator Lapangan", team: "walikota", status: "Standby", tasksCount: 12, phone: "081234567890", photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" },
-        { id: 2, name: "Rifaldy Pratama", role: "Petugas Pendamping VIP", team: "walikota", status: "Bertugas", tasksCount: 15, phone: "081298765432", photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150" },
+        { id: 2, name: "Rifaldy Pratama", role: "Petugas Pendamping VIP", team: "walikota", status: "Standby", tasksCount: 15, phone: "081298765432", photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150" },
         { id: 3, name: "Siti Rahmawati", role: "Master of Ceremony (MC)", team: "wakil", status: "Standby", tasksCount: 9, phone: "081311223344", photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150" },
         { id: 4, name: "Hendra Wijaya", role: "Koordinator Acara", team: "wakil", status: "Standby", tasksCount: 11, phone: "081555667788", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" },
         { id: 5, name: "Dedi Kurniawan", role: "Petugas Penghubung Lembaga", team: "penghubung", status: "Standby", tasksCount: 8, phone: "081999887766", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" }
@@ -644,14 +639,38 @@
             category: "Konferensi / Rakor",
             vip: "Walikota & Jajaran Forkopimda",
             date: "2026-09-10T09:00",
+            durationHours: 2,
             location: "Aula Utama Kantor Walikota Lt. 3",
             status: "Terjadwal",
             officers: [1, 2],
             notes: "Pakaian PSH / Pakaian Dinas Harian."
+        },
+        {
+            id: "PRT-2026-002",
+            title: "Penerimaan Kunjungan Kerja Spesifik Komisi II DPR RI",
+            category: "Kunjungan Kerja VIP",
+            vip: "Rombongan Komisi II DPR RI",
+            date: "2026-09-08T14:00",
+            durationHours: 3,
+            location: "Ruang Rapat VIP Bandara & Gedung Pemkot",
+            status: "Berlangsung",
+            officers: [],
+            notes: "Pendampingan VIP penuh."
+        },
+        {
+            id: "PRT-2026-003",
+            title: "Upacara Peringatan Hari Jadi Kota",
+            category: "Kegiatan Seremonial & Protokol",
+            vip: "Walikota & Forkopimda",
+            date: "2026-09-07T07:30",
+            durationHours: 2,
+            location: "Lapangan Merdeka",
+            status: "Selesai",
+            officers: [],
+            notes: "Pakaian PDU I / Kebaya."
         }
     ];
 
-    // State Aplikasi (Menggunakan cache localStorage untuk load cepat)
     let officers = JSON.parse(localStorage.getItem('siprodi_officers')) || defaultOfficers;
     let tasks = JSON.parse(localStorage.getItem('siprodi_tasks')) || defaultTasks;
     let userProfile = JSON.parse(localStorage.getItem('siprodi_profile')) || {
@@ -664,27 +683,89 @@
     let tempProfileAvatar = '';
     let tempOfficerPhoto = '';
 
+    let chartCategoryInstance = null;
+    let chartWorkloadInstance = null;
+    let chartTrendInstance = null;
+
     document.addEventListener('DOMContentLoaded', () => {
         checkAuth();
         initProfile();
+        
+        // Singkronisasi status secara berkala setiap detik / per menit
+        updateAutoStatuses();
+        
         renderDashboard();
         renderAssignments();
         renderOfficers();
         renderFormOfficerCheckboxes();
         initCharts();
         
-        // Ambil data terbaru dari Cloud secara otomatis saat dibuka di perangkat manapun
         fetchCloudData();
+
+        // Cek dan sinkronkan status jadwal & jam otomatis setiap 10 detik
+        setInterval(() => {
+            if (updateAutoStatuses()) {
+                renderDashboard();
+                renderAssignments();
+                renderOfficers();
+            }
+        }, 10000);
     });
 
-    // Simpan ke Cache Lokal & Sinkronkan ke Cloud Online
+    // --- FUNGSI UTAMA SINKRONISASI STATUS OTOMATIS BERDASARKAN WAKTU ---
+    function updateAutoStatuses() {
+        const now = new Date();
+        let statusUpdated = false;
+
+        tasks.forEach(task => {
+            if (!task.date) return;
+            
+            const taskStart = new Date(task.date);
+            const durationMs = (task.durationHours || 2) * 60 * 60 * 1000;
+            const taskEnd = new Date(taskStart.getTime() + durationMs);
+
+            let calculatedStatus = task.status;
+
+            if (now < taskStart) {
+                calculatedStatus = "Terjadwal";
+            } else if (now >= taskStart && now <= taskEnd) {
+                calculatedStatus = "Berlangsung";
+            } else if (now > taskEnd) {
+                calculatedStatus = "Selesai";
+            }
+
+            if (task.status !== calculatedStatus) {
+                task.status = calculatedStatus;
+                statusUpdated = true;
+            }
+        });
+
+        // Sinkronkan status petugas otomatis (Bertugas jika ada task Berlangsung, Standby jika tidak)
+        officers.forEach(off => {
+            const hasOngoingTask = tasks.some(t => t.status === 'Berlangsung' && t.officers && t.officers.includes(off.id));
+            const expectedStatus = hasOngoingTask ? 'Bertugas' : 'Standby';
+            
+            if (off.status !== expectedStatus) {
+                off.status = expectedStatus;
+                statusUpdated = true;
+            }
+        });
+
+        if (statusUpdated) {
+            localStorage.setItem('siprodi_officers', JSON.stringify(officers));
+            localStorage.setItem('siprodi_tasks', JSON.stringify(tasks));
+        }
+
+        return statusUpdated;
+    }
+
     function saveStateAndSync(actionType = 'SYNC', payload = {}) {
+        updateAutoStatuses();
         localStorage.setItem('siprodi_officers', JSON.stringify(officers));
         localStorage.setItem('siprodi_tasks', JSON.stringify(tasks));
         localStorage.setItem('siprodi_profile', JSON.stringify(userProfile));
         localStorage.setItem('siprodi_auth', JSON.stringify(authSession));
 
-        // Kirim perubahan ke Google Spreadsheet
         if (GOOGLE_SCRIPT_URL) {
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
@@ -701,7 +782,6 @@
         }
     }
 
-    // Mengambil Data Terbaru dari Google Sheets
     function fetchCloudData() {
         if (!GOOGLE_SCRIPT_URL) return;
         
@@ -713,7 +793,8 @@
                     if (data.officers) officers = data.officers;
                     if (data.profile) userProfile = data.profile;
 
-                    // Update Cache dan Tampilan
+                    updateAutoStatuses();
+
                     localStorage.setItem('siprodi_officers', JSON.stringify(officers));
                     localStorage.setItem('siprodi_tasks', JSON.stringify(tasks));
                     localStorage.setItem('siprodi_profile', JSON.stringify(userProfile));
@@ -729,13 +810,13 @@
             .catch(err => console.log('Menggunakan data cache lokal (Offline/Initial mode)'));
     }
 
-    // --- LOGIK CRUD & PENYIMPANAN ---
-
     function handleAddTask(e) {
         e.preventDefault();
         const btnSubmit = document.getElementById('btn-submit');
         btnSubmit.disabled = true;
         btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Menyimpan...';
+
+        const durationVal = parseFloat(document.getElementById('task-duration').value) || 2;
 
         const newTask = {
             id: `PRT-2026-00${tasks.length + 1}`,
@@ -743,6 +824,7 @@
             category: document.getElementById('task-category').value,
             vip: document.getElementById('task-vip').value,
             date: document.getElementById('task-date').value,
+            durationHours: durationVal,
             location: document.getElementById('task-location').value,
             status: "Terjadwal",
             officers: Array.from(document.querySelectorAll('input[name="selected_officers"]:checked')).map(el => parseInt(el.value)),
@@ -755,6 +837,7 @@
         });
 
         tasks.unshift(newTask);
+        updateAutoStatuses();
         saveStateAndSync('ADD_TASK', newTask);
         
         renderDashboard();
@@ -801,6 +884,7 @@
             });
         }
 
+        updateAutoStatuses();
         saveStateAndSync('SAVE_OFFICER');
         renderOfficers();
         renderFormOfficerCheckboxes();
@@ -813,6 +897,7 @@
         const off = officers.find(o => o.id === id);
         if (off && confirm(`Apakah Anda yakin ingin menghapus "${off.name}" dari tim?`)) {
             officers = officers.filter(o => o.id !== id);
+            updateAutoStatuses();
             saveStateAndSync('DELETE_OFFICER', { id: id });
             renderOfficers();
             renderFormOfficerCheckboxes();
@@ -829,15 +914,18 @@
             saveStateAndSync('UPDATE_TASK_STATUS', { id: taskId, status: newStatus });
             renderDashboard();
             renderAssignments();
+            renderOfficers();
         }
     }
 
     function deleteTask(taskId) {
         if (confirm("Apakah Anda yakin ingin menghapus penugasan ini?")) {
             tasks = tasks.filter(t => t.id !== taskId);
+            updateAutoStatuses();
             saveStateAndSync('DELETE_TASK', { id: taskId });
             renderDashboard();
             renderAssignments();
+            renderOfficers();
         }
     }
 
@@ -853,7 +941,6 @@
         closeModal('modalProfile');
     }
 
-    // --- AUTHENTICATION & UTILITIES ---
     function checkAuth() {
         const loginScreen = document.getElementById('login-screen');
         const appContainer = document.getElementById('app-container');
@@ -1022,8 +1109,9 @@
     }
 
     function renderDashboard() {
+        updateAutoStatuses();
         document.getElementById('stat-total-tasks').innerText = tasks.length;
-        const activeTasks = tasks.filter(t => t.status === 'Berlangsung' || t.status === 'Terjadwal');
+        const activeTasks = tasks.filter(t => t.status === 'Berlangsung');
         document.getElementById('stat-active-tasks').innerText = activeTasks.length;
         document.getElementById('badge-active-count').innerText = activeTasks.length;
         document.getElementById('stat-ready-officers').innerText = officers.filter(o => o.status === 'Standby').length;
@@ -1050,7 +1138,7 @@
                 <tr class="hover:bg-slate-50 transition">
                     <td class="p-3 font-semibold text-slate-800">${task.title}</td>
                     <td class="p-3 text-slate-600">${formattedDate}<br><span class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot me-1"></i>${task.location}</span></td>
-                    <td class="p-3 text-slate-700">${assignedNames || '-'}</td>
+                    <td class="p-3 text-slate-700">${assignedNames || 'Belum ada petugas assigned'}</td>
                     <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeColor}">${task.status}</span></td>
                     <td class="p-3 text-right"><button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold text-xs">Detail</button></td>
                 </tr>
@@ -1081,6 +1169,7 @@
     }
 
     function renderAssignments() {
+        updateAutoStatuses();
         const tbody = document.getElementById('all-assignments-body');
         tbody.innerHTML = '';
         if (tasks.length === 0) {
@@ -1132,6 +1221,7 @@
     }
 
     function renderOfficers() {
+        updateAutoStatuses();
         const grid = document.getElementById('officers-grid');
         grid.innerHTML = '';
         if (officers.length === 0) {
@@ -1236,7 +1326,6 @@
         openModal('modalDetail');
     }
 
-    // Charting Functions
     function initCharts() {
         const ctxCat = document.getElementById('chartCategory');
         const ctxWork = document.getElementById('chartWorkload');
@@ -1283,6 +1372,6 @@
             chartWorkloadInstance.update();
         }
     }
-   </script>
+</script>
 </body>
 </html>
