@@ -111,6 +111,13 @@
                         
                         <div class="h-6 w-px bg-slate-700 hidden sm:block"></div>
 
+                        <div class="hidden lg:flex items-center space-x-2 text-right">
+                            <div>
+                                <p class="text-xs font-bold leading-tight">Pemerintah Kota Ambon</p>
+                                <p class="text-[10px] text-slate-300">Protokol dan Komunikasi Pimpinan</p>
+                            </div>
+                        </div>
+
                         <div onclick="openProfileModal()" class="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition p-1.5 rounded-lg hover:bg-slate-700/50" title="Klik untuk edit profil">
                             <div class="text-right hidden sm:block">
                                 <p class="text-sm font-semibold leading-none" id="user-display-name">Bambang Wijaya, S.STP</p>
@@ -306,7 +313,7 @@
                                 <thead class="bg-slate-100 text-slate-600 font-bold uppercase tracking-wider">
                                     <tr>
                                         <th class="p-3">ID & Acara</th>
-                                        <th class="p-3">Tamu VIP / Tanggal</th>
+                                        <th class="p-3">Pejabat Pemerintah</th>
                                         <th class="p-3">Lokasi Kegiatan</th>
                                         <th class="p-3">Personel Protokol Assigned</th>
                                         <th class="p-3">Status</th>
@@ -342,17 +349,67 @@
 
                 <!-- TAB 4: ANALYTICS -->
                 <section id="tab-analytics" class="tab-content space-y-6 hidden">
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-                        <h2 class="text-lg font-bold text-slate-900">Analisis Beban Kerja & Evaluasi Penugasan</h2>
-                        <p class="text-xs text-slate-500">Statistik pemerataan penugasan anggota tim dan performa operasional keprotokolan.</p>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-900">Analisis Beban Kerja & Evaluasi Penugasan</h2>
+                            <p class="text-xs text-slate-500">Statistik pemerataan penugasan anggota tim dan performa operasional keprotokolan yang terintegrasi penuh.</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-3 py-1 rounded-full font-bold flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                                <span>Grafik Synchronized Live</span>
+                            </span>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- RINGKASAN REKAPITULASI Sinkronisasi -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
+                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Penugasan</p>
+                            <h4 class="text-xl font-bold text-slate-900 mt-0.5" id="analytics-total-count">0</h4>
+                            <span class="text-[10px] text-blue-600 font-semibold">100% Terdata</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
+                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Terjadwal</p>
+                            <h4 class="text-xl font-bold text-blue-600 mt-0.5" id="analytics-scheduled-count">0</h4>
+                            <span class="text-[10px] text-slate-400">Akan Datang</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
+                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Berlangsung</p>
+                            <h4 class="text-xl font-bold text-amber-600 mt-0.5" id="analytics-active-count">0</h4>
+                            <span class="text-[10px] text-amber-600 font-semibold">Sedang Aktif</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
+                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Selesai</p>
+                            <h4 class="text-xl font-bold text-emerald-600 mt-0.5" id="analytics-completed-count">0</h4>
+                            <span class="text-[10px] text-emerald-600 font-semibold">Telah Dilaksanakan</span>
+                        </div>
+                    </div>
+
+                    <!-- LAYOUT 3 GRAFIK SINKRONIS -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                            <h3 class="text-sm font-bold text-slate-800 mb-4">Jumlah Penugasan per Petugas</h3>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-bold text-slate-800">Jumlah Penugasan per Petugas</h3>
+                                <span class="text-[11px] text-slate-400">Beban Kerja</span>
+                            </div>
                             <div class="h-64"><canvas id="chartWorkload"></canvas></div>
                         </div>
+
+                        <!-- GRAFIK PEJABAT PEMERINTAH (TERHUBUNG & SINKRON) -->
                         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                            <h3 class="text-sm font-bold text-slate-800 mb-4">Tren Kegiatan Keprotokolan</h3>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-bold text-slate-800">Penugasan per Pejabat Pemerintah</h3>
+                                <span class="text-[11px] text-amber-600 font-semibold"><i class="fa-solid fa-crown me-1"></i>Distribusi VIP</span>
+                            </div>
+                            <div class="h-64"><canvas id="chartVip"></canvas></div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-bold text-slate-800">Tren Kegiatan Keprotokolan</h3>
+                                <span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-arrows-rotate me-1"></i>Realtime Sync</span>
+                            </div>
                             <div class="h-64"><canvas id="chartTrend"></canvas></div>
                         </div>
                     </div>
@@ -620,7 +677,23 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIKA OTOMATISASI & LOGIK SIPRODI TERHUBUNG CLOUD -->
+    <!-- MODAL CONFIRMATION DIALOG -->
+    <div id="modalConfirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-sm overflow-hidden text-xs">
+            <div class="p-5 text-center space-y-3">
+                <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto text-xl">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-800" id="confirm-title">Konfirmasi Tindakan</h3>
+                <p class="text-slate-600 leading-relaxed" id="confirm-message">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
+            </div>
+            <div class="p-3 bg-slate-50 border-t border-slate-200 flex justify-end space-x-2">
+                <button onclick="closeConfirmModal(false)" class="px-4 py-1.5 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 transition">Batal</button>
+                <button id="confirm-ok-btn" onclick="closeConfirmModal(true)" class="px-4 py-1.5 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 shadow-sm transition">Ya, Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
 <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwu76AlBNUUuZfpFpnqE3g3zVL4XOKoEFH6SrhqIZFOuosTkinoTuLLwXIRsfDyLMg8/exec";
 
@@ -685,7 +758,9 @@
 
     let chartCategoryInstance = null;
     let chartWorkloadInstance = null;
+    let chartVipInstance = null;
     let chartTrendInstance = null;
+    let pendingConfirmCallback = null;
 
     document.addEventListener('DOMContentLoaded', () => {
         checkAuth();
@@ -739,7 +814,6 @@
         });
 
         officers.forEach(off => {
-            // Hitung penugasan aktual secara real-time dari array tasks
             const realCount = tasks.filter(t => t.officers && t.officers.map(Number).includes(Number(off.id))).length;
             if (off.tasksCount !== realCount) {
                 off.tasksCount = realCount;
@@ -813,6 +887,28 @@
                 }
             })
             .catch(err => console.log('Menggunakan data cache lokal (Offline/Initial mode)'));
+    }
+
+    function showConfirm(title, message, callback, btnText = 'Ya, Lanjutkan', isDanger = true) {
+        document.getElementById('confirm-title').innerText = title;
+        document.getElementById('confirm-message').innerText = message;
+        const okBtn = document.getElementById('confirm-ok-btn');
+        okBtn.innerText = btnText;
+        if (isDanger) {
+            okBtn.className = "px-4 py-1.5 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 shadow-sm transition";
+        } else {
+            okBtn.className = "px-4 py-1.5 rounded-lg bg-protocol-500 text-white font-semibold hover:bg-protocol-600 shadow-sm transition";
+        }
+        pendingConfirmCallback = callback;
+        openModal('modalConfirm');
+    }
+
+    function closeConfirmModal(confirmed) {
+        closeModal('modalConfirm');
+        if (confirmed && typeof pendingConfirmCallback === 'function') {
+            pendingConfirmCallback();
+        }
+        pendingConfirmCallback = null;
     }
 
     function handleAddTask(e) {
@@ -897,17 +993,23 @@
 
     function deleteOfficer(id) {
         const off = officers.find(o => o.id === id);
-        if (off && confirm(`Apakah Anda yakin ingin menghapus "${off.name}" dari tim?`)) {
-            officers = officers.filter(o => o.id !== id);
-            updateAutoStatuses();
-            saveStateAndSync('DELETE_OFFICER', { id: id });
-            renderOfficers();
-            renderFormOfficerCheckboxes();
-            renderDashboard();
-            renderManageTeamList();
-            updateCharts();
-            if (document.getElementById('officer-edit-id').value == id) resetOfficerForm();
-        }
+        if (!off) return;
+
+        showConfirm(
+            'Hapus Anggota Tim',
+            `Apakah Anda yakin ingin menghapus "${off.name}" dari tim?`,
+            () => {
+                officers = officers.filter(o => o.id !== id);
+                updateAutoStatuses();
+                saveStateAndSync('DELETE_OFFICER', { id: id });
+                renderOfficers();
+                renderFormOfficerCheckboxes();
+                renderDashboard();
+                renderManageTeamList();
+                updateCharts();
+                if (document.getElementById('officer-edit-id').value == id) resetOfficerForm();
+            }
+        );
     }
 
     function changeTaskStatus(taskId, newStatus) {
@@ -923,15 +1025,22 @@
     }
 
     function deleteTask(taskId) {
-        if (confirm("Apakah Anda yakin ingin menghapus penugasan ini?")) {
-            tasks = tasks.filter(t => t.id !== taskId);
-            updateAutoStatuses();
-            saveStateAndSync('DELETE_TASK', { id: taskId });
-            renderDashboard();
-            renderAssignments();
-            renderOfficers();
-            updateCharts();
-        }
+        const task = tasks.find(t => t.id === taskId);
+        if (!task) return;
+
+        showConfirm(
+            'Hapus Agenda Penugasan',
+            `Apakah Anda yakin ingin menghapus penugasan "${task.title}"?`,
+            () => {
+                tasks = tasks.filter(t => t.id !== taskId);
+                updateAutoStatuses();
+                saveStateAndSync('DELETE_TASK', { id: taskId });
+                renderDashboard();
+                renderAssignments();
+                renderOfficers();
+                updateCharts();
+            }
+        );
     }
 
     function handleSaveProfile(e) {
@@ -974,11 +1083,17 @@
     }
 
     function handleLogout() {
-        if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
-            authSession = false;
-            saveStateAndSync();
-            checkAuth();
-        }
+        showConfirm(
+            'Keluar dari Sistem',
+            'Apakah Anda yakin ingin keluar dari sistem SIPRODI-DIGITAL?',
+            () => {
+                authSession = false;
+                saveStateAndSync();
+                checkAuth();
+            },
+            'Ya, Keluar',
+            false
+        );
     }
 
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
@@ -1113,32 +1228,6 @@
         document.getElementById('btn-cancel-edit-officer').classList.remove('hidden');
     }
 
-    function updateCategoryChart() {
-        if (!chartCategoryInstance) return;
-
-        const categoryCounts = {};
-        tasks.forEach(task => {
-            const cat = task.category || 'Lainnya';
-            categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
-        });
-
-        const labels = Object.keys(categoryCounts);
-        const data = Object.values(categoryCounts);
-        const colors = ['#102a43', '#0bcc94', '#d4af37', '#627d98', '#e11d48', '#8b5cf6', '#f59e0b', '#06b6d4'];
-
-        if (labels.length === 0) {
-            chartCategoryInstance.data.labels = ['Belum ada penugasan'];
-            chartCategoryInstance.data.datasets[0].data = [0];
-            chartCategoryInstance.data.datasets[0].backgroundColor = ['#e2e8f0'];
-        } else {
-            chartCategoryInstance.data.labels = labels;
-            chartCategoryInstance.data.datasets[0].data = data;
-            chartCategoryInstance.data.datasets[0].backgroundColor = colors.slice(0, labels.length);
-        }
-
-        chartCategoryInstance.update();
-    }
-
     function renderDashboard() {
         updateAutoStatuses();
         document.getElementById('stat-total-tasks').innerText = tasks.length;
@@ -1233,8 +1322,8 @@
                         </select>
                     </td>
                     <td class="p-3 text-center space-x-2">
-                        <button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold"><i class="fa-solid fa-eye"></i></button>
-                        <button onclick="deleteTask('${task.id}')" class="text-red-500 hover:text-red-700 font-semibold"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold" title="Detail"><i class="fa-solid fa-eye"></i></button>
+                        <button onclick="deleteTask('${task.id}')" class="text-red-500 hover:text-red-700 font-semibold" title="Hapus"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
             `;
@@ -1362,37 +1451,49 @@
     function initCharts() {
         const ctxCat = document.getElementById('chartCategory');
         const ctxWork = document.getElementById('chartWorkload');
+        const ctxVip = document.getElementById('chartVip');
         const ctxTrend = document.getElementById('chartTrend');
 
         if (ctxCat) {
             chartCategoryInstance = new Chart(ctxCat, {
                 type: 'doughnut',
-                data: {
-                    labels: [],
-                    datasets: [{ data: [], backgroundColor: [] }]
-                },
+                data: { labels: [], datasets: [{ data: [], backgroundColor: [] }] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
             });
-            updateCategoryChart();
         }
 
         if (ctxWork) {
-            const workloadData = officers.map(o => tasks.filter(t => t.officers && t.officers.map(Number).includes(Number(o.id))).length);
             chartWorkloadInstance = new Chart(ctxWork, {
                 type: 'bar',
+                data: { labels: [], datasets: [{ label: 'Jumlah Penugasan', data: [], backgroundColor: '#102a43' }] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } } } }
+            });
+        }
+
+        // INISIALISASI GRAFIK PEJABAT PEMERINTAH (VIP)
+        if (ctxVip) {
+            chartVipInstance = new Chart(ctxVip, {
+                type: 'bar',
                 data: {
-                    labels: officers.map(o => o.name.split(' ')[0]),
-                    datasets: [{ label: 'Jumlah Penugasan', data: workloadData, backgroundColor: '#102a43' }]
+                    labels: [],
+                    datasets: [{
+                        label: 'Total Agenda Pendampingan',
+                        data: [],
+                        backgroundColor: '#d4af37'
+                    }]
                 },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    scales: { 
-                        y: { 
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
                             beginAtZero: true,
-                            ticks: { stepSize: 1 } 
-                        } 
-                    } 
+                            ticks: { stepSize: 1, precision: 0 }
+                        }
+                    }
                 }
             });
         }
@@ -1401,23 +1502,140 @@
             chartTrendInstance = new Chart(ctxTrend, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
-                    datasets: [{ label: 'Total Agenda', data: [12, 19, 15, 22, 18, 25], borderColor: '#0bcc94', tension: 0.3, fill: false }]
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'],
+                    datasets: [{ 
+                        label: 'Total Agenda Penugasan', 
+                        data: [], 
+                        borderColor: '#0bcc94', 
+                        backgroundColor: 'rgba(11, 204, 148, 0.1)',
+                        tension: 0.3, 
+                        fill: true,
+                        pointBackgroundColor: '#0bcc94',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
                 },
-                options: { responsive: true, maintainAspectRatio: false }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { font: { size: 11 } } },
+                        tooltip: { callbacks: { label: (ctx) => ` Total Penugasan: ${ctx.raw} Agenda` } }
+                    },
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } } }
+                }
             });
         }
+
+        updateCharts();
     }
 
-    function updateCharts() {
-        if (chartWorkloadInstance) {
+    function updateCategoryChart() {
+        if (!chartCategoryInstance) return;
+
+        const categoryCounts = {};
+        tasks.forEach(task => {
+            const cat = task.category || 'Lainnya';
+            categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+        });
+
+        const labels = Object.keys(categoryCounts);
+        const data = Object.values(categoryCounts);
+        const colors = ['#102a43', '#0bcc94', '#d4af37', '#627d98', '#e11d48', '#8b5cf6', '#f59e0b', '#06b6d4'];
+
+        if (labels.length === 0) {
+            chartCategoryInstance.data.labels = ['Belum ada penugasan'];
+            chartCategoryInstance.data.datasets[0].data = [0];
+            chartCategoryInstance.data.datasets[0].backgroundColor = ['#e2e8f0'];
+        } else {
+            chartCategoryInstance.data.labels = labels;
+            chartCategoryInstance.data.datasets[0].data = data;
+            chartCategoryInstance.data.datasets[0].backgroundColor = colors.slice(0, labels.length);
+        }
+
+        chartCategoryInstance.update();
+    }
+
+    function updateWorkloadChart() {
+        if (!chartWorkloadInstance) return;
+
+        if (officers.length === 0) {
+            chartWorkloadInstance.data.labels = ['Belum ada petugas'];
+            chartWorkloadInstance.data.datasets[0].data = [0];
+        } else {
             chartWorkloadInstance.data.labels = officers.map(o => o.name.split(' ')[0]);
             chartWorkloadInstance.data.datasets[0].data = officers.map(o => 
                 tasks.filter(t => t.officers && t.officers.map(Number).includes(Number(o.id))).length
             );
-            chartWorkloadInstance.update();
         }
+
+        chartWorkloadInstance.update();
+    }
+
+    // FUNGSI UPDATE GRAFIK PEJABAT PEMERINTAH (TERHUBUNG KE SINKRONISASI TASKS)
+    function updateVipChart() {
+        if (!chartVipInstance) return;
+
+        const vipCounts = {};
+        tasks.forEach(task => {
+            const vipName = task.vip && task.vip.trim() !== '' ? task.vip.trim() : 'Tanpa VIP / Umum';
+            vipCounts[vipName] = (vipCounts[vipName] || 0) + 1;
+        });
+
+        const labels = Object.keys(vipCounts);
+        const data = Object.values(vipCounts);
+
+        if (labels.length === 0) {
+            chartVipInstance.data.labels = ['Belum Ada Data'];
+            chartVipInstance.data.datasets[0].data = [0];
+        } else {
+            chartVipInstance.data.labels = labels;
+            chartVipInstance.data.datasets[0].data = data;
+        }
+
+        chartVipInstance.update();
+    }
+
+    function updateTrendChart() {
+        if (!chartTrendInstance) return;
+
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+        const monthlyCounts = new Array(12).fill(0);
+
+        tasks.forEach(task => {
+            if (!task.date) return;
+            const d = new Date(task.date);
+            if (!isNaN(d.getTime())) {
+                const monthIndex = d.getMonth();
+                monthlyCounts[monthIndex]++;
+            }
+        });
+
+        chartTrendInstance.data.labels = months;
+        chartTrendInstance.data.datasets[0].data = monthlyCounts;
+        chartTrendInstance.update();
+    }
+
+    function updateAnalyticsSummaryCards() {
+        const totalEl = document.getElementById('analytics-total-count');
+        const schedEl = document.getElementById('analytics-scheduled-count');
+        const activeEl = document.getElementById('analytics-active-count');
+        const compEl = document.getElementById('analytics-completed-count');
+
+        if (!totalEl) return;
+
+        totalEl.innerText = tasks.length;
+        schedEl.innerText = tasks.filter(t => t.status === 'Terjadwal').length;
+        activeEl.innerText = tasks.filter(t => t.status === 'Berlangsung').length;
+        compEl.innerText = tasks.filter(t => t.status === 'Selesai').length;
+    }
+
+    function updateCharts() {
         updateCategoryChart();
+        updateWorkloadChart();
+        updateVipChart();
+        updateTrendChart();
+        updateAnalyticsSummaryCards();
     }
 </script>
 </body>
