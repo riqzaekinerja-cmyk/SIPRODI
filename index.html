@@ -691,7 +691,6 @@
         checkAuth();
         initProfile();
         
-        // Singkronisasi status secara berkala setiap detik / per menit
         updateAutoStatuses();
         
         renderDashboard();
@@ -702,7 +701,6 @@
         
         fetchCloudData();
 
-        // Cek dan sinkronkan status jadwal & jam otomatis setiap 10 detik
         setInterval(() => {
             if (updateAutoStatuses()) {
                 renderDashboard();
@@ -712,7 +710,6 @@
         }, 10000);
     });
 
-    // --- FUNGSI UTAMA SINKRONISASI STATUS OTOMATIS BERDASARKAN WAKTU ---
     function updateAutoStatuses() {
         const now = new Date();
         let statusUpdated = false;
@@ -740,7 +737,6 @@
             }
         });
 
-        // Sinkronkan status petugas otomatis (Bertugas jika ada task Berlangsung, Standby jika tidak)
         officers.forEach(off => {
             const hasOngoingTask = tasks.some(t => t.status === 'Berlangsung' && t.officers && t.officers.includes(off.id));
             const expectedStatus = hasOngoingTask ? 'Bertugas' : 'Standby';
@@ -1108,6 +1104,33 @@
         document.getElementById('btn-cancel-edit-officer').classList.remove('hidden');
     }
 
+    // FUNGSI UNTUK MENGUPDATE CHART KATEGORI PENUGASAN SECARA DINAMIS
+    function updateCategoryChart() {
+        if (!chartCategoryInstance) return;
+
+        const categoryCounts = {};
+        tasks.forEach(task => {
+            const cat = task.category || 'Lainnya';
+            categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+        });
+
+        const labels = Object.keys(categoryCounts);
+        const data = Object.values(categoryCounts);
+        const colors = ['#102a43', '#0bcc94', '#d4af37', '#627d98', '#e11d48', '#8b5cf6', '#f59e0b', '#06b6d4'];
+
+        if (labels.length === 0) {
+            chartCategoryInstance.data.labels = ['Belum ada penugasan'];
+            chartCategoryInstance.data.datasets[0].data = [0];
+            chartCategoryInstance.data.datasets[0].backgroundColor = ['#e2e8f0'];
+        } else {
+            chartCategoryInstance.data.labels = labels;
+            chartCategoryInstance.data.datasets[0].data = data;
+            chartCategoryInstance.data.datasets[0].backgroundColor = colors.slice(0, labels.length);
+        }
+
+        chartCategoryInstance.update();
+    }
+
     function renderDashboard() {
         updateAutoStatuses();
         document.getElementById('stat-total-tasks').innerText = tasks.length;
@@ -1115,6 +1138,9 @@
         document.getElementById('stat-active-tasks').innerText = activeTasks.length;
         document.getElementById('badge-active-count').innerText = activeTasks.length;
         document.getElementById('stat-ready-officers').innerText = officers.filter(o => o.status === 'Standby').length;
+
+        // Update grafik kategori agar jumlahnya selalu sinkron dengan total penugasan
+        updateCategoryChart();
 
         const tbody = document.getElementById('recent-tasks-body');
         tbody.innerHTML = '';
@@ -1335,11 +1361,12 @@
             chartCategoryInstance = new Chart(ctxCat, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Seremonial', 'Kunjungan VIP', 'Rakor / Konferensi', 'Audiensi'],
-                    datasets: [{ data: [4, 3, 5, 2], backgroundColor: ['#102a43', '#0bcc94', '#d4af37', '#627d98'] }]
+                    labels: [],
+                    datasets: [{ data: [], backgroundColor: [] }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
             });
+            updateCategoryChart();
         }
 
         if (ctxWork) {
@@ -1371,6 +1398,7 @@
             chartWorkloadInstance.data.datasets[0].data = officers.map(o => o.tasksCount);
             chartWorkloadInstance.update();
         }
+        updateCategoryChart();
     }
 </script>
 </body>
