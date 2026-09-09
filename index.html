@@ -625,11 +625,11 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwu76AlBNUUuZfpFpnqE3g3zVL4XOKoEFH6SrhqIZFOuosTkinoTuLLwXIRsfDyLMg8/exec";
 
     const defaultOfficers = [
-        { id: 1, name: "Fitrah Ramadhan", role: "Koordinator Lapangan", team: "walikota", status: "Standby", tasksCount: 12, phone: "081234567890", photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" },
-        { id: 2, name: "Rifaldy Pratama", role: "Petugas Pendamping VIP", team: "walikota", status: "Standby", tasksCount: 15, phone: "081298765432", photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150" },
-        { id: 3, name: "Siti Rahmawati", role: "Master of Ceremony (MC)", team: "wakil", status: "Standby", tasksCount: 9, phone: "081311223344", photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150" },
-        { id: 4, name: "Hendra Wijaya", role: "Koordinator Acara", team: "wakil", status: "Standby", tasksCount: 11, phone: "081555667788", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" },
-        { id: 5, name: "Dedi Kurniawan", role: "Petugas Penghubung Lembaga", team: "penghubung", status: "Standby", tasksCount: 8, phone: "081999887766", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" }
+        { id: 1, name: "Fitrah Ramadhan", role: "Koordinator Lapangan", team: "walikota", status: "Standby", tasksCount: 0, phone: "081234567890", photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" },
+        { id: 2, name: "Rifaldy Pratama", role: "Petugas Pendamping VIP", team: "walikota", status: "Standby", tasksCount: 0, phone: "081298765432", photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150" },
+        { id: 3, name: "Siti Rahmawati", role: "Master of Ceremony (MC)", team: "wakil", status: "Standby", tasksCount: 0, phone: "081311223344", photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150" },
+        { id: 4, name: "Hendra Wijaya", role: "Koordinator Acara", team: "wakil", status: "Standby", tasksCount: 0, phone: "081555667788", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" },
+        { id: 5, name: "Dedi Kurniawan", role: "Petugas Penghubung Lembaga", team: "penghubung", status: "Standby", tasksCount: 0, phone: "081999887766", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" }
     ];
 
     const defaultTasks = [
@@ -654,7 +654,7 @@
             durationHours: 3,
             location: "Ruang Rapat VIP Bandara & Gedung Pemkot",
             status: "Berlangsung",
-            officers: [],
+            officers: [1, 3],
             notes: "Pendampingan VIP penuh."
         },
         {
@@ -666,7 +666,7 @@
             durationHours: 2,
             location: "Lapangan Merdeka",
             status: "Selesai",
-            officers: [],
+            officers: [2, 4],
             notes: "Pakaian PDU I / Kebaya."
         }
     ];
@@ -706,6 +706,7 @@
                 renderDashboard();
                 renderAssignments();
                 renderOfficers();
+                updateCharts();
             }
         }, 10000);
     });
@@ -738,7 +739,14 @@
         });
 
         officers.forEach(off => {
-            const hasOngoingTask = tasks.some(t => t.status === 'Berlangsung' && t.officers && t.officers.includes(off.id));
+            // Hitung penugasan aktual secara real-time dari array tasks
+            const realCount = tasks.filter(t => t.officers && t.officers.map(Number).includes(Number(off.id))).length;
+            if (off.tasksCount !== realCount) {
+                off.tasksCount = realCount;
+                statusUpdated = true;
+            }
+
+            const hasOngoingTask = tasks.some(t => t.status === 'Berlangsung' && t.officers && t.officers.map(Number).includes(Number(off.id)));
             const expectedStatus = hasOngoingTask ? 'Bertugas' : 'Standby';
             
             if (off.status !== expectedStatus) {
@@ -800,6 +808,7 @@
                     renderAssignments();
                     renderOfficers();
                     renderFormOfficerCheckboxes();
+                    updateCharts();
                     if (typeof renderManageTeamList === 'function') renderManageTeamList();
                 }
             })
@@ -827,11 +836,6 @@
             notes: document.getElementById('task-notes').value
         };
 
-        newTask.officers.forEach(id => {
-            const off = officers.find(o => o.id === id);
-            if (off) off.tasksCount += 1;
-        });
-
         tasks.unshift(newTask);
         updateAutoStatuses();
         saveStateAndSync('ADD_TASK', newTask);
@@ -839,6 +843,7 @@
         renderDashboard();
         renderAssignments();
         renderOfficers();
+        updateCharts();
 
         btnSubmit.disabled = false;
         btnSubmit.innerText = 'Simpan & Terbitkan Penugasan';
@@ -886,6 +891,7 @@
         renderFormOfficerCheckboxes();
         renderDashboard();
         renderManageTeamList();
+        updateCharts();
         resetOfficerForm();
     }
 
@@ -899,6 +905,7 @@
             renderFormOfficerCheckboxes();
             renderDashboard();
             renderManageTeamList();
+            updateCharts();
             if (document.getElementById('officer-edit-id').value == id) resetOfficerForm();
         }
     }
@@ -911,6 +918,7 @@
             renderDashboard();
             renderAssignments();
             renderOfficers();
+            updateCharts();
         }
     }
 
@@ -922,6 +930,7 @@
             renderDashboard();
             renderAssignments();
             renderOfficers();
+            updateCharts();
         }
     }
 
@@ -1104,7 +1113,6 @@
         document.getElementById('btn-cancel-edit-officer').classList.remove('hidden');
     }
 
-    // FUNGSI UNTUK MENGUPDATE CHART KATEGORI PENUGASAN SECARA DINAMIS
     function updateCategoryChart() {
         if (!chartCategoryInstance) return;
 
@@ -1139,7 +1147,6 @@
         document.getElementById('badge-active-count').innerText = activeTasks.length;
         document.getElementById('stat-ready-officers').innerText = officers.filter(o => o.status === 'Standby').length;
 
-        // Update grafik kategori agar jumlahnya selalu sinkron dengan total penugasan
         updateCategoryChart();
 
         const tbody = document.getElementById('recent-tasks-body');
@@ -1370,13 +1377,23 @@
         }
 
         if (ctxWork) {
+            const workloadData = officers.map(o => tasks.filter(t => t.officers && t.officers.map(Number).includes(Number(o.id))).length);
             chartWorkloadInstance = new Chart(ctxWork, {
                 type: 'bar',
                 data: {
                     labels: officers.map(o => o.name.split(' ')[0]),
-                    datasets: [{ label: 'Jumlah Penugasan', data: officers.map(o => o.tasksCount), backgroundColor: '#102a43' }]
+                    datasets: [{ label: 'Jumlah Penugasan', data: workloadData, backgroundColor: '#102a43' }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        y: { 
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 } 
+                        } 
+                    } 
+                }
             });
         }
 
@@ -1395,7 +1412,9 @@
     function updateCharts() {
         if (chartWorkloadInstance) {
             chartWorkloadInstance.data.labels = officers.map(o => o.name.split(' ')[0]);
-            chartWorkloadInstance.data.datasets[0].data = officers.map(o => o.tasksCount);
+            chartWorkloadInstance.data.datasets[0].data = officers.map(o => 
+                tasks.filter(t => t.officers && t.officers.map(Number).includes(Number(o.id))).length
+            );
             chartWorkloadInstance.update();
         }
         updateCategoryChart();
