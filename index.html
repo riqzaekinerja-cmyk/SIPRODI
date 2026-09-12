@@ -58,13 +58,13 @@
 
     <!-- LAYAR LOGIN SYSTEM DENGAN BACKGROUND GAMBAR JMP.jpg -->
     <div id="login-screen" class="fixed inset-0 bg-cover bg-center bg-no-repeat z-50 flex items-center justify-center p-4 relative" style="background-image: url('JMP.jpg');">
-        <!-- Overlay Gelap Transparan -->
+        <!-- Overlay Gelap Transparan agar Teks dan Card Tetap Terbaca -->
         <div class="absolute inset-0 bg-slate-950/65 backdrop-blur-xs"></div>
 
-        <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200/80 w-full max-w-md overflow-hidden relative z-10 flex flex-col">
+        <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200/80 w-full max-w-md overflow-hidden relative z-10">
             <div class="bg-protocol-500 p-6 text-white text-center relative">
                 <div class="w-20 h-20 bg-white/10 rounded-full mx-auto flex items-center justify-center p-1.5 shadow-lg mb-3 border border-protocol-gold/40">
-                    <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-full h-full object-contain rounded-full bg-slate-900" onerror="this.src=''">
+                    <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-full h-full object-contain rounded-full bg-slate-900">
                 </div>
                 <h2 class="text-xl font-bold tracking-wide">SIPRODI-DIGITAL</h2>
                 <p class="text-xs text-slate-300 mt-1">Protokol & Komunikasi Pimpinan Kota Ambon</p>
@@ -107,19 +107,6 @@
                     <span>Masuk ke Sistem</span>
                 </button>
             </form>
-
-            <!-- FOOTER INFORMASI ALAMAT & SOSMED LOGIN -->
-            <div class="px-5 py-3 bg-slate-100 border-t border-slate-200 text-[11px] text-slate-600 space-y-1.5">
-                <p class="font-medium text-slate-700 flex items-start gap-1.5">
-                    <i class="fa-solid fa-location-dot text-red-500 mt-0.5 flex-shrink-0"></i>
-                    <span>Jalan Sultan Hairun No. 1, Kel. Uritetu, Kec. Sirimau, Kota Ambon, Maluku</span>
-                </p>
-                <div class="flex items-center justify-between pt-1.5 border-t border-slate-200 text-[10px] text-slate-600 font-semibold">
-                    <a href="https://ambon.go.id" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 flex items-center gap-1"><i class="fa-solid fa-globe text-blue-500"></i> ambon.go.id</a>
-                    <a href="https://instagram.com/protokol_kota_ambon" target="_blank" rel="noopener noreferrer" class="hover:text-pink-600 flex items-center gap-1"><i class="fa-brands fa-instagram text-pink-500"></i> @protokol_kota_ambon</a>
-                    <a href="https://tiktok.com/@protokolkotaambon" target="_blank" rel="noopener noreferrer" class="hover:text-slate-900 flex items-center gap-1"><i class="fa-brands fa-tiktok text-slate-800"></i> @protokolkotaambon</a>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -131,7 +118,7 @@
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 bg-slate-900 border border-protocol-gold/50 rounded-lg p-0.5 flex items-center justify-center shadow-sm overflow-hidden">
-                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-full h-full object-contain rounded" onerror="this.src=''">
+                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-full h-full object-contain rounded">
                         </div>
                         <div>
                             <h1 class="font-bold text-lg leading-tight tracking-wide text-white">SIPRODI-DIGITAL</h1>
@@ -199,7 +186,7 @@
                         </button>
                     </nav>
 
-                    <div class="mt-6 pt-6 border-t border-slate-100 space-y-4">
+                    <div class="mt-6 pt-6 border-t border-slate-100">
                         <div class="bg-amber-50/90 rounded-lg p-3 border border-amber-200">
                             <div class="flex items-start space-x-2">
                                 <i class="fa-solid fa-circle-info text-amber-600 mt-0.5"></i>
@@ -207,27 +194,6 @@
                                     <h4 class="text-xs font-bold text-amber-900 uppercase tracking-wide">Standard Operasional</h4>
                                     <p class="text-xs text-amber-800 mt-1">Seluruh penugasan wajib dikonfirmasi minimal H-1 kegiatan oleh Koordinator Lapangan Tim Walikota/Wakil Walikota.</p>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- KOTAK KONTAK & ALAMAT KOTA AMBON PADA SIDEBAR -->
-                        <div class="bg-slate-50/90 rounded-lg p-3 border border-slate-200 text-xs text-slate-600 space-y-2">
-                            <h4 class="font-bold text-slate-800 text-[11px] uppercase tracking-wide flex items-center gap-1.5">
-                                <i class="fa-solid fa-building-columns text-protocol-500"></i> Sekretariat Prokopim
-                            </h4>
-                            <p class="text-[11px] leading-relaxed text-slate-700">
-                                <i class="fa-solid fa-location-dot text-red-500 me-1"></i> Jalan Sultan Hairun No. 1, Kel. Uritetu, Kec. Sirimau, Kota Ambon, Maluku
-                            </p>
-                            <div class="pt-2 border-t border-slate-200/80 flex flex-col space-y-1.5 text-[11px] font-medium">
-                                <a href="https://ambon.go.id" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline flex items-center gap-1.5">
-                                    <i class="fa-solid fa-globe w-4 text-center text-blue-500"></i> ambon.go.id
-                                </a>
-                                <a href="https://instagram.com/protokol_kota_ambon" target="_blank" rel="noopener noreferrer" class="text-pink-600 hover:underline flex items-center gap-1.5">
-                                    <i class="fa-brands fa-instagram w-4 text-center text-pink-500"></i> @protokol_kota_ambon
-                                </a>
-                                <a href="https://tiktok.com/@protokolkotaambon" target="_blank" rel="noopener noreferrer" class="text-slate-800 hover:underline flex items-center gap-1.5">
-                                    <i class="fa-brands fa-tiktok w-4 text-center text-slate-900"></i> @protokolkotaambon
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -238,14 +204,14 @@
             <main class="flex-1 min-w-0 relative">
                 
                 <!-- WATERMARK LOGO PROKOPIM OVERLAY -->
-                <img src="Logo Prokopim Hitam.jpeg" alt="Prokopim Watermark" class="dashboard-watermark" onerror="this.style.display='none'">
+                <img src="Logo Prokopim Hitam.jpeg" alt="Prokopim Watermark" class="dashboard-watermark">
 
                 <!-- TAB 1: DASHBOARD -->
                 <section id="tab-dashboard" class="tab-content space-y-6 relative z-10">
                     <!-- HERO BANNER -->
                     <div class="bg-gradient-to-r from-protocol-500 via-slate-800 to-protocol-600 rounded-xl p-6 text-white shadow-md relative overflow-hidden">
                         <div class="absolute right-3 top-1/2 -translate-y-1/2 opacity-20 pointer-events-none hidden sm:block">
-                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim Hero" class="w-48 h-48 object-contain rounded-full" onerror="this.style.display='none'">
+                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim Hero" class="w-48 h-48 object-contain rounded-full">
                         </div>
                         <div class="relative z-10 max-w-2xl">
                             <span class="bg-protocol-gold/20 text-protocol-gold border border-protocol-gold/40 text-xs px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider inline-flex items-center gap-1.5">
@@ -357,6 +323,7 @@
                                     <input type="text" id="search-input" onkeyup="filterAssignments()" placeholder="Cari acara / petugas..." class="pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-60">
                                     <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
                                 </div>
+                                <!-- KOLOM FILTER STATUS TERINTEGRASI PENUH -->
                                 <select id="filter-status" onchange="filterAssignments()" class="text-xs py-1.5 px-3 rounded-lg border border-slate-300 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold cursor-pointer">
                                     <option value="ALL">Semua Status</option>
                                     <option value="Terjadwal">Terjadwal</option>
@@ -450,7 +417,7 @@
                         </div>
                     </div>
 
-                    <!-- LAYOUT 3 GRAFIK -->
+                    <!-- LAYOUT 3 GRAFIK (GRAFIK PEJABAT TELAH DIUBAH MENJADI LINGKARAN) -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="bg-white/90 backdrop-blur-sm p-5 rounded-xl border border-slate-200 shadow-sm">
                             <div class="flex items-center justify-between mb-4">
@@ -460,6 +427,7 @@
                             <div class="h-64"><canvas id="chartWorkload"></canvas></div>
                         </div>
 
+                        <!-- GRAFIK PENUGASAN PEJABAT (DIUBAH MENJADI LINGKARAN DOUGHNUT) -->
                         <div class="bg-white/90 backdrop-blur-sm p-5 rounded-xl border border-slate-200 shadow-sm">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-sm font-bold text-slate-800">Penugasan per Pejabat Pemerintah</h3>
@@ -479,55 +447,6 @@
                 </section>
             </main>
         </div>
-
-        <!-- FOOTER APLIKASI DENGAN ALAMAT & SOSMED KOTA AMBON -->
-        <footer class="bg-protocol-500 text-white mt-auto border-t border-protocol-600 no-print z-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300">
-                    <div>
-                        <div class="flex items-center space-x-2.5 mb-2">
-                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-7 h-7 object-contain rounded bg-slate-900 border border-protocol-gold/40" onerror="this.src=''">
-                            <span class="font-bold text-white text-sm tracking-wide">SIPRODI-DIGITAL</span>
-                        </div>
-                        <p class="text-slate-300 leading-relaxed">Sistem Informasi & Optimalisasi Penugasan Petugas Protokol Bagian Protokol dan Komunikasi Pimpinan Pemerintah Kota Ambon.</p>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-white text-xs uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-                            <i class="fa-solid fa-location-dot text-protocol-gold"></i> Alamat Kantor
-                        </h4>
-                        <p class="leading-relaxed text-slate-200">
-                            Jalan Sultan Hairun No. 1, Kelurahan Uritetu, Kecamatan Sirimau, Kota Ambon, Maluku
-                        </p>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-white text-xs uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-                            <i class="fa-solid fa-link text-protocol-gold"></i> Website & Media Sosial Resmi
-                        </h4>
-                        <ul class="space-y-1.5 font-medium">
-                            <li>
-                                <a href="https://ambon.go.id" target="_blank" rel="noopener noreferrer" class="hover:text-protocol-gold transition inline-flex items-center gap-2">
-                                    <i class="fa-solid fa-globe w-4 text-blue-400"></i> https://ambon.go.id
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://instagram.com/protokol_kota_ambon" target="_blank" rel="noopener noreferrer" class="hover:text-protocol-gold transition inline-flex items-center gap-2">
-                                    <i class="fa-brands fa-instagram w-4 text-pink-400"></i> Instagram: @protokol_kota_ambon
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://tiktok.com/@protokolkotaambon" target="_blank" rel="noopener noreferrer" class="hover:text-protocol-gold transition inline-flex items-center gap-2">
-                                    <i class="fa-brands fa-tiktok w-4 text-slate-200"></i> TikTok: @protokolkotaambon
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="mt-6 pt-4 border-t border-slate-700/60 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2">
-                    <p>&copy; 2026 Bagian Protokol dan Komunikasi Pimpinan Kota Ambon. All rights reserved.</p>
-                    <p>SIPRODI-DIGITAL v2.0</p>
-                </div>
-            </div>
-        </footer>
     </div>
 
     <!-- MODAL: ADD TASK -->
@@ -810,7 +729,7 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwu76AlBNUUuZfpFpnqE3g3zVL4XOKoEFH6SrhqIZFOuosTkinoTuLLwXIRsfDyLMg8/exec";
 
     // FITUR AUTO LOGOUT DALAM WAKTU 10 MENIT INAKTIVITAS
-    const AUTO_LOGOUT_TIME = 10 * 60 * 1000;
+    const AUTO_LOGOUT_TIME = 10 * 60 * 1000; // 10 menit = 600,000 milidetik
     let autoLogoutTimer = null;
 
     function resetAutoLogoutTimer() {
@@ -831,6 +750,7 @@
             saveStateAndSync();
             checkAuth();
             
+            // Tampilkan pesan pemberitahuan auto logout pada form login
             const autoLogoutMsg = document.getElementById('auto-logout-msg');
             if (autoLogoutMsg) {
                 autoLogoutMsg.classList.remove('hidden');
@@ -838,6 +758,7 @@
         }
     }
 
+    // Listener aktivitas pengguna untuk mereset timer auto logout 10 menit
     ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(eventType => {
         window.addEventListener(eventType, () => {
             if (authSession) {
@@ -1067,20 +988,18 @@
         btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Menyimpan...';
 
         const durationVal = parseFloat(document.getElementById('task-duration').value) || 2;
-        const nextNumber = tasks.length + 1;
-        const formattedId = `PRT-2026-${String(nextNumber).padStart(3, '0')}`;
 
         const newTask = {
-            id: formattedId,
+            id: `PRT-2026-00${tasks.length + 1}`,
             title: document.getElementById('task-title').value,
             category: document.getElementById('task-category').value,
-            vip: document.getElementById('task-vip').value || '',
+            vip: document.getElementById('task-vip').value,
             date: document.getElementById('task-date').value,
             durationHours: durationVal,
             location: document.getElementById('task-location').value,
             status: "Terjadwal",
             officers: Array.from(document.querySelectorAll('input[name="selected_officers"]:checked')).map(el => parseInt(el.value)),
-            notes: document.getElementById('task-notes').value || ''
+            notes: document.getElementById('task-notes').value
         };
 
         tasks.unshift(newTask);
@@ -1103,7 +1022,7 @@
         const editId = document.getElementById('officer-edit-id').value;
         const name = document.getElementById('officer-name-input').value;
         const role = document.getElementById('officer-role-input').value;
-        const team = document.getElementById('team-select').value.toLowerCase();
+        const team = document.getElementById('team-select').value;
         const phone = document.getElementById('officer-phone-input').value;
         const photoUrl = document.getElementById('officer-photo-input').value;
 
@@ -1111,7 +1030,7 @@
         const finalPhoto = tempOfficerPhoto || photoUrl || fallbackAvatar;
 
         if (editId) {
-            const off = officers.find(o => Number(o.id) === Number(editId));
+            const off = officers.find(o => o.id === parseInt(editId));
             if (off) {
                 off.team = team;
                 off.name = name;
@@ -1143,14 +1062,14 @@
     }
 
     function deleteOfficer(id) {
-        const off = officers.find(o => Number(o.id) === Number(id));
+        const off = officers.find(o => o.id === id);
         if (!off) return;
 
         showConfirm(
             'Hapus Anggota Tim',
             `Apakah Anda yakin ingin menghapus "${off.name}" dari tim?`,
             () => {
-                officers = officers.filter(o => Number(o.id) !== Number(id));
+                officers = officers.filter(o => o.id !== id);
                 updateAutoStatuses();
                 saveStateAndSync('DELETE_OFFICER', { id: id });
                 renderOfficers();
@@ -1158,7 +1077,7 @@
                 renderDashboard();
                 renderManageTeamList();
                 updateCharts();
-                if (Number(document.getElementById('officer-edit-id').value) === Number(id)) resetOfficerForm();
+                if (document.getElementById('officer-edit-id').value == id) resetOfficerForm();
             }
         );
     }
@@ -1212,7 +1131,7 @@
         if (authSession) {
             loginScreen.classList.add('hidden');
             appContainer.classList.remove('hidden');
-            resetAutoLogoutTimer();
+            resetAutoLogoutTimer(); // Mulai timer 10 menit ketika berhasil masuk
         } else {
             loginScreen.classList.remove('hidden');
             appContainer.classList.add('hidden');
@@ -1261,18 +1180,9 @@
         });
         document.getElementById(`tab-${tabId}`).classList.remove('hidden');
         const activeNav = document.getElementById(`nav-${tabId}`);
-        if (activeNav) {
-            activeNav.classList.add('bg-protocol-500', 'text-white', 'shadow-sm');
-            activeNav.classList.remove('text-slate-600', 'hover:bg-slate-100');
-        }
-        if (tabId === 'analytics') {
-            updateCharts();
-            setTimeout(() => {
-                if (chartWorkloadInstance) chartWorkloadInstance.resize();
-                if (chartVipInstance) chartVipInstance.resize();
-                if (chartTrendInstance) chartTrendInstance.resize();
-            }, 50);
-        }
+        activeNav.classList.add('bg-protocol-500', 'text-white', 'shadow-sm');
+        activeNav.classList.remove('text-slate-600', 'hover:bg-slate-100');
+        if (tabId === 'analytics') updateCharts();
     }
 
     function initProfile() {
@@ -1348,16 +1258,15 @@
         }
 
         officers.forEach(off => {
-            const teamKey = (off.team || '').toLowerCase();
-            let teamLabel = teamKey === 'walikota' ? 'Walikota' : (teamKey === 'wakil' ? 'Wakil Walikota' : 'Penghubung');
-            let teamBadge = teamKey === 'walikota' ? 'bg-blue-100 text-blue-800' : (teamKey === 'wakil' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800');
+            let teamLabel = off.team === 'walikota' ? 'Walikota' : (off.team === 'wakil' ? 'Wakil Walikota' : 'Penghubung');
+            let teamBadge = off.team === 'walikota' ? 'bg-blue-100 text-blue-800' : (off.team === 'wakil' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800');
             let photoUrl = off.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff`;
 
             tbody.innerHTML += `
                 <tr class="hover:bg-slate-50 transition">
                     <td class="p-2.5">
                         <div class="flex items-center space-x-2.5">
-                            <img src="${photoUrl}" alt="${off.name}" class="w-8 h-8 rounded-full object-cover border border-slate-200 flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff'">
+                            <img src="${photoUrl}" alt="${off.name}" class="w-8 h-8 rounded-full object-cover border border-slate-200 flex-shrink-0">
                             <div><p class="font-bold text-slate-800">${off.name}</p></div>
                         </div>
                     </td>
@@ -1376,10 +1285,10 @@
     }
 
     function editOfficer(id) {
-        const off = officers.find(o => Number(o.id) === Number(id));
+        const off = officers.find(o => o.id === id);
         if (!off) return;
         document.getElementById('officer-edit-id').value = off.id;
-        document.getElementById('team-select').value = (off.team || 'walikota').toLowerCase();
+        document.getElementById('team-select').value = off.team;
         document.getElementById('officer-name-input').value = off.name;
         document.getElementById('officer-role-input').value = off.role;
         document.getElementById('officer-phone-input').value = off.phone || '';
@@ -1412,8 +1321,8 @@
         }
 
         sortedTasks.forEach(task => {
-            const assignedNames = (task.officers || []).map(id => {
-                const off = officers.find(o => Number(o.id) === Number(id));
+            const assignedNames = task.officers.map(id => {
+                const off = officers.find(o => o.id === id);
                 return off ? off.name : 'Unknown';
             }).join(', ');
 
@@ -1444,7 +1353,7 @@
                             <i class="fa-solid fa-user-tie text-protocol-500"></i>
                             <div>
                                 <p class="font-bold text-slate-800">${c.name}</p>
-                                <p class="text-[10px] text-slate-500">${(c.team || '').toUpperCase()} - ${c.role}</p>
+                                <p class="text-[10px] text-slate-500">${c.team.toUpperCase()} - ${c.role}</p>
                             </div>
                         </div>
                         <span class="px-2 py-0.5 text-[10px] rounded-full font-bold ${c.status === 'Standby' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${c.status}</span>
@@ -1464,18 +1373,17 @@
         }
 
         tasks.forEach(task => {
-            const assignedNames = (task.officers || []).map(id => {
-                const off = officers.find(o => Number(o.id) === Number(id));
+            const assignedNames = task.officers.map(id => {
+                const off = officers.find(o => o.id === id);
                 return off ? off.name : 'Unknown';
             }).join(', ');
 
             const formattedDate = new Date(task.date).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
             let badgeColor = task.status === "Berlangsung" ? "bg-amber-100 text-amber-800" : (task.status === "Selesai" ? "bg-emerald-100 text-emerald-800" : "bg-blue-100 text-blue-800");
 
-            const searchString = `${task.id} ${task.title} ${task.vip || ''} ${task.location || ''} ${assignedNames}`.toLowerCase();
-
+            // Menambahkan atribut data-status dan data-search untuk memfungsikan filter status & pencarian
             tbody.innerHTML += `
-                <tr class="hover:bg-slate-50 transition border-b border-slate-100 task-row" data-status="${task.status}" data-search="${searchString}">
+                <tr class="hover:bg-slate-50 transition border-b border-slate-100 task-row" data-status="${task.status}" data-search="${(task.id + ' ' + task.title + ' ' + task.vip + ' ' + task.location + ' ' + assignedNames).toLowerCase()}">
                     <td class="p-3 font-semibold text-slate-800"><span class="text-[10px] font-mono text-slate-400 block">${task.id}</span>${task.title}</td>
                     <td class="p-3 text-slate-600"><span class="font-medium text-slate-800 block">${task.vip || 'Tidak Ada Tamu VIP'}</span><span class="text-[11px] text-slate-500">${formattedDate}</span></td>
                     <td class="p-3 text-slate-600"><i class="fa-solid fa-location-dot me-1 text-red-400"></i>${task.location}</td>
@@ -1495,9 +1403,11 @@
             `;
         });
 
+        // Jalankan filterAssignments() setelah render agar filter status yang aktif langsung berlaku
         filterAssignments();
     }
 
+    // FUNGSI FILTER STATUS & PENCARIAN YANG SUDAH DIPERBAIKI PENUH
     function filterAssignments() {
         const query = (document.getElementById('search-input').value || '').toLowerCase().trim();
         const statusFilter = document.getElementById('filter-status').value;
@@ -1529,8 +1439,7 @@
 
         officers.forEach(off => {
             let badgeStatus = off.status === 'Standby' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
-            const teamKey = (off.team || '').toLowerCase();
-            let teamColor = teamKey === 'walikota' ? 'border-blue-200 bg-blue-50/20' : (teamKey === 'wakil' ? 'border-emerald-200 bg-emerald-50/20' : 'border-amber-200 bg-amber-50/20');
+            let teamColor = off.team === 'walikota' ? 'border-blue-200 bg-blue-50/20' : (off.team === 'wakil' ? 'border-emerald-200 bg-emerald-50/20' : 'border-amber-200 bg-amber-50/20');
             let photoUrl = off.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff`;
 
             grid.innerHTML += `
@@ -1541,7 +1450,7 @@
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeStatus}">${off.status}</span>
                         </div>
                         <div class="flex items-start space-x-3">
-                            <img src="${photoUrl}" alt="${off.name}" class="w-12 h-12 rounded-full object-cover border-2 border-slate-200 flex-shrink-0 shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff'">
+                            <img src="${photoUrl}" alt="${off.name}" class="w-12 h-12 rounded-full object-cover border-2 border-slate-200 flex-shrink-0 shadow-sm">
                             <div>
                                 <h4 class="font-bold text-slate-900 text-sm leading-tight">${off.name}</h4>
                                 <p class="text-xs text-slate-500 mt-0.5">${off.role}</p>
@@ -1559,7 +1468,7 @@
     }
 
     function toggleOfficerStatus(id) {
-        const off = officers.find(o => Number(o.id) === Number(id));
+        const off = officers.find(o => o.id === id);
         if (off) {
             off.status = off.status === 'Standby' ? 'Bertugas' : 'Standby';
             saveStateAndSync('UPDATE_OFFICER_STATUS', { id: id, status: off.status });
@@ -1573,8 +1482,6 @@
         const containerWakil = document.getElementById('container-officers-wakil');
         const containerPenghubung = document.getElementById('container-officers-penghubung');
 
-        if (!containerWalikota || !containerWakil || !containerPenghubung) return;
-
         containerWalikota.innerHTML = '';
         containerWakil.innerHTML = '';
         containerPenghubung.innerHTML = '';
@@ -1587,9 +1494,8 @@
                 </label>
             `;
 
-            const teamKey = (off.team || '').toLowerCase();
-            if (teamKey === 'walikota') containerWalikota.innerHTML += item;
-            else if (teamKey === 'wakil') containerWakil.innerHTML += item;
+            if (off.team === 'walikota') containerWalikota.innerHTML += item;
+            else if (off.team === 'wakil') containerWakil.innerHTML += item;
             else containerPenghubung.innerHTML += item;
         });
     }
@@ -1598,8 +1504,8 @@
         const task = tasks.find(t => t.id === taskId);
         if (!task) return;
 
-        const assignedNames = (task.officers || []).map(id => {
-            const off = officers.find(o => Number(o.id) === Number(id));
+        const assignedNames = task.officers.map(id => {
+            const off = officers.find(o => o.id === id);
             return off ? `${off.name} (${off.role})` : 'Unknown';
         }).join('<br>• ');
 
@@ -1650,6 +1556,7 @@
             });
         }
 
+        // GRAFIK PENUGASAN PEJABAT DIUBAH MENJADI LINGKARAN (DOUGHNUT / PIE)
         if (ctxVip) {
             chartVipInstance = new Chart(ctxVip, {
                 type: 'doughnut',
@@ -1748,6 +1655,7 @@
         chartWorkloadInstance.update();
     }
 
+    // UPDATE GRAFIK LINGKARAN PENUGASAN PEJABAT (VIP CHART)
     function updateVipChart() {
         if (!chartVipInstance) return;
 
