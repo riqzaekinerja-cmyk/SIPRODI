@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Digital Penugasan Petugas Protokol</title>
+    <title>Sistem Digital Penugasan Petugas Protokol - Prokopim Kota Ambon</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -33,26 +33,49 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Watermark Dashboard Effect */
+        .dashboard-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(520px, 85vw);
+            pointer-events: none;
+            opacity: 0.06;
+            z-index: 0;
+            user-select: none;
+            filter: grayscale(10%) drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+        }
+
         @media print {
             .no-print { display: none !important; }
             .print-only { display: block !important; }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col relative overflow-x-hidden">
 
-    <!-- LAYAR LOGIN SYSTEM -->
-    <div id="login-screen" class="fixed inset-0 bg-protocol-600 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden">
+    <!-- LAYAR LOGIN SYSTEM DENGAN BACKGROUND GAMBAR JMP.jpg -->
+    <div id="login-screen" class="fixed inset-0 bg-cover bg-center bg-no-repeat z-50 flex items-center justify-center p-4 relative" style="background-image: url('JMP.jpg');">
+        <!-- Overlay Gelap Transparan agar Teks dan Card Tetap Terbaca -->
+        <div class="absolute inset-0 bg-slate-950/65 backdrop-blur-xs"></div>
+
+        <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200/80 w-full max-w-md overflow-hidden relative z-10">
             <div class="bg-protocol-500 p-6 text-white text-center relative">
-                <div class="w-16 h-16 bg-protocol-gold rounded-2xl mx-auto flex items-center justify-center text-slate-950 font-bold text-2xl shadow-lg mb-3">
-                    <i class="fa-solid fa-shield-halved"></i>
+                <div class="w-20 h-20 bg-white/10 rounded-full mx-auto flex items-center justify-center p-1.5 shadow-lg mb-3 border border-protocol-gold/40">
+                    <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-full h-full object-contain rounded-full bg-slate-900">
                 </div>
-                <h2 class="text-xl font-bold">SIPRODI-DIGITAL</h2>
-                <p class="text-xs text-slate-300 mt-1">Sistem Informasi & Optimalisasi Penugasan Petugas Protokol</p>
+                <h2 class="text-xl font-bold tracking-wide">SIPRODI-DIGITAL</h2>
+                <p class="text-xs text-slate-300 mt-1">Protokol & Komunikasi Pimpinan Kota Ambon</p>
             </div>
             
             <form id="form-login" onsubmit="handleLogin(event)" class="p-6 space-y-4 text-xs">
+                <!-- Pesan Berhasil Auto Logout -->
+                <div id="auto-logout-msg" class="hidden p-3 bg-amber-50 border border-amber-300 text-amber-900 rounded-lg text-center font-medium shadow-sm">
+                    <i class="fa-solid fa-clock-rotate-left text-amber-600 me-1"></i> Sesi Anda telah berakhir secara otomatis karena tidak ada aktivitas selama 10 menit.
+                </div>
+
                 <div id="login-error-msg" class="hidden p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-center font-medium">
                     Username atau password salah!
                 </div>
@@ -61,7 +84,7 @@
                     <label class="block font-semibold text-slate-700 mb-1">Username Login</label>
                     <div class="relative">
                         <i class="fa-solid fa-user absolute left-3 top-2.5 text-slate-400"></i>
-                        <input type="text" id="login-username" required placeholder="Masukkan username" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="text" id="login-username" required placeholder="Masukkan username" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
                     </div>
                 </div>
 
@@ -69,7 +92,7 @@
                     <label class="block font-semibold text-slate-700 mb-1">Password</label>
                     <div class="relative">
                         <i class="fa-solid fa-lock absolute left-3 top-2.5 text-slate-400"></i>
-                        <input type="password" id="login-password" required placeholder="Masukkan password" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="password" id="login-password" required placeholder="Masukkan password" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
                     </div>
                 </div>
 
@@ -84,18 +107,43 @@
                     <span>Masuk ke Sistem</span>
                 </button>
             </form>
+
+            <!-- FOOTER INFORMASI KOTA AMBON DI DALAM KARTU LOGIN -->
+            <div class="px-6 py-4 bg-slate-100/90 border-t border-slate-200/90 text-[11px] text-slate-600 space-y-2.5">
+                <div class="flex items-start space-x-2.5">
+                    <i class="fa-solid fa-location-dot text-red-500 mt-0.5 flex-shrink-0 text-xs"></i>
+                    <div class="leading-tight">
+                        <strong class="text-slate-800">Alamat Kantor:</strong><br>
+                        <span>Jalan Sultan Hairun No. 1, Kelurahan Uritetu, Kecamatan Sirimau, Kota Ambon, Maluku</span>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200/70 text-[11px] font-medium">
+                    <a href="https://ambon.go.id" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-blue-600 hover:text-blue-800 transition">
+                        <i class="fa-solid fa-globe text-blue-500"></i>
+                        <span>ambon.go.id</span>
+                    </a>
+                    <a href="https://instagram.com/protokol_kota_ambon" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-pink-600 hover:text-pink-800 transition">
+                        <i class="fa-brands fa-instagram text-pink-500"></i>
+                        <span>@protokol_kota_ambon</span>
+                    </a>
+                    <a href="https://tiktok.com/@protokolkotaambon" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-slate-800 hover:text-black transition">
+                        <i class="fa-brands fa-tiktok text-slate-900"></i>
+                        <span>@protokolkotaambon</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- MAIN APP CONTAINER -->
-    <div id="app-container" class="hidden flex-1 flex flex-col">
+    <div id="app-container" class="hidden flex-1 flex flex-col min-h-screen">
         <!-- HEADER -->
         <header class="bg-protocol-500 text-white shadow-md sticky top-0 z-30 no-print">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
-                        <div class="bg-protocol-gold p-2 rounded-lg text-slate-900 font-bold shadow-sm">
-                            <i class="fa-solid fa-shield-halved me-1"></i> PROTOKOL
+                        <div class="w-10 h-10 bg-slate-900 border border-protocol-gold/50 rounded-lg p-0.5 flex items-center justify-center shadow-sm overflow-hidden">
+                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-full h-full object-contain rounded">
                         </div>
                         <div>
                             <h1 class="font-bold text-lg leading-tight tracking-wide text-white">SIPRODI-DIGITAL</h1>
@@ -135,11 +183,11 @@
         </header>
 
         <!-- KONTEN UTAMA & NAVIGATION -->
-        <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row gap-6">
+        <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row gap-6 relative">
 
             <!-- ASIDE / SIDEBAR -->
-            <aside class="w-full md:w-64 flex-shrink-0 no-print">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sticky top-22">
+            <aside class="w-full md:w-64 flex-shrink-0 no-print z-10">
+                <div class="bg-white/95 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 p-4 sticky top-22">
                     <nav class="space-y-1">
                         <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-protocol-500 text-white shadow-sm">
                             <i class="fa-solid fa-chart-pie w-5"></i>
@@ -164,7 +212,7 @@
                     </nav>
 
                     <div class="mt-6 pt-6 border-t border-slate-100">
-                        <div class="bg-amber-50 rounded-lg p-3 border border-amber-200">
+                        <div class="bg-amber-50/90 rounded-lg p-3 border border-amber-200">
                             <div class="flex items-start space-x-2">
                                 <i class="fa-solid fa-circle-info text-amber-600 mt-0.5"></i>
                                 <div>
@@ -177,24 +225,31 @@
                 </div>
             </aside>
 
-            <!-- MAIN CONTENT CONTAINER -->
-            <main class="flex-1 min-w-0">
+            <!-- MAIN CONTENT CONTAINER WITH PROKOPIM WATERMARK -->
+            <main class="flex-1 min-w-0 relative">
+                
+                <!-- WATERMARK LOGO PROKOPIM OVERLAY -->
+                <img src="Logo Prokopim Hitam.jpeg" alt="Prokopim Watermark" class="dashboard-watermark">
 
                 <!-- TAB 1: DASHBOARD -->
-                <section id="tab-dashboard" class="tab-content space-y-6">
+                <section id="tab-dashboard" class="tab-content space-y-6 relative z-10">
+                    <!-- HERO BANNER -->
                     <div class="bg-gradient-to-r from-protocol-500 via-slate-800 to-protocol-600 rounded-xl p-6 text-white shadow-md relative overflow-hidden">
-                        <div class="absolute right-0 top-0 h-full w-1/3 opacity-10 flex items-center justify-end pr-8">
-                            <i class="fa-solid fa-award text-9xl"></i>
+                        <div class="absolute right-3 top-1/2 -translate-y-1/2 opacity-20 pointer-events-none hidden sm:block">
+                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim Hero" class="w-48 h-48 object-contain rounded-full">
                         </div>
                         <div class="relative z-10 max-w-2xl">
-                            <span class="bg-protocol-gold/20 text-protocol-gold border border-protocol-gold/40 text-xs px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider">Dashboard Protokol Terintegrasi</span>
+                            <span class="bg-protocol-gold/20 text-protocol-gold border border-protocol-gold/40 text-xs px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-shield-halved text-[10px]"></i> Dashboard Protokol Terintegrasi
+                            </span>
                             <h2 class="text-2xl font-bold mt-2">Optimalisasi Penugasan Petugas Protokol</h2>
                             <p class="text-slate-300 text-sm mt-1">Pencatatan agenda keprotokolan, alokasi personel Tim Walikota, Tim Wakil Walikota, & Kantor Penghubung secara terstruktur dan digital.</p>
                         </div>
                     </div>
 
+                    <!-- STATISTIK RINGKASAN -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
                             <div>
                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Penugasan</p>
                                 <h3 class="text-2xl font-bold text-slate-900 mt-1" id="stat-total-tasks">0</h3>
@@ -204,7 +259,7 @@
                                 <i class="fa-solid fa-clipboard-list"></i>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
                             <div>
                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Sedang / Berlangsung</p>
                                 <h3 class="text-2xl font-bold text-amber-600 mt-1" id="stat-active-tasks">0</h3>
@@ -214,7 +269,7 @@
                                 <i class="fa-solid fa-spinner fa-spin"></i>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
                             <div>
                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Petugas Standby</p>
                                 <h3 class="text-2xl font-bold text-emerald-600 mt-1" id="stat-ready-officers">0</h3>
@@ -224,7 +279,7 @@
                                 <i class="fa-solid fa-user-check"></i>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
                             <div>
                                 <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Tingkat Ketepatan</p>
                                 <h3 class="text-2xl font-bold text-purple-600 mt-1">98.5%</h3>
@@ -237,8 +292,8 @@
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
-                            <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+                        <div class="lg:col-span-2 bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+                            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-white/80">
                                 <div>
                                     <h3 class="font-bold text-slate-800">Agenda Penugasan Protokol Terdekat</h3>
                                     <p class="text-xs text-slate-500">Jadwal kegiatan penting yang membutuhkan pendampingan protokol</p>
@@ -247,7 +302,7 @@
                             </div>
                             <div class="overflow-x-auto flex-1">
                                 <table class="w-full text-left text-xs">
-                                    <thead class="bg-slate-50 text-slate-500 uppercase font-semibold">
+                                    <thead class="bg-slate-50/90 text-slate-500 uppercase font-semibold">
                                         <tr>
                                             <th class="p-3">Kegiatan / Acara</th>
                                             <th class="p-3">Waktu & Lokasi</th>
@@ -266,13 +321,13 @@
                         </div>
 
                         <div class="space-y-6">
-                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                            <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 p-4">
                                 <h3 class="font-bold text-slate-800 text-sm mb-3">Distribusi Kategori Penugasan</h3>
                                 <div class="h-48 relative">
                                     <canvas id="chartCategory"></canvas>
                                 </div>
                             </div>
-                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                            <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 p-4">
                                 <h3 class="font-bold text-slate-800 text-sm mb-3">Koordinator Lapangan Hari Ini</h3>
                                 <div class="space-y-3" id="today-coordinators-list"></div>
                             </div>
@@ -281,8 +336,8 @@
                 </section>
 
                 <!-- TAB 2: ALL ASSIGNMENTS -->
-                <section id="tab-assignments" class="tab-content space-y-6 hidden">
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                <section id="tab-assignments" class="tab-content space-y-6 hidden relative z-10">
+                    <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 p-4">
                         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div>
                                 <h2 class="text-lg font-bold text-slate-900">Jadwal Penugasan Protokol</h2>
@@ -293,13 +348,13 @@
                                     <input type="text" id="search-input" onkeyup="filterAssignments()" placeholder="Cari acara / petugas..." class="pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-60">
                                     <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
                                 </div>
-                                <select id="filter-status" onchange="filterAssignments()" class="text-xs py-1.5 px-3 rounded-lg border border-slate-300 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <select id="filter-status" onchange="filterAssignments()" class="text-xs py-1.5 px-3 rounded-lg border border-slate-300 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold cursor-pointer">
                                     <option value="ALL">Semua Status</option>
                                     <option value="Terjadwal">Terjadwal</option>
                                     <option value="Berlangsung">Berlangsung</option>
                                     <option value="Selesai">Selesai</option>
                                 </select>
-                                <button onclick="openModal('modalTask')" class="bg-protocol-500 hover:bg-protocol-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1">
+                                <button onclick="openModal('modalTask')" class="bg-protocol-500 hover:bg-protocol-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1 shadow-sm">
                                     <i class="fa-solid fa-plus"></i>
                                     <span>Buat Penugasan</span>
                                 </button>
@@ -307,10 +362,10 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs">
-                                <thead class="bg-slate-100 text-slate-600 font-bold uppercase tracking-wider">
+                                <thead class="bg-slate-100/90 text-slate-600 font-bold uppercase tracking-wider">
                                     <tr>
                                         <th class="p-3">ID & Acara</th>
                                         <th class="p-3">Pejabat Pemerintah</th>
@@ -331,8 +386,8 @@
                 </section>
 
                 <!-- TAB 3: OFFICERS DIRECTORY -->
-                <section id="tab-officers" class="tab-content space-y-6 hidden">
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-wrap justify-between items-center gap-3">
+                <section id="tab-officers" class="tab-content space-y-6 hidden relative z-10">
+                    <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 p-4 flex flex-wrap justify-between items-center gap-3">
                         <div>
                             <h2 class="text-lg font-bold text-slate-900">Direktori & Status Ketersediaan Petugas</h2>
                             <p class="text-xs text-slate-500">Daftar anggota protokol berdasarkan Tim Walikota, Tim Wakil Walikota, & Tim Kantor Penghubung.</p>
@@ -348,8 +403,8 @@
                 </section>
 
                 <!-- TAB 4: ANALYTICS -->
-                <section id="tab-analytics" class="tab-content space-y-6 hidden">
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <section id="tab-analytics" class="tab-content space-y-6 hidden relative z-10">
+                    <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <h2 class="text-lg font-bold text-slate-900">Analisis Beban Kerja & Evaluasi Penugasan</h2>
                             <p class="text-xs text-slate-500">Statistik pemerataan penugasan anggota tim dan performa operasional keprotokolan yang terintegrasi penuh.</p>
@@ -362,33 +417,33 @@
                         </div>
                     </div>
 
-                    <!-- RINGKASAN REKAPITULASI Sinkronisasi -->
+                    <!-- RINGKASAN REKAPITULASI -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
+                        <div class="bg-white/90 backdrop-blur-sm p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
                             <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Penugasan</p>
                             <h4 class="text-xl font-bold text-slate-900 mt-0.5" id="analytics-total-count">0</h4>
                             <span class="text-[10px] text-blue-600 font-semibold">100% Terdata</span>
                         </div>
-                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
+                        <div class="bg-white/90 backdrop-blur-sm p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
                             <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Terjadwal</p>
                             <h4 class="text-xl font-bold text-blue-600 mt-0.5" id="analytics-scheduled-count">0</h4>
                             <span class="text-[10px] text-slate-400">Akan Datang</span>
                         </div>
-                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
+                        <div class="bg-white/90 backdrop-blur-sm p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
                             <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Berlangsung</p>
                             <h4 class="text-xl font-bold text-amber-600 mt-0.5" id="analytics-active-count">0</h4>
                             <span class="text-[10px] text-amber-600 font-semibold">Sedang Aktif</span>
                         </div>
-                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
+                        <div class="bg-white/90 backdrop-blur-sm p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
                             <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Selesai</p>
                             <h4 class="text-xl font-bold text-emerald-600 mt-0.5" id="analytics-completed-count">0</h4>
                             <span class="text-[10px] text-emerald-600 font-semibold">Telah Dilaksanakan</span>
                         </div>
                     </div>
 
-                    <!-- LAYOUT 3 GRAFIK SINKRONIS -->
+                    <!-- LAYOUT 3 GRAFIK -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="bg-white/90 backdrop-blur-sm p-5 rounded-xl border border-slate-200 shadow-sm">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-sm font-bold text-slate-800">Jumlah Penugasan per Petugas</h3>
                                 <span class="text-[11px] text-slate-400">Beban Kerja</span>
@@ -396,16 +451,15 @@
                             <div class="h-64"><canvas id="chartWorkload"></canvas></div>
                         </div>
 
-                        <!-- GRAFIK PEJABAT PEMERINTAH (TERHUBUNG & SINKRON) -->
-                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="bg-white/90 backdrop-blur-sm p-5 rounded-xl border border-slate-200 shadow-sm">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-sm font-bold text-slate-800">Penugasan per Pejabat Pemerintah</h3>
-                                <span class="text-[11px] text-amber-600 font-semibold"><i class="fa-solid fa-crown me-1"></i>Distribusi VIP</span>
+                                <span class="text-[11px] text-amber-600 font-semibold"><i class="fa-solid fa-chart-pie me-1"></i>Lingkaran VIP</span>
                             </div>
-                            <div class="h-64"><canvas id="chartVip"></canvas></div>
+                            <div class="h-64 relative"><canvas id="chartVip"></canvas></div>
                         </div>
 
-                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="bg-white/90 backdrop-blur-sm p-5 rounded-xl border border-slate-200 shadow-sm">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-sm font-bold text-slate-800">Tren Kegiatan Keprotokolan</h3>
                                 <span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-arrows-rotate me-1"></i>Realtime Sync</span>
@@ -416,6 +470,48 @@
                 </section>
             </main>
         </div>
+
+        <!-- FOOTER UTAMA SIPRODI DIGITAL (BAGIAN BAWAH PUTIH) -->
+        <footer class="bg-white border-t border-slate-200 mt-auto py-6 text-slate-600 no-print">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+                    <!-- ALAMAT LENGKAP KOTA AMBON -->
+                    <div class="flex items-start space-x-3 text-center md:text-left">
+                        <div class="w-9 h-9 rounded-xl bg-protocol-50 text-protocol-500 border border-protocol-100 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
+                            <i class="fa-solid fa-building-columns text-base"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900 text-sm">Bagian Protokol & Komunikasi Pimpinan Kota Ambon</p>
+                            <p class="text-slate-500 mt-0.5 text-xs">
+                                <i class="fa-solid fa-location-dot me-1 text-red-500"></i>
+                                Jalan Sultan Hairun No. 1, Kelurahan Uritetu, Kecamatan Sirimau, Kota Ambon, Maluku
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- KONTAK, WEBSITE & MEDIA SOSIAL -->
+                    <div class="flex flex-wrap items-center justify-center md:justify-end gap-2.5 font-medium text-xs">
+                        <a href="https://ambon.go.id" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition border border-slate-200 shadow-2xs">
+                            <i class="fa-solid fa-globe text-blue-500"></i>
+                            <span>ambon.go.id</span>
+                        </a>
+                        <a href="https://instagram.com/protokol_kota_ambon" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-700 hover:bg-pink-50 hover:text-pink-700 hover:border-pink-200 transition border border-slate-200 shadow-2xs">
+                            <i class="fa-brands fa-instagram text-pink-500"></i>
+                            <span>@protokol_kota_ambon</span>
+                        </a>
+                        <a href="https://tiktok.com/@protokolkotaambon" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-200 hover:text-slate-950 transition border border-slate-200 shadow-2xs">
+                            <i class="fa-brands fa-tiktok text-slate-900"></i>
+                            <span>@protokolkotaambon</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2">
+                    <p>&copy; 2026 Pemerintah Kota Ambon — Bagian Protokol & Komunikasi Pimpinan. All rights reserved.</p>
+                    <p class="text-slate-400 font-medium">SIPRODI-DIGITAL v2.0</p>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <!-- MODAL: ADD TASK -->
@@ -696,6 +792,45 @@
 
 <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwu76AlBNUUuZfpFpnqE3g3zVL4XOKoEFH6SrhqIZFOuosTkinoTuLLwXIRsfDyLMg8/exec";
+
+    // FITUR AUTO LOGOUT DALAM WAKTU 10 MENIT INAKTIVITAS
+    const AUTO_LOGOUT_TIME = 10 * 60 * 1000; // 10 menit = 600,000 milidetik
+    let autoLogoutTimer = null;
+
+    function resetAutoLogoutTimer() {
+        if (!authSession) return;
+        
+        if (autoLogoutTimer) {
+            clearTimeout(autoLogoutTimer);
+        }
+
+        autoLogoutTimer = setTimeout(() => {
+            triggerAutoLogout();
+        }, AUTO_LOGOUT_TIME);
+    }
+
+    function triggerAutoLogout() {
+        if (authSession) {
+            authSession = false;
+            saveStateAndSync();
+            checkAuth();
+            
+            // Tampilkan pesan pemberitahuan auto logout pada form login
+            const autoLogoutMsg = document.getElementById('auto-logout-msg');
+            if (autoLogoutMsg) {
+                autoLogoutMsg.classList.remove('hidden');
+            }
+        }
+    }
+
+    // Listener aktivitas pengguna untuk mereset timer auto logout 10 menit
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(eventType => {
+        window.addEventListener(eventType, () => {
+            if (authSession) {
+                resetAutoLogoutTimer();
+            }
+        }, { passive: true });
+    });
 
     const defaultOfficers = [
         { id: 1, name: "Fitrah Ramadhan", role: "Koordinator Lapangan", team: "walikota", status: "Standby", tasksCount: 0, phone: "081234567890", photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" },
@@ -1061,9 +1196,11 @@
         if (authSession) {
             loginScreen.classList.add('hidden');
             appContainer.classList.remove('hidden');
+            resetAutoLogoutTimer();
         } else {
             loginScreen.classList.remove('hidden');
             appContainer.classList.add('hidden');
+            if (autoLogoutTimer) clearTimeout(autoLogoutTimer);
         }
     }
 
@@ -1075,6 +1212,7 @@
             authSession = true;
             saveStateAndSync();
             document.getElementById('login-error-msg').classList.add('hidden');
+            document.getElementById('auto-logout-msg').classList.add('hidden');
             document.getElementById('form-login').reset();
             checkAuth();
         } else {
@@ -1309,7 +1447,7 @@
             let badgeColor = task.status === "Berlangsung" ? "bg-amber-100 text-amber-800" : (task.status === "Selesai" ? "bg-emerald-100 text-emerald-800" : "bg-blue-100 text-blue-800");
 
             tbody.innerHTML += `
-                <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                <tr class="hover:bg-slate-50 transition border-b border-slate-100 task-row" data-status="${task.status}" data-search="${(task.id + ' ' + task.title + ' ' + task.vip + ' ' + task.location + ' ' + assignedNames).toLowerCase()}">
                     <td class="p-3 font-semibold text-slate-800"><span class="text-[10px] font-mono text-slate-400 block">${task.id}</span>${task.title}</td>
                     <td class="p-3 text-slate-600"><span class="font-medium text-slate-800 block">${task.vip || 'Tidak Ada Tamu VIP'}</span><span class="text-[11px] text-slate-500">${formattedDate}</span></td>
                     <td class="p-3 text-slate-600"><i class="fa-solid fa-location-dot me-1 text-red-400"></i>${task.location}</td>
@@ -1328,17 +1466,27 @@
                 </tr>
             `;
         });
+
+        filterAssignments();
     }
 
     function filterAssignments() {
-        const query = document.getElementById('search-input').value.toLowerCase();
+        const query = (document.getElementById('search-input').value || '').toLowerCase().trim();
         const statusFilter = document.getElementById('filter-status').value;
 
-        document.querySelectorAll('#all-assignments-body tr').forEach(row => {
-            const text = row.innerText.toLowerCase();
-            const matchesSearch = text.includes(query);
-            const matchesStatus = statusFilter === 'ALL' || text.includes(statusFilter.toLowerCase());
-            row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+        const rows = document.querySelectorAll('#all-assignments-body tr.task-row');
+        rows.forEach(row => {
+            const taskStatus = row.getAttribute('data-status');
+            const searchData = row.getAttribute('data-search') || '';
+
+            const matchesSearch = !query || searchData.includes(query);
+            const matchesStatus = (statusFilter === 'ALL') || (taskStatus === statusFilter);
+
+            if (matchesSearch && matchesStatus) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
         });
     }
 
@@ -1357,7 +1505,7 @@
             let photoUrl = off.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff`;
 
             grid.innerHTML += `
-                <div class="bg-white p-4 rounded-xl shadow-sm border ${teamColor} flex flex-col justify-between">
+                <div class="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-sm border ${teamColor} flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-[10px] uppercase font-bold text-slate-400">Tim ${off.team}</span>
@@ -1470,28 +1618,24 @@
             });
         }
 
-        // INISIALISASI GRAFIK PEJABAT PEMERINTAH (VIP)
         if (ctxVip) {
             chartVipInstance = new Chart(ctxVip, {
-                type: 'bar',
+                type: 'doughnut',
                 data: {
                     labels: [],
                     datasets: [{
-                        label: 'Total Agenda Pendampingan',
+                        label: 'Agenda Pendampingan',
                         data: [],
-                        backgroundColor: '#d4af37'
+                        backgroundColor: ['#d4af37', '#102a43', '#0bcc94', '#627d98', '#e11d48', '#8b5cf6', '#f59e0b', '#06b6d4']
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { stepSize: 1, precision: 0 }
+                        legend: { 
+                            position: 'bottom', 
+                            labels: { boxWidth: 10, font: { size: 10 } } 
                         }
                     }
                 }
@@ -1572,7 +1716,6 @@
         chartWorkloadInstance.update();
     }
 
-    // FUNGSI UPDATE GRAFIK PEJABAT PEMERINTAH (TERHUBUNG KE SINKRONISASI TASKS)
     function updateVipChart() {
         if (!chartVipInstance) return;
 
@@ -1584,13 +1727,16 @@
 
         const labels = Object.keys(vipCounts);
         const data = Object.values(vipCounts);
+        const colors = ['#d4af37', '#102a43', '#0bcc94', '#627d98', '#e11d48', '#8b5cf6', '#f59e0b', '#06b6d4', '#ec4899', '#3b82f6'];
 
         if (labels.length === 0) {
             chartVipInstance.data.labels = ['Belum Ada Data'];
             chartVipInstance.data.datasets[0].data = [0];
+            chartVipInstance.data.datasets[0].backgroundColor = ['#e2e8f0'];
         } else {
             chartVipInstance.data.labels = labels;
             chartVipInstance.data.datasets[0].data = data;
+            chartVipInstance.data.datasets[0].backgroundColor = colors.slice(0, labels.length);
         }
 
         chartVipInstance.update();
