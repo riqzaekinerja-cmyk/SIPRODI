@@ -58,13 +58,13 @@
 
     <!-- LAYAR LOGIN SYSTEM DENGAN BACKGROUND GAMBAR JMP.jpg -->
     <div id="login-screen" class="fixed inset-0 bg-cover bg-center bg-no-repeat z-50 flex items-center justify-center p-4 relative" style="background-image: url('JMP.jpg');">
-        <!-- Overlay Gelap Transparan agar Teks dan Card Tetap Terbaca -->
+        <!-- Overlay Gelap Transparan -->
         <div class="absolute inset-0 bg-slate-950/65 backdrop-blur-xs"></div>
 
         <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200/80 w-full max-w-md overflow-hidden relative z-10 flex flex-col">
             <div class="bg-protocol-500 p-6 text-white text-center relative">
                 <div class="w-20 h-20 bg-white/10 rounded-full mx-auto flex items-center justify-center p-1.5 shadow-lg mb-3 border border-protocol-gold/40">
-                    <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-full h-full object-contain rounded-full bg-slate-900">
+                    <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-full h-full object-contain rounded-full bg-slate-900" onerror="this.src='https://ui-avatars.com/api/?name=Prokopim&background=102a43&color=fff'">
                 </div>
                 <h2 class="text-xl font-bold tracking-wide">SIPRODI-DIGITAL</h2>
                 <p class="text-xs text-slate-300 mt-1">Protokol & Komunikasi Pimpinan Kota Ambon</p>
@@ -131,7 +131,7 @@
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 bg-slate-900 border border-protocol-gold/50 rounded-lg p-0.5 flex items-center justify-center shadow-sm overflow-hidden">
-                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-full h-full object-contain rounded">
+                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-full h-full object-contain rounded" onerror="this.src='https://ui-avatars.com/api/?name=Prokopim&background=102a43&color=fff'">
                         </div>
                         <div>
                             <h1 class="font-bold text-lg leading-tight tracking-wide text-white">SIPRODI-DIGITAL</h1>
@@ -238,14 +238,14 @@
             <main class="flex-1 min-w-0 relative">
                 
                 <!-- WATERMARK LOGO PROKOPIM OVERLAY -->
-                <img src="Logo Prokopim Hitam.jpeg" alt="Prokopim Watermark" class="dashboard-watermark">
+                <img src="Logo Prokopim Hitam.jpeg" alt="Prokopim Watermark" class="dashboard-watermark" onerror="this.style.display='none'">
 
                 <!-- TAB 1: DASHBOARD -->
                 <section id="tab-dashboard" class="tab-content space-y-6 relative z-10">
                     <!-- HERO BANNER -->
                     <div class="bg-gradient-to-r from-protocol-500 via-slate-800 to-protocol-600 rounded-xl p-6 text-white shadow-md relative overflow-hidden">
                         <div class="absolute right-3 top-1/2 -translate-y-1/2 opacity-20 pointer-events-none hidden sm:block">
-                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim Hero" class="w-48 h-48 object-contain rounded-full">
+                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim Hero" class="w-48 h-48 object-contain rounded-full" onerror="this.style.display='none'">
                         </div>
                         <div class="relative z-10 max-w-2xl">
                             <span class="bg-protocol-gold/20 text-protocol-gold border border-protocol-gold/40 text-xs px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider inline-flex items-center gap-1.5">
@@ -357,7 +357,6 @@
                                     <input type="text" id="search-input" onkeyup="filterAssignments()" placeholder="Cari acara / petugas..." class="pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-60">
                                     <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
                                 </div>
-                                <!-- KOLOM FILTER STATUS TERINTEGRASI PENUH -->
                                 <select id="filter-status" onchange="filterAssignments()" class="text-xs py-1.5 px-3 rounded-lg border border-slate-300 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold cursor-pointer">
                                     <option value="ALL">Semua Status</option>
                                     <option value="Terjadwal">Terjadwal</option>
@@ -461,7 +460,6 @@
                             <div class="h-64"><canvas id="chartWorkload"></canvas></div>
                         </div>
 
-                        <!-- GRAFIK PENUGASAN PEJABAT -->
                         <div class="bg-white/90 backdrop-blur-sm p-5 rounded-xl border border-slate-200 shadow-sm">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-sm font-bold text-slate-800">Penugasan per Pejabat Pemerintah</h3>
@@ -488,7 +486,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300">
                     <div>
                         <div class="flex items-center space-x-2.5 mb-2">
-                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-7 h-7 object-contain rounded bg-slate-900 border border-protocol-gold/40">
+                            <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim" class="w-7 h-7 object-contain rounded bg-slate-900 border border-protocol-gold/40" onerror="this.src='https://ui-avatars.com/api/?name=Prokopim&background=102a43&color=fff'">
                             <span class="font-bold text-white text-sm tracking-wide">SIPRODI-DIGITAL</span>
                         </div>
                         <p class="text-slate-300 leading-relaxed">Sistem Informasi & Optimalisasi Penugasan Petugas Protokol Bagian Protokol dan Komunikasi Pimpinan Pemerintah Kota Ambon.</p>
@@ -812,7 +810,7 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwu76AlBNUUuZfpFpnqE3g3zVL4XOKoEFH6SrhqIZFOuosTkinoTuLLwXIRsfDyLMg8/exec";
 
     // FITUR AUTO LOGOUT DALAM WAKTU 10 MENIT INAKTIVITAS
-    const AUTO_LOGOUT_TIME = 10 * 60 * 1000; // 10 menit = 600,000 milidetik
+    const AUTO_LOGOUT_TIME = 10 * 60 * 1000;
     let autoLogoutTimer = null;
 
     function resetAutoLogoutTimer() {
@@ -833,7 +831,6 @@
             saveStateAndSync();
             checkAuth();
             
-            // Tampilkan pesan pemberitahuan auto logout pada form login
             const autoLogoutMsg = document.getElementById('auto-logout-msg');
             if (autoLogoutMsg) {
                 autoLogoutMsg.classList.remove('hidden');
@@ -841,7 +838,6 @@
         }
     }
 
-    // Listener aktivitas pengguna untuk mereset timer auto logout 10 menit
     ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(eventType => {
         window.addEventListener(eventType, () => {
             if (authSession) {
@@ -1071,18 +1067,20 @@
         btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Menyimpan...';
 
         const durationVal = parseFloat(document.getElementById('task-duration').value) || 2;
+        const nextNumber = tasks.length + 1;
+        const formattedId = `PRT-2026-${String(nextNumber).padStart(3, '0')}`;
 
         const newTask = {
-            id: `PRT-2026-00${tasks.length + 1}`,
+            id: formattedId,
             title: document.getElementById('task-title').value,
             category: document.getElementById('task-category').value,
-            vip: document.getElementById('task-vip').value,
+            vip: document.getElementById('task-vip').value || '',
             date: document.getElementById('task-date').value,
             durationHours: durationVal,
             location: document.getElementById('task-location').value,
             status: "Terjadwal",
             officers: Array.from(document.querySelectorAll('input[name="selected_officers"]:checked')).map(el => parseInt(el.value)),
-            notes: document.getElementById('task-notes').value
+            notes: document.getElementById('task-notes').value || ''
         };
 
         tasks.unshift(newTask);
@@ -1105,7 +1103,7 @@
         const editId = document.getElementById('officer-edit-id').value;
         const name = document.getElementById('officer-name-input').value;
         const role = document.getElementById('officer-role-input').value;
-        const team = document.getElementById('team-select').value;
+        const team = document.getElementById('team-select').value.toLowerCase();
         const phone = document.getElementById('officer-phone-input').value;
         const photoUrl = document.getElementById('officer-photo-input').value;
 
@@ -1113,7 +1111,7 @@
         const finalPhoto = tempOfficerPhoto || photoUrl || fallbackAvatar;
 
         if (editId) {
-            const off = officers.find(o => o.id === parseInt(editId));
+            const off = officers.find(o => Number(o.id) === Number(editId));
             if (off) {
                 off.team = team;
                 off.name = name;
@@ -1145,14 +1143,14 @@
     }
 
     function deleteOfficer(id) {
-        const off = officers.find(o => o.id === id);
+        const off = officers.find(o => Number(o.id) === Number(id));
         if (!off) return;
 
         showConfirm(
             'Hapus Anggota Tim',
             `Apakah Anda yakin ingin menghapus "${off.name}" dari tim?`,
             () => {
-                officers = officers.filter(o => o.id !== id);
+                officers = officers.filter(o => Number(o.id) !== Number(id));
                 updateAutoStatuses();
                 saveStateAndSync('DELETE_OFFICER', { id: id });
                 renderOfficers();
@@ -1160,7 +1158,7 @@
                 renderDashboard();
                 renderManageTeamList();
                 updateCharts();
-                if (document.getElementById('officer-edit-id').value == id) resetOfficerForm();
+                if (Number(document.getElementById('officer-edit-id').value) === Number(id)) resetOfficerForm();
             }
         );
     }
@@ -1214,7 +1212,7 @@
         if (authSession) {
             loginScreen.classList.add('hidden');
             appContainer.classList.remove('hidden');
-            resetAutoLogoutTimer(); // Mulai timer 10 menit ketika berhasil masuk
+            resetAutoLogoutTimer();
         } else {
             loginScreen.classList.remove('hidden');
             appContainer.classList.add('hidden');
@@ -1263,9 +1261,18 @@
         });
         document.getElementById(`tab-${tabId}`).classList.remove('hidden');
         const activeNav = document.getElementById(`nav-${tabId}`);
-        activeNav.classList.add('bg-protocol-500', 'text-white', 'shadow-sm');
-        activeNav.classList.remove('text-slate-600', 'hover:bg-slate-100');
-        if (tabId === 'analytics') updateCharts();
+        if (activeNav) {
+            activeNav.classList.add('bg-protocol-500', 'text-white', 'shadow-sm');
+            activeNav.classList.remove('text-slate-600', 'hover:bg-slate-100');
+        }
+        if (tabId === 'analytics') {
+            updateCharts();
+            setTimeout(() => {
+                if (chartWorkloadInstance) chartWorkloadInstance.resize();
+                if (chartVipInstance) chartVipInstance.resize();
+                if (chartTrendInstance) chartTrendInstance.resize();
+            }, 50);
+        }
     }
 
     function initProfile() {
@@ -1341,15 +1348,16 @@
         }
 
         officers.forEach(off => {
-            let teamLabel = off.team === 'walikota' ? 'Walikota' : (off.team === 'wakil' ? 'Wakil Walikota' : 'Penghubung');
-            let teamBadge = off.team === 'walikota' ? 'bg-blue-100 text-blue-800' : (off.team === 'wakil' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800');
+            const teamKey = (off.team || '').toLowerCase();
+            let teamLabel = teamKey === 'walikota' ? 'Walikota' : (teamKey === 'wakil' ? 'Wakil Walikota' : 'Penghubung');
+            let teamBadge = teamKey === 'walikota' ? 'bg-blue-100 text-blue-800' : (teamKey === 'wakil' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800');
             let photoUrl = off.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff`;
 
             tbody.innerHTML += `
                 <tr class="hover:bg-slate-50 transition">
                     <td class="p-2.5">
                         <div class="flex items-center space-x-2.5">
-                            <img src="${photoUrl}" alt="${off.name}" class="w-8 h-8 rounded-full object-cover border border-slate-200 flex-shrink-0">
+                            <img src="${photoUrl}" alt="${off.name}" class="w-8 h-8 rounded-full object-cover border border-slate-200 flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff'">
                             <div><p class="font-bold text-slate-800">${off.name}</p></div>
                         </div>
                     </td>
@@ -1368,10 +1376,10 @@
     }
 
     function editOfficer(id) {
-        const off = officers.find(o => o.id === id);
+        const off = officers.find(o => Number(o.id) === Number(id));
         if (!off) return;
         document.getElementById('officer-edit-id').value = off.id;
-        document.getElementById('team-select').value = off.team;
+        document.getElementById('team-select').value = (off.team || 'walikota').toLowerCase();
         document.getElementById('officer-name-input').value = off.name;
         document.getElementById('officer-role-input').value = off.role;
         document.getElementById('officer-phone-input').value = off.phone || '';
@@ -1404,8 +1412,8 @@
         }
 
         sortedTasks.forEach(task => {
-            const assignedNames = task.officers.map(id => {
-                const off = officers.find(o => o.id === id);
+            const assignedNames = (task.officers || []).map(id => {
+                const off = officers.find(o => Number(o.id) === Number(id));
                 return off ? off.name : 'Unknown';
             }).join(', ');
 
@@ -1436,7 +1444,7 @@
                             <i class="fa-solid fa-user-tie text-protocol-500"></i>
                             <div>
                                 <p class="font-bold text-slate-800">${c.name}</p>
-                                <p class="text-[10px] text-slate-500">${c.team.toUpperCase()} - ${c.role}</p>
+                                <p class="text-[10px] text-slate-500">${(c.team || '').toUpperCase()} - ${c.role}</p>
                             </div>
                         </div>
                         <span class="px-2 py-0.5 text-[10px] rounded-full font-bold ${c.status === 'Standby' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${c.status}</span>
@@ -1456,16 +1464,18 @@
         }
 
         tasks.forEach(task => {
-            const assignedNames = task.officers.map(id => {
-                const off = officers.find(o => o.id === id);
+            const assignedNames = (task.officers || []).map(id => {
+                const off = officers.find(o => Number(o.id) === Number(id));
                 return off ? off.name : 'Unknown';
             }).join(', ');
 
             const formattedDate = new Date(task.date).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
             let badgeColor = task.status === "Berlangsung" ? "bg-amber-100 text-amber-800" : (task.status === "Selesai" ? "bg-emerald-100 text-emerald-800" : "bg-blue-100 text-blue-800");
 
+            const searchString = `${task.id} ${task.title} ${task.vip || ''} ${task.location || ''} ${assignedNames}`.toLowerCase();
+
             tbody.innerHTML += `
-                <tr class="hover:bg-slate-50 transition border-b border-slate-100 task-row" data-status="${task.status}" data-search="${(task.id + ' ' + task.title + ' ' + task.vip + ' ' + task.location + ' ' + assignedNames).toLowerCase()}">
+                <tr class="hover:bg-slate-50 transition border-b border-slate-100 task-row" data-status="${task.status}" data-search="${searchString}">
                     <td class="p-3 font-semibold text-slate-800"><span class="text-[10px] font-mono text-slate-400 block">${task.id}</span>${task.title}</td>
                     <td class="p-3 text-slate-600"><span class="font-medium text-slate-800 block">${task.vip || 'Tidak Ada Tamu VIP'}</span><span class="text-[11px] text-slate-500">${formattedDate}</span></td>
                     <td class="p-3 text-slate-600"><i class="fa-solid fa-location-dot me-1 text-red-400"></i>${task.location}</td>
@@ -1519,7 +1529,8 @@
 
         officers.forEach(off => {
             let badgeStatus = off.status === 'Standby' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
-            let teamColor = off.team === 'walikota' ? 'border-blue-200 bg-blue-50/20' : (off.team === 'wakil' ? 'border-emerald-200 bg-emerald-50/20' : 'border-amber-200 bg-amber-50/20');
+            const teamKey = (off.team || '').toLowerCase();
+            let teamColor = teamKey === 'walikota' ? 'border-blue-200 bg-blue-50/20' : (teamKey === 'wakil' ? 'border-emerald-200 bg-emerald-50/20' : 'border-amber-200 bg-amber-50/20');
             let photoUrl = off.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff`;
 
             grid.innerHTML += `
@@ -1530,7 +1541,7 @@
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeStatus}">${off.status}</span>
                         </div>
                         <div class="flex items-start space-x-3">
-                            <img src="${photoUrl}" alt="${off.name}" class="w-12 h-12 rounded-full object-cover border-2 border-slate-200 flex-shrink-0 shadow-sm">
+                            <img src="${photoUrl}" alt="${off.name}" class="w-12 h-12 rounded-full object-cover border-2 border-slate-200 flex-shrink-0 shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(off.name)}&background=102a43&color=fff'">
                             <div>
                                 <h4 class="font-bold text-slate-900 text-sm leading-tight">${off.name}</h4>
                                 <p class="text-xs text-slate-500 mt-0.5">${off.role}</p>
@@ -1548,7 +1559,7 @@
     }
 
     function toggleOfficerStatus(id) {
-        const off = officers.find(o => o.id === id);
+        const off = officers.find(o => Number(o.id) === Number(id));
         if (off) {
             off.status = off.status === 'Standby' ? 'Bertugas' : 'Standby';
             saveStateAndSync('UPDATE_OFFICER_STATUS', { id: id, status: off.status });
@@ -1562,6 +1573,8 @@
         const containerWakil = document.getElementById('container-officers-wakil');
         const containerPenghubung = document.getElementById('container-officers-penghubung');
 
+        if (!containerWalikota || !containerWakil || !containerPenghubung) return;
+
         containerWalikota.innerHTML = '';
         containerWakil.innerHTML = '';
         containerPenghubung.innerHTML = '';
@@ -1574,8 +1587,9 @@
                 </label>
             `;
 
-            if (off.team === 'walikota') containerWalikota.innerHTML += item;
-            else if (off.team === 'wakil') containerWakil.innerHTML += item;
+            const teamKey = (off.team || '').toLowerCase();
+            if (teamKey === 'walikota') containerWalikota.innerHTML += item;
+            else if (teamKey === 'wakil') containerWakil.innerHTML += item;
             else containerPenghubung.innerHTML += item;
         });
     }
@@ -1584,8 +1598,8 @@
         const task = tasks.find(t => t.id === taskId);
         if (!task) return;
 
-        const assignedNames = task.officers.map(id => {
-            const off = officers.find(o => o.id === id);
+        const assignedNames = (task.officers || []).map(id => {
+            const off = officers.find(o => Number(o.id) === Number(id));
             return off ? `${off.name} (${off.role})` : 'Unknown';
         }).join('<br>• ');
 
