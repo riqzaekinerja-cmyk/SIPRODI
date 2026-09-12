@@ -68,6 +68,7 @@
                 </div>
                 <h2 class="text-xl font-bold tracking-wide">SIPRODI-DIGITAL</h2>
                 <p class="text-xs text-slate-300 mt-1">Protokol & Komunikasi Pimpinan Kota Ambon</p>
+                <p class="text-[11px] text-protocol-gold mt-1 font-medium"><i class="fa-solid fa-globe me-1"></i> https://ambon.go.id</p>
             </div>
             
             <form id="form-login" onsubmit="handleLogin(event)" class="p-6 space-y-4 text-xs">
@@ -108,29 +109,8 @@
                 </button>
             </form>
 
-            <!-- FOOTER INFORMASI KOTA AMBON DI DALAM KARTU LOGIN -->
-            <div class="px-6 py-4 bg-slate-100/90 border-t border-slate-200/90 text-[11px] text-slate-600 space-y-2.5">
-                <div class="flex items-start space-x-2.5">
-                    <i class="fa-solid fa-location-dot text-red-500 mt-0.5 flex-shrink-0 text-xs"></i>
-                    <div class="leading-tight">
-                        <strong class="text-slate-800">Alamat Kantor:</strong><br>
-                        <span>Jalan Sultan Hairun No. 1, Kelurahan Uritetu, Kecamatan Sirimau, Kota Ambon, Maluku</span>
-                    </div>
-                </div>
-                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200/70 text-[11px] font-medium">
-                    <a href="https://ambon.go.id" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-blue-600 hover:text-blue-800 transition">
-                        <i class="fa-solid fa-globe text-blue-500"></i>
-                        <span>ambon.go.id</span>
-                    </a>
-                    <a href="https://instagram.com/protokol_kota_ambon" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-pink-600 hover:text-pink-800 transition">
-                        <i class="fa-brands fa-instagram text-pink-500"></i>
-                        <span>@protokol_kota_ambon</span>
-                    </a>
-                    <a href="https://tiktok.com/@protokolkotaambon" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-slate-800 hover:text-black transition">
-                        <i class="fa-brands fa-tiktok text-slate-900"></i>
-                        <span>@protokolkotaambon</span>
-                    </a>
-                </div>
+            <div class="bg-slate-100 p-3 text-center text-[10px] text-slate-500 border-t border-slate-200">
+                <p>Jalan Sultan Hairun No. 1, Kelurahan Uritetu, Kecamatan Sirimau, Kota Ambon, Maluku</p>
             </div>
         </div>
     </div>
@@ -162,7 +142,7 @@
                         <div class="hidden lg:flex items-center space-x-2 text-right">
                             <div>
                                 <p class="text-xs font-bold leading-tight">Pemerintah Kota Ambon</p>
-                                <p class="text-[10px] text-slate-300">Protokol dan Komunikasi Pimpinan</p>
+                                <a href="https://ambon.go.id" target="_blank" class="text-[10px] text-protocol-gold hover:underline"><i class="fa-solid fa-globe me-1"></i>ambon.go.id</a>
                             </div>
                         </div>
 
@@ -187,7 +167,7 @@
 
             <!-- ASIDE / SIDEBAR -->
             <aside class="w-full md:w-64 flex-shrink-0 no-print z-10">
-                <div class="bg-white/95 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 p-4 sticky top-22">
+                <div class="bg-white/95 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 p-4 sticky top-22 space-y-4">
                     <nav class="space-y-1">
                         <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-protocol-500 text-white shadow-sm">
                             <i class="fa-solid fa-chart-pie w-5"></i>
@@ -211,15 +191,27 @@
                         </button>
                     </nav>
 
-                    <div class="mt-6 pt-6 border-t border-slate-100">
+                    <!-- INFORMASI SOP -->
+                    <div class="pt-4 border-t border-slate-100">
                         <div class="bg-amber-50/90 rounded-lg p-3 border border-amber-200">
                             <div class="flex items-start space-x-2">
                                 <i class="fa-solid fa-circle-info text-amber-600 mt-0.5"></i>
                                 <div>
                                     <h4 class="text-xs font-bold text-amber-900 uppercase tracking-wide">Standard Operasional</h4>
-                                    <p class="text-xs text-amber-800 mt-1">Seluruh penugasan wajib dikonfirmasi minimal H-1 kegiatan oleh Koordinator Lapangan Tim Walikota/Wakil Walikota.</p>
+                                    <p class="text-[11px] text-amber-800 mt-1 leading-relaxed">Seluruh penugasan wajib dikonfirmasi minimal H-1 kegiatan oleh Koordinator Lapangan Tim Walikota/Wakil Walikota.</p>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- ALAMAT & SOSIAL MEDIA -->
+                    <div class="pt-4 border-t border-slate-100 space-y-2 text-[11px] text-slate-600">
+                        <h4 class="font-bold text-slate-800 text-xs flex items-center"><i class="fa-solid fa-building text-protocol-500 me-1.5"></i> Sekretariat Pemkot</h4>
+                        <p class="text-[10px] leading-tight text-slate-500"><i class="fa-solid fa-location-dot me-1 text-red-500"></i> Jalan Sultan Hairun No. 1, Kel. Uritetu, Kec. Sirimau, Kota Ambon, Maluku</p>
+                        <p class="text-[10px]"><i class="fa-solid fa-globe me-1 text-blue-500"></i> <a href="https://ambon.go.id" target="_blank" class="hover:underline font-semibold text-blue-600">ambon.go.id</a></p>
+                        <div class="flex flex-col space-y-1 pt-1 border-t border-slate-100 text-[10px]">
+                            <a href="https://instagram.com/protokol_kota_ambon" target="_blank" class="flex items-center text-slate-600 hover:text-pink-600 transition"><i class="fa-brands fa-instagram me-1.5 text-pink-500 text-xs"></i> @protokol_kota_ambon</a>
+                            <a href="https://tiktok.com/@protokolkotaambon" target="_blank" class="flex items-center text-slate-600 hover:text-black transition"><i class="fa-brands fa-tiktok me-1.5 text-black text-xs"></i> @protokolkotaambon</a>
                         </div>
                     </div>
                 </div>
@@ -348,6 +340,7 @@
                                     <input type="text" id="search-input" onkeyup="filterAssignments()" placeholder="Cari acara / petugas..." class="pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-44 sm:w-60">
                                     <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
                                 </div>
+                                <!-- KOLOM FILTER STATUS TERINTEGRASI PENUH -->
                                 <select id="filter-status" onchange="filterAssignments()" class="text-xs py-1.5 px-3 rounded-lg border border-slate-300 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold cursor-pointer">
                                     <option value="ALL">Semua Status</option>
                                     <option value="Terjadwal">Terjadwal</option>
@@ -471,45 +464,27 @@
             </main>
         </div>
 
-        <!-- FOOTER UTAMA SIPRODI DIGITAL (BAGIAN BAWAH PUTIH) -->
-        <footer class="bg-white border-t border-slate-200 mt-auto py-6 text-slate-600 no-print">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
-                    <!-- ALAMAT LENGKAP KOTA AMBON -->
-                    <div class="flex items-start space-x-3 text-center md:text-left">
-                        <div class="w-9 h-9 rounded-xl bg-protocol-50 text-protocol-500 border border-protocol-100 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
-                            <i class="fa-solid fa-building-columns text-base"></i>
-                        </div>
-                        <div>
-                            <p class="font-bold text-slate-900 text-sm">Bagian Protokol & Komunikasi Pimpinan Kota Ambon</p>
-                            <p class="text-slate-500 mt-0.5 text-xs">
-                                <i class="fa-solid fa-location-dot me-1 text-red-500"></i>
-                                Jalan Sultan Hairun No. 1, Kelurahan Uritetu, Kecamatan Sirimau, Kota Ambon, Maluku
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- KONTAK, WEBSITE & MEDIA SOSIAL -->
-                    <div class="flex flex-wrap items-center justify-center md:justify-end gap-2.5 font-medium text-xs">
-                        <a href="https://ambon.go.id" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition border border-slate-200 shadow-2xs">
-                            <i class="fa-solid fa-globe text-blue-500"></i>
-                            <span>ambon.go.id</span>
+        <!-- FOOTER KOTA AMBON -->
+        <footer class="bg-protocol-500 text-white py-6 border-t border-slate-800 mt-auto no-print text-xs">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="text-center md:text-left space-y-1">
+                    <p class="font-bold text-sm text-protocol-gold">Bagian Protokol & Komunikasi Pimpinan Kota Ambon</p>
+                    <p class="text-slate-300">Jalan Sultan Hairun No. 1, Kelurahan Uritetu, Kecamatan Sirimau, Kota Ambon, Maluku</p>
+                </div>
+                <div class="flex flex-col md:flex-end items-center md:items-end space-y-1 text-slate-300">
+                    <p><i class="fa-solid fa-globe text-blue-400 me-1"></i> Website: <a href="https://ambon.go.id" target="_blank" class="text-white hover:underline">https://ambon.go.id</a></p>
+                    <div class="flex items-center space-x-4 pt-1">
+                        <a href="https://instagram.com/protokol_kota_ambon" target="_blank" class="hover:text-protocol-gold transition flex items-center space-x-1">
+                            <i class="fa-brands fa-instagram text-pink-400"></i> <span>@protokol_kota_ambon</span>
                         </a>
-                        <a href="https://instagram.com/protokol_kota_ambon" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-700 hover:bg-pink-50 hover:text-pink-700 hover:border-pink-200 transition border border-slate-200 shadow-2xs">
-                            <i class="fa-brands fa-instagram text-pink-500"></i>
-                            <span>@protokol_kota_ambon</span>
-                        </a>
-                        <a href="https://tiktok.com/@protokolkotaambon" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-700 hover:bg-slate-200 hover:text-slate-950 transition border border-slate-200 shadow-2xs">
-                            <i class="fa-brands fa-tiktok text-slate-900"></i>
-                            <span>@protokolkotaambon</span>
+                        <a href="https://tiktok.com/@protokolkotaambon" target="_blank" class="hover:text-protocol-gold transition flex items-center space-x-1">
+                            <i class="fa-brands fa-tiktok text-slate-100"></i> <span>@protokolkotaambon</span>
                         </a>
                     </div>
                 </div>
-                
-                <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2">
-                    <p>&copy; 2026 Pemerintah Kota Ambon — Bagian Protokol & Komunikasi Pimpinan. All rights reserved.</p>
-                    <p class="text-slate-400 font-medium">SIPRODI-DIGITAL v2.0</p>
-                </div>
+            </div>
+            <div class="text-center text-[11px] text-slate-400 border-t border-slate-700/60 mt-4 pt-4">
+                &copy; 2026 SIPRODI-DIGITAL Kota Ambon. All Rights Reserved.
             </div>
         </footer>
     </div>
