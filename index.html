@@ -34,7 +34,6 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* Watermark Dashboard Effect */
         .dashboard-watermark {
             position: absolute;
             top: 50%;
@@ -56,10 +55,9 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col relative overflow-x-hidden">
 
-    <!-- LAYAR LOGIN SYSTEM DENGAN BACKGROUND GAMBAR JMP.jpg -->
+    <!-- LAYAR LOGIN SYSTEM DENGAN KEAMANAN TINGKAT LANJUT -->
     <div id="login-screen" class="fixed inset-0 bg-cover bg-center bg-no-repeat z-50 flex items-center justify-center p-4 relative" style="background-image: url('JMP.jpg');">
-        <!-- Overlay Gelap Transparan -->
-        <div class="absolute inset-0 bg-slate-950/65 backdrop-blur-xs"></div>
+        <div class="absolute inset-0 bg-slate-950/75 backdrop-blur-xs"></div>
 
         <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200/80 w-full max-w-md overflow-hidden relative z-10 flex flex-col">
             <div class="bg-protocol-500 p-6 text-white text-center relative">
@@ -71,20 +69,23 @@
             </div>
             
             <form id="form-login" onsubmit="handleLogin(event)" class="p-6 space-y-4 text-xs">
-                <!-- Pesan Berhasil Auto Logout -->
                 <div id="auto-logout-msg" class="hidden p-3 bg-amber-50 border border-amber-300 text-amber-900 rounded-lg text-center font-medium shadow-sm">
-                    <i class="fa-solid fa-clock-rotate-left text-amber-600 me-1"></i> Sesi Anda telah berakhir secara otomatis karena tidak ada aktivitas selama 10 menit.
+                    <i class="fa-solid fa-clock-rotate-left text-amber-600 me-1"></i> Sesi Anda telah berakhir secara aman karena inaktivitas selama 10 menit.
                 </div>
 
                 <div id="login-error-msg" class="hidden p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-center font-medium">
                     Username atau password salah!
                 </div>
 
+                <div id="login-lockout-msg" class="hidden p-3 bg-red-100 border border-red-400 text-red-800 rounded-lg text-center font-bold">
+                    Terlalu banyak percobaan gagal. Akun dikunci sementara: <span id="lockout-timer">30</span> detik.
+                </div>
+
                 <div>
                     <label class="block font-semibold text-slate-700 mb-1">Username Login</label>
                     <div class="relative">
                         <i class="fa-solid fa-user absolute left-3 top-2.5 text-slate-400"></i>
-                        <input type="text" id="login-username" required placeholder="Masukkan username" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
+                        <input type="text" id="login-username" required autocomplete="username" placeholder="Masukkan username" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
                     </div>
                 </div>
 
@@ -92,21 +93,16 @@
                     <label class="block font-semibold text-slate-700 mb-1">Password</label>
                     <div class="relative">
                         <i class="fa-solid fa-lock absolute left-3 top-2.5 text-slate-400"></i>
-                        <input type="password" id="login-password" required placeholder="Masukkan password" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
+                        <input type="password" id="login-password" required autocomplete="current-password" placeholder="Masukkan password" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
                     </div>
                 </div>
 
-                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-900 space-y-1">
-              
-                </div>
-
-                <button type="submit" class="w-full py-2.5 bg-protocol-gold hover:bg-protocol-goldhover text-slate-950 font-bold rounded-lg transition shadow-md text-sm flex items-center justify-center space-x-2">
+                <button type="submit" id="btn-login-submit" class="w-full py-2.5 bg-protocol-gold hover:bg-protocol-goldhover text-slate-950 font-bold rounded-lg transition shadow-md text-sm flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-right-to-bracket"></i>
-                    <span>Masuk ke Sistem</span>
+                    <span>Masuk ke Sistem Aman</span>
                 </button>
             </form>
 
-            <!-- FOOTER INFORMASI ALAMAT & SOSMED LOGIN -->
             <div class="px-5 py-3 bg-slate-100 border-t border-slate-200 text-[11px] text-slate-600 space-y-1.5">
                 <p class="font-medium text-slate-700 flex items-start gap-1.5">
                     <i class="fa-solid fa-location-dot text-red-500 mt-0.5 flex-shrink-0"></i>
@@ -123,7 +119,6 @@
 
     <!-- MAIN APP CONTAINER -->
     <div id="app-container" class="hidden flex-1 flex flex-col min-h-screen">
-        <!-- HEADER -->
         <header class="bg-protocol-500 text-white shadow-md sticky top-0 z-30 no-print">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
@@ -160,7 +155,11 @@
                             <img id="user-display-avatar" class="h-9 w-9 rounded-full border-2 border-protocol-gold object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Foto Profil Kasubag">
                         </div>
 
-                        <button onclick="handleLogout()" class="text-slate-300 hover:text-red-400 text-sm font-semibold p-2 rounded-lg hover:bg-slate-700/50 transition" title="Keluar / Logout">
+                        <button onclick="openWaSettingsModal()" class="text-slate-300 hover:text-emerald-400 text-sm font-semibold p-2 rounded-lg hover:bg-slate-700/50 transition" title="Pengaturan WhatsApp Gateway">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </button>
+
+                        <button onclick="handleLogout()" class="text-slate-300 hover:text-red-400 text-sm font-semibold p-2 rounded-lg hover:bg-slate-700/50 transition" title="Keluar / Logout Aman">
                             <i class="fa-solid fa-right-from-bracket"></i>
                         </button>
                     </div>
@@ -168,10 +167,7 @@
             </div>
         </header>
 
-        <!-- KONTEN UTAMA & NAVIGATION -->
         <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row gap-6 relative">
-
-            <!-- ASIDE / SIDEBAR -->
             <aside class="w-full md:w-64 flex-shrink-0 no-print z-10">
                 <div class="bg-white/95 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 p-4 sticky top-22">
                     <nav class="space-y-1">
@@ -208,7 +204,6 @@
                             </div>
                         </div>
 
-                        <!-- KOTAK KONTAK & ALAMAT KOTA AMBON PADA SIDEBAR -->
                         <div class="bg-slate-50/90 rounded-lg p-3 border border-slate-200 text-xs text-slate-600 space-y-2">
                             <h4 class="font-bold text-slate-800 text-[11px] uppercase tracking-wide flex items-center gap-1.5">
                                 <i class="fa-solid fa-building-columns text-protocol-500"></i> Sekretariat Prokopim
@@ -232,15 +227,12 @@
                 </div>
             </aside>
 
-            <!-- MAIN CONTENT CONTAINER WITH PROKOPIM WATERMARK -->
             <main class="flex-1 min-w-0 relative">
-                
-                <!-- WATERMARK LOGO PROKOPIM OVERLAY -->
                 <img src="Logo Prokopim Hitam.jpeg" alt="Prokopim Watermark" class="dashboard-watermark" onerror="this.style.display='none'">
 
                 <!-- TAB 1: DASHBOARD -->
                 <section id="tab-dashboard" class="tab-content space-y-6 relative z-10">
-                    <!-- HERO BANNER -->
+                    <div id="scope-banner-dashboard" class="hidden bg-blue-50 border border-blue-200 text-blue-900 text-xs rounded-lg px-3 py-2 items-center gap-2"></div>
                     <div class="bg-gradient-to-r from-protocol-500 via-slate-800 to-protocol-600 rounded-xl p-6 text-white shadow-md relative overflow-hidden">
                         <div class="absolute right-3 top-1/2 -translate-y-1/2 opacity-20 pointer-events-none hidden sm:block">
                             <img src="Logo Prokopim Hitam.jpeg" alt="Logo Prokopim Hero" class="w-48 h-48 object-contain rounded-full" onerror="this.style.display='none'">
@@ -254,7 +246,6 @@
                         </div>
                     </div>
 
-                    <!-- STATISTIK RINGKASAN -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
                             <div>
@@ -344,6 +335,7 @@
 
                 <!-- TAB 2: ALL ASSIGNMENTS -->
                 <section id="tab-assignments" class="tab-content space-y-6 hidden relative z-10">
+                    <div id="scope-banner-assignments" class="hidden bg-blue-50 border border-blue-200 text-blue-900 text-xs rounded-lg px-3 py-2 items-center gap-2"></div>
                     <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200 p-4">
                         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div>
@@ -424,7 +416,6 @@
                         </div>
                     </div>
 
-                    <!-- RINGKASAN REKAPITULASI -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div class="bg-white/90 backdrop-blur-sm p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
                             <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Penugasan</p>
@@ -448,7 +439,6 @@
                         </div>
                     </div>
 
-                    <!-- LAYOUT 3 GRAFIK -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="bg-white/90 backdrop-blur-sm p-5 rounded-xl border border-slate-200 shadow-sm">
                             <div class="flex items-center justify-between mb-4">
@@ -478,7 +468,6 @@
             </main>
         </div>
 
-        <!-- FOOTER APLIKASI DENGAN ALAMAT & SOSMED KOTA AMBON -->
         <footer class="bg-protocol-500 text-white mt-auto border-t border-protocol-600 no-print z-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300">
@@ -522,7 +511,7 @@
                 </div>
                 <div class="mt-6 pt-4 border-t border-slate-700/60 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-2">
                     <p>&copy; 2026 Bagian Protokol dan Komunikasi Pimpinan Kota Ambon. All rights reserved.</p>
-                    <p>SIPRODI-DIGITAL v2.0</p>
+                    <p>SIPRODI-DIGITAL v2.0 (Secure Edition)</p>
                 </div>
             </div>
         </footer>
@@ -534,11 +523,13 @@
             <div class="bg-protocol-500 text-white px-6 py-4 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <i class="fa-solid fa-calendar-plus text-protocol-gold text-lg"></i>
-                    <h3 class="font-bold text-base">Formulir Penugasan Protokol Baru</h3>
+                    <h3 class="font-bold text-base" id="task-modal-heading">Formulir Penugasan Protokol Baru</h3>
                 </div>
                 <button onclick="closeModal('modalTask')" class="text-slate-300 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="form-add-task" onsubmit="handleAddTask(event)" class="p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1 text-xs">
+                <input type="hidden" id="task-edit-id" value="">
+                <div id="task-scope-note" class="hidden bg-amber-50 border border-amber-200 text-amber-900 rounded-lg px-3 py-2"></div>
                 <div>
                     <label class="block font-semibold text-slate-700 mb-1">Nama Acara / Kegiatan <span class="text-red-500">*</span></label>
                     <input type="text" id="task-title" required placeholder="Contoh: Rapat Koordinasi Forum Komunikasi Pimpinan Daerah" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -572,7 +563,28 @@
                 </div>
                 <div>
                     <label class="block font-semibold text-slate-700 mb-1">Lokasi Kegiatan <span class="text-red-500">*</span></label>
-                    <input type="text" id="task-location" required placeholder="Contoh: Aula Utama Gedung Perkantoran Lt. 3" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="task-location" required placeholder="Contoh: Aula Utama Gedung Perkantoran Lt. 3" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none" oninput="updateTaskLocationMap()">
+                        <button type="button" onclick="updateTaskLocationMap()" title="Tampilkan di Peta" class="flex-shrink-0 px-3 py-2 rounded-lg bg-protocol-500 hover:bg-protocol-600 text-white transition">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </button>
+                    </div>
+                    <div id="task-map-preview-wrapper" class="hidden mt-2 rounded-lg overflow-hidden border border-slate-300">
+                        <iframe id="task-map-preview" class="w-full h-48" style="border:0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <a id="task-map-preview-link" href="#" target="_blank" rel="noopener noreferrer" class="block text-center text-[11px] font-semibold text-blue-700 bg-blue-50 py-1.5 hover:bg-blue-100">
+                            <i class="fa-solid fa-up-right-from-square me-1"></i> Buka di Google Maps
+                        </a>
+                    </div>
+                </div>
+
+                <!-- KOLOM KHUSUS AJUDAN, KABAG, KASUBAG, KOORDINATOR & WAKIL KOORDINATOR -->
+                <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                    <label class="block font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-check text-protocol-gold"></i> Kolom Khusus: Ajudan, Kabag, Kasubag, Koordinator & Wakil Koordinator (Ceklis Tembusan)
+                    </label>
+                    <p class="text-[11px] text-slate-500">Pilih / ceklis personel di bawah ini untuk mengirimkan teks otomatis tembusan protokol yang bertugas.</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-1" id="container-special-roles"></div>
                 </div>
 
                 <div class="mt-4">
@@ -584,7 +596,7 @@
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="border border-blue-200 bg-blue-50/30 rounded-xl p-3.5">
                             <div class="flex items-center justify-between pb-2 mb-3 border-b border-blue-200">
                                 <div class="flex items-center space-x-2 text-blue-800 font-bold text-xs uppercase">
@@ -651,9 +663,7 @@
                     <i class="fa-solid fa-user-pen text-protocol-gold"></i>
                     <h3 class="font-bold text-base">Edit Profil Pengguna</h3>
                 </div>
-                <button onclick="closeModal('modalProfile')" class="text-slate-300 hover:text-white text-xl">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button onclick="closeModal('modalProfile')" class="text-slate-300 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="form-edit-profile" onsubmit="handleSaveProfile(event)" class="p-6 space-y-4 text-xs">
                 <div class="flex items-center space-x-4 p-3 bg-slate-50 rounded-xl border border-slate-200">
@@ -699,9 +709,7 @@
                     <i class="fa-solid fa-users-gear text-protocol-gold"></i>
                     <h3 class="font-bold text-base">Kelola Anggota Tim Protokol</h3>
                 </div>
-                <button onclick="closeModal('modalManageTeam')" class="text-slate-300 hover:text-white text-xl">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button onclick="closeModal('modalManageTeam')" class="text-slate-300 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
             <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6 text-xs">
@@ -737,12 +745,10 @@
                             <label class="block font-semibold text-slate-700 mb-1">Nomor HP / WhatsApp</label>
                             <input type="tel" id="officer-phone-input" placeholder="Contoh: 081234567890" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
-
                         <div>
                             <label class="block font-semibold text-slate-700 mb-1">Upload Foto (Komputer/HP)</label>
                             <input type="file" id="officer-photo-file" accept="image/*" onchange="handleOfficerFileSelect(event)" class="w-full px-2 py-1 border border-slate-300 rounded-lg bg-white text-[11px] file:mr-2 file:py-0.5 file:px-2 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-protocol-500 file:text-white">
                         </div>
-
                         <div>
                             <label class="block font-semibold text-slate-700 mb-1">Atau URL Foto</label>
                             <input type="url" id="officer-photo-input" placeholder="https://..." class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -773,8 +779,7 @@
                                         <th class="p-2.5 text-center">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-100" id="manage-team-list-body">
-                                </tbody>
+                                <tbody class="divide-y divide-slate-100" id="manage-team-list-body"></tbody>
                             </table>
                         </div>
                     </div>
@@ -804,8 +809,201 @@
         </div>
     </div>
 
+    <!-- MODAL: PENGATURAN WHATSAPP GATEWAY -->
+    <div id="modalWaSettings" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden text-xs">
+            <div class="bg-emerald-700 text-white px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <h3 class="font-bold text-base">Pengaturan WhatsApp Gateway API</h3>
+                </div>
+                <button onclick="closeModal('modalWaSettings')" class="text-slate-200 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="form-wa-settings" onsubmit="handleSaveWaSettings(event)" class="p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1">
+                <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg text-[11px] text-blue-900 leading-relaxed">
+                    <i class="fa-solid fa-circle-info me-1"></i> Notifikasi WhatsApp Individual dikirim ke tiap petugas yang ditugaskan (disertai nama ajudan yang bertugas). Tembusan ringkasan daftar petugas bertugas dikirim secara khusus ke nomor ajudan, kabag, kasubag, koordinator & wakil koordinator yang dichecklist pada formulir.
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Endpoint API Gateway WA <span class="text-red-500">*</span></label>
+                    <input type="url" id="wa-api-endpoint" placeholder="https://api.penyedia-wa-gateway.com/send" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Token / API Key</label>
+                    <input type="text" id="wa-api-token" placeholder="Masukkan Token/API Key dari penyedia WA Gateway" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Kode Negara Default</label>
+                    <input type="text" id="wa-country-code" placeholder="62" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    <p class="text-[10px] text-slate-400 mt-1">Digunakan untuk mengubah nomor HP petugas (contoh: 0812xxxx) menjadi format internasional (62812xxxx) sebelum dikirim ke API.</p>
+                </div>
+
+                <div class="pt-3 border-t border-slate-200 space-y-2">
+                    <label class="block font-semibold text-slate-700 mb-1">Uji Coba Pengiriman</label>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="wa-test-phone" placeholder="Nomor WA tujuan uji coba, cth: 081234567890" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        <button type="button" id="btn-wa-test" onclick="handleTestWaSend()" class="flex-shrink-0 px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition whitespace-nowrap">
+                            <i class="fa-solid fa-paper-plane me-1"></i> Kirim Tes
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-200 flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal('modalWaSettings')" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100">Batal</button>
+                    <button type="submit" class="px-5 py-2 rounded-lg bg-emerald-700 text-white font-semibold hover:bg-emerald-800 shadow-md">Simpan Pengaturan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwu76AlBNUUuZfpFpnqE3g3zVL4XOKoEFH6SrhqIZFOuosTkinoTuLLwXIRsfDyLMg8/exec";
+
+    // --- FITUR KEAMANAN LOGIN & LOGOUT TINGKAT LANJUT ---
+    function secureHash(text) {
+        let hash = 0;
+        if (text.length === 0) return hash.toString();
+        for (let i = 0; i < text.length; i++) {
+            const char = text.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash |= 0;
+        }
+        return "SecuredHash_" + Math.abs(hash).toString(16) + "_" + btoa(text).substring(0, 4);
+    }
+
+    // --- MULTI USER LOGIN & HAK AKSES ---
+    // Ganti password default di bawah ini sebelum aplikasi dipakai secara nyata.
+    const USERS = {
+        admin:      { username: "admin",      passwordHash: secureHash("protokol123"),  role: "admin",      displayName: "Admin / Kasubag Protokol", title: "Kasubag Agenda & Protokol" },
+        walikota:   { username: "walikota",   passwordHash: secureHash("walikota123"),  role: "walikota",   displayName: "Walikota Ambon",           title: "Akun Protokol Walikota & Ajudan" },
+        wakil:      { username: "wakil",      passwordHash: secureHash("wakil123"),     role: "wakil",      displayName: "Wakil Walikota Ambon",     title: "Akun Protokol Wakil Walikota & Ajudan" },
+        penghubung: { username: "penghubung", passwordHash: secureHash("penghubung123"), role: "penghubung", displayName: "Kantor Penghubung",        title: "Akun Protokol Kantor Penghubung" }
+    };
+
+    // tabs: menu yang boleh dibuka | createTeams: tim yang boleh ditugaskan saat "Tambah Penugasan"
+    // dashboardTeams / assignmentTeams: data tim yang tampil (null = semua data)
+    const ROLE_CONFIG = {
+        admin:      { tabs: ['dashboard', 'assignments', 'officers', 'analytics'], defaultTab: 'dashboard',
+                      createTeams: ['walikota', 'wakil', 'penghubung'], dashboardTeams: null, assignmentTeams: null, canManage: true },
+        walikota:   { tabs: ['assignments'], defaultTab: 'assignments',
+                      createTeams: ['walikota'], dashboardTeams: ['walikota'], assignmentTeams: ['walikota'], canManage: false },
+        wakil:      { tabs: ['assignments'], defaultTab: 'assignments',
+                      createTeams: ['wakil'], dashboardTeams: ['wakil'], assignmentTeams: ['wakil'], canManage: false },
+        penghubung: { tabs: ['dashboard', 'assignments'], defaultTab: 'dashboard',
+                      createTeams: ['penghubung'], dashboardTeams: ['walikota', 'wakil'], assignmentTeams: ['walikota', 'wakil', 'penghubung'], canManage: false }
+    };
+    const TEAM_LABELS = { walikota: 'Walikota', wakil: 'Wakil Walikota', penghubung: 'Kantor Penghubung' };
+
+    const hasOwn = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
+    let currentUserKey = localStorage.getItem('siprodi_session_user') || null;
+    let lastSaveAt = 0;
+
+    function getCurrentUser() { return currentUserKey && hasOwn(USERS, currentUserKey) ? USERS[currentUserKey] : null; }
+    function getRoleConfig() { const u = getCurrentUser(); return u ? ROLE_CONFIG[u.role] : null; }
+    function canManage() { const c = getRoleConfig(); return !!(c && c.canManage); }
+
+    function normalizeTeam(t) {
+        const k = String(t || '').toLowerCase();
+        return (k === 'walikota' || k === 'wakil') ? k : 'penghubung';
+    }
+    function deriveTeamsFromIds(ids) {
+        const set = new Set();
+        (ids || []).forEach(id => {
+            const o = officers.find(x => Number(x.id) === Number(id));
+            if (o) set.add(normalizeTeam(o.team));
+        });
+        return [...set];
+    }
+    // Tim yang terkait dengan sebuah penugasan (tugas lama tanpa field "teams" diturunkan dari petugasnya)
+    function getTaskTeams(task) {
+        if (Array.isArray(task.teams) && task.teams.length) return task.teams;
+        return deriveTeamsFromIds([...(task.officers || []), ...(task.specialRoles || [])]);
+    }
+    // SUMBER DATA TUNGGAL: semua tampilan memakai data induk (tasks & officers) yang dikelola Admin,
+    // lalu hanya disaring sesuai hak akses. Angka tiap user = angka Admin untuk cakupan yang sama.
+    function getScopedTasks(kind) {
+        const cfg = getRoleConfig();
+        if (!cfg) return [];
+        const teams = kind === 'dashboard' ? cfg.dashboardTeams : cfg.assignmentTeams;
+        if (teams === null) return tasks.slice();
+        return tasks.filter(t => getTaskTeams(t).some(x => teams.includes(x)));
+    }
+    function getScopedOfficers(kind) {
+        const cfg = getRoleConfig();
+        if (!cfg) return [];
+        const teams = kind === 'dashboard' ? cfg.dashboardTeams : cfg.assignmentTeams;
+        if (teams === null) return officers.slice();
+        return officers.filter(o => teams.includes(normalizeTeam(o.team)));
+    }
+
+    function applyRolePermissions() {
+        const cfg = getRoleConfig();
+        const user = getCurrentUser();
+        if (!cfg || !user) return;
+        const admin = user.role === 'admin';
+
+        ['dashboard', 'assignments', 'officers', 'analytics'].forEach(t => {
+            const btn = document.getElementById('nav-' + t);
+            if (btn) btn.classList.toggle('hidden', !cfg.tabs.includes(t));
+        });
+        document.querySelectorAll('button[onclick="openWaSettingsModal()"], #modalTask button[onclick="openManageTeamModal()"]')
+            .forEach(b => b.classList.toggle('hidden', !admin));
+
+        const profileBox = document.querySelector('[onclick="openProfileModal()"]');
+        if (profileBox) {
+            profileBox.style.cursor = admin ? 'pointer' : 'default';
+            profileBox.title = admin ? 'Klik untuk edit profil' : user.displayName;
+        }
+
+        const note = document.getElementById('task-scope-note');
+        if (note) {
+            if (admin) note.classList.add('hidden');
+            else {
+                note.innerHTML = '<i class="fa-solid fa-circle-info me-1"></i> Penugasan ini akan tercatat untuk <b>' + cfg.createTeams.map(t => 'Tim ' + TEAM_LABELS[t]).join(', ') + '</b> dan langsung masuk ke data induk Admin / Kasubag Protokol.';
+                note.classList.remove('hidden');
+            }
+        }
+        updateScopeBanners();
+        switchTab(cfg.defaultTab);
+    }
+
+    function updateScopeBanners() {
+        const cfg = getRoleConfig();
+        if (!cfg) return;
+        const fmt = teams => teams.map(t => TEAM_LABELS[t]).join(' & ');
+        const setBanner = (id, teams, text) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (teams === null) { el.classList.add('hidden'); return; }
+            el.innerHTML = '<i class="fa-solid fa-filter"></i><span>' + text.replace('{TIM}', fmt(teams)) + '</span>';
+            el.classList.remove('hidden');
+        };
+        setBanner('scope-banner-dashboard', cfg.dashboardTeams, 'Dashboard menampilkan data <b>{TIM}</b>. Seluruh perhitungan bersumber dari data induk Admin / Kasubag Protokol dan diperbarui otomatis.');
+        setBanner('scope-banner-assignments', cfg.assignmentTeams, 'Daftar agenda menampilkan penugasan <b>{TIM}</b>. Perubahan status & penghapusan hanya dapat dilakukan oleh Admin / Kasubag Protokol.');
+    }
+
+    function refreshAllViews() {
+        updateAutoStatuses();
+        renderDashboard();
+        renderAssignments();
+        renderOfficers();
+        renderFormOfficerCheckboxes();
+        updateCharts();
+        updateScopeBanners();
+    }
+
+    // Sinkronisasi berkala dengan data induk di cloud agar angka dashboard semua user sama dengan Admin
+    setInterval(() => {
+        if (!authSession || !getCurrentUser()) return;
+        if (Date.now() - lastSaveAt < 20000) return;
+        const busy = ['modalTask', 'modalManageTeam', 'modalProfile'].some(id => {
+            const el = document.getElementById(id);
+            return el && !el.classList.contains('hidden');
+        });
+        if (!busy) fetchCloudData();
+    }, 60000);
+
+    let loginAttempts = JSON.parse(localStorage.getItem('siprodi_login_attempts')) || { count: 0, lockoutUntil: 0 };
+    let lockoutInterval = null;
 
     // FITUR AUTO LOGOUT DALAM WAKTU 10 MENIT INAKTIVITAS
     const AUTO_LOGOUT_TIME = 10 * 60 * 1000;
@@ -813,42 +1011,39 @@
 
     function resetAutoLogoutTimer() {
         if (!authSession) return;
-        
-        if (autoLogoutTimer) {
-            clearTimeout(autoLogoutTimer);
-        }
+        if (autoLogoutTimer) clearTimeout(autoLogoutTimer);
 
         autoLogoutTimer = setTimeout(() => {
-            triggerAutoLogout();
+            triggerAutoLogout("Sesi Anda telah berakhir secara aman karena tidak ada aktivitas selama 10 menit.");
         }, AUTO_LOGOUT_TIME);
     }
 
-    function triggerAutoLogout() {
-        if (authSession) {
-            authSession = false;
-            saveStateAndSync();
-            checkAuth();
-            
-            const autoLogoutMsg = document.getElementById('auto-logout-msg');
-            if (autoLogoutMsg) {
-                autoLogoutMsg.classList.remove('hidden');
-            }
+    function triggerAutoLogout(reasonMsg) {
+        authSession = false;
+        currentUserKey = null;
+        localStorage.removeItem('siprodi_session_user');
+        localStorage.removeItem('siprodi_auth');
+        localStorage.removeItem('siprodi_session_token');
+        checkAuth();
+        
+        const autoLogoutMsg = document.getElementById('auto-logout-msg');
+        if (autoLogoutMsg) {
+            autoLogoutMsg.innerText = reasonMsg;
+            autoLogoutMsg.classList.remove('hidden');
         }
     }
 
     ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(eventType => {
         window.addEventListener(eventType, () => {
-            if (authSession) {
-                resetAutoLogoutTimer();
-            }
+            if (authSession) resetAutoLogoutTimer();
         }, { passive: true });
     });
 
     const defaultOfficers = [
         { id: 1, name: "Fitrah Ramadhan", role: "Koordinator Lapangan", team: "walikota", status: "Standby", tasksCount: 0, phone: "081234567890", photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" },
-        { id: 2, name: "Rifaldy Pratama", role: "Petugas Pendamping VIP", team: "walikota", status: "Standby", tasksCount: 0, phone: "081298765432", photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150" },
-        { id: 3, name: "Siti Rahmawati", role: "Master of Ceremony (MC)", team: "wakil", status: "Standby", tasksCount: 0, phone: "081311223344", photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150" },
-        { id: 4, name: "Hendra Wijaya", role: "Koordinator Acara", team: "wakil", status: "Standby", tasksCount: 0, phone: "081555667788", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" },
+        { id: 2, name: "Rifaldy Pratama", role: "Ajudan Pimpinan", team: "walikota", status: "Standby", tasksCount: 0, phone: "081298765432", photo: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150" },
+        { id: 3, name: "Siti Rahmawati", role: "Kasubag & Wakil Koordinator", team: "wakil", status: "Standby", tasksCount: 0, phone: "081311223344", photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150" },
+        { id: 4, name: "Hendra Wijaya", role: "Kabag Protokol", team: "wakil", status: "Standby", tasksCount: 0, phone: "081555667788", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" },
         { id: 5, name: "Dedi Kurniawan", role: "Petugas Penghubung Lembaga", team: "penghubung", status: "Standby", tasksCount: 0, phone: "081999887766", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" }
     ];
 
@@ -863,6 +1058,7 @@
             location: "Aula Utama Kantor Walikota Lt. 3",
             status: "Terjadwal",
             officers: [1, 2],
+            specialRoles: [2, 4],
             notes: "Pakaian PSH / Pakaian Dinas Harian."
         },
         {
@@ -875,19 +1071,8 @@
             location: "Ruang Rapat VIP Bandara & Gedung Pemkot",
             status: "Berlangsung",
             officers: [1, 3],
+            specialRoles: [1, 3],
             notes: "Pendampingan VIP penuh."
-        },
-        {
-            id: "PRT-2026-003",
-            title: "Upacara Peringatan Hari Jadi Kota",
-            category: "Kegiatan Seremonial & Protokol",
-            vip: "Walikota & Forkopimda",
-            date: "2026-09-07T07:30",
-            durationHours: 2,
-            location: "Lapangan Merdeka",
-            status: "Selesai",
-            officers: [2, 4],
-            notes: "Pakaian PDU I / Kebaya."
         }
     ];
 
@@ -912,7 +1097,6 @@
     document.addEventListener('DOMContentLoaded', () => {
         checkAuth();
         initProfile();
-        
         updateAutoStatuses();
         
         renderDashboard();
@@ -920,7 +1104,6 @@
         renderOfficers();
         renderFormOfficerCheckboxes();
         initCharts();
-        
         fetchCloudData();
 
         setInterval(() => {
@@ -933,26 +1116,147 @@
         }, 10000);
     });
 
+    function checkAuth() {
+        const loginScreen = document.getElementById('login-screen');
+        const appContainer = document.getElementById('app-container');
+        
+        const savedAuth = JSON.parse(localStorage.getItem('siprodi_auth')) || false;
+        const sessionToken = localStorage.getItem('siprodi_session_token');
+
+        if (savedAuth && sessionToken && sessionToken.startsWith('SIPRODI_SECURE_TOKEN_') && getCurrentUser()) {
+            authSession = true;
+            loginScreen.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+            applyRolePermissions();
+            resetAutoLogoutTimer();
+            checkLockoutStatus();
+        } else {
+            authSession = false;
+            loginScreen.classList.remove('hidden');
+            appContainer.classList.add('hidden');
+            if (autoLogoutTimer) clearTimeout(autoLogoutTimer);
+            checkLockoutStatus();
+        }
+    }
+
+    function checkLockoutStatus() {
+        const now = Date.now();
+        const submitBtn = document.getElementById('btn-login-submit');
+        const lockoutMsg = document.getElementById('login-lockout-msg');
+        const timerSpan = document.getElementById('lockout-timer');
+
+        if (loginAttempts.lockoutUntil && now < loginAttempts.lockoutUntil) {
+            const remainingSecs = Math.ceil((loginAttempts.lockoutUntil - now) / 1000);
+            if (submitBtn) submitBtn.disabled = true;
+            if (lockoutMsg) lockoutMsg.classList.remove('hidden');
+            if (timerSpan) timerSpan.innerText = remainingSecs;
+
+            if (!lockoutInterval) {
+                lockoutInterval = setInterval(() => {
+                    const currentNow = Date.now();
+                    const leftSecs = Math.ceil((loginAttempts.lockoutUntil - currentNow) / 1000);
+                    if (leftSecs <= 0) {
+                        clearInterval(lockoutInterval);
+                        lockoutInterval = null;
+                        loginAttempts.count = 0;
+                        loginAttempts.lockoutUntil = 0;
+                        localStorage.setItem('siprodi_login_attempts', JSON.stringify(loginAttempts));
+                        if (submitBtn) submitBtn.disabled = false;
+                        if (lockoutMsg) lockoutMsg.classList.add('hidden');
+                    } else {
+                        if (timerSpan) timerSpan.innerText = leftSecs;
+                    }
+                }, 1000);
+            }
+        } else {
+            if (submitBtn) submitBtn.disabled = false;
+            if (lockoutMsg) lockoutMsg.classList.add('hidden');
+        }
+    }
+
+    function handleLogin(e) {
+        e.preventDefault();
+        const now = Date.now();
+
+        if (loginAttempts.lockoutUntil && now < loginAttempts.lockoutUntil) return;
+
+        const userField = document.getElementById('login-username').value.trim();
+        const passField = document.getElementById('login-password').value.trim();
+        const inputPasswordHashed = secureHash(passField);
+
+        const userKey = userField.toLowerCase();
+        const matchedUser = hasOwn(USERS, userKey) ? USERS[userKey] : null;
+
+        if (matchedUser && inputPasswordHashed === matchedUser.passwordHash) {
+            loginAttempts = { count: 0, lockoutUntil: 0 };
+            localStorage.setItem('siprodi_login_attempts', JSON.stringify(loginAttempts));
+
+            authSession = true;
+            const secureToken = 'SIPRODI_SECURE_TOKEN_' + Math.random().toString(36).substring(2) + '_' + Date.now();
+            localStorage.setItem('siprodi_auth', JSON.stringify(true));
+            localStorage.setItem('siprodi_session_token', secureToken);
+            currentUserKey = matchedUser.username;
+            localStorage.setItem('siprodi_session_user', currentUserKey);
+
+            document.getElementById('login-error-msg').classList.add('hidden');
+            document.getElementById('auto-logout-msg').classList.add('hidden');
+            document.getElementById('form-login').reset();
+            
+            checkAuth();
+            initProfile();
+            refreshAllViews();
+            showToast(`Login berhasil sebagai ${matchedUser.displayName}.`, 'success');
+        } else {
+            loginAttempts.count++;
+            
+            if (loginAttempts.count >= 3) {
+                loginAttempts.lockoutUntil = Date.now() + (30 * 1000);
+                showToast('Terlalu banyak percobaan gagal. Akun dikunci sementara 30 detik.', 'error');
+            } else {
+                const sisaKesempatan = 3 - loginAttempts.count;
+                showToast(`Username atau password salah! Sisa percobaan: ${sisaKesempatan}`, 'error');
+            }
+
+            localStorage.setItem('siprodi_login_attempts', JSON.stringify(loginAttempts));
+            document.getElementById('login-error-msg').classList.remove('hidden');
+            checkLockoutStatus();
+        }
+    }
+
+    function handleLogout() {
+        showConfirm(
+            'Keluar dari Sistem Aman',
+            'Apakah Anda yakin ingin mengakhiri sesi dan keluar dari sistem SIPRODI-DIGITAL?',
+            () => {
+                authSession = false;
+                localStorage.removeItem('siprodi_auth');
+                localStorage.removeItem('siprodi_session_token');
+                
+                if (autoLogoutTimer) clearTimeout(autoLogoutTimer);
+                currentUserKey = null;
+                localStorage.removeItem('siprodi_session_user');
+                checkAuth();
+                showToast('Anda telah berhasil keluar dengan aman.', 'success');
+            },
+            'Ya, Keluar',
+            false
+        );
+    }
+
     function updateAutoStatuses() {
         const now = new Date();
         let statusUpdated = false;
 
         tasks.forEach(task => {
             if (!task.date) return;
-            
             const taskStart = new Date(task.date);
             const durationMs = (task.durationHours || 2) * 60 * 60 * 1000;
             const taskEnd = new Date(taskStart.getTime() + durationMs);
 
             let calculatedStatus = task.status;
-
-            if (now < taskStart) {
-                calculatedStatus = "Terjadwal";
-            } else if (now >= taskStart && now <= taskEnd) {
-                calculatedStatus = "Berlangsung";
-            } else if (now > taskEnd) {
-                calculatedStatus = "Selesai";
-            }
+            if (now < taskStart) calculatedStatus = "Terjadwal";
+            else if (now >= taskStart && now <= taskEnd) calculatedStatus = "Berlangsung";
+            else if (now > taskEnd) calculatedStatus = "Selesai";
 
             if (task.status !== calculatedStatus) {
                 task.status = calculatedStatus;
@@ -980,11 +1284,11 @@
             localStorage.setItem('siprodi_officers', JSON.stringify(officers));
             localStorage.setItem('siprodi_tasks', JSON.stringify(tasks));
         }
-
         return statusUpdated;
     }
 
     function saveStateAndSync(actionType = 'SYNC', payload = {}) {
+        lastSaveAt = Date.now();
         updateAutoStatuses();
         localStorage.setItem('siprodi_officers', JSON.stringify(officers));
         localStorage.setItem('siprodi_tasks', JSON.stringify(tasks));
@@ -996,20 +1300,13 @@
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: actionType,
-                    payload: payload,
-                    allTasks: tasks,
-                    allOfficers: officers,
-                    profile: userProfile
-                })
+                body: JSON.stringify({ action: actionType, payload: payload, allTasks: tasks, allOfficers: officers, profile: userProfile })
             }).catch(err => console.error('Gagal sinkronisasi cloud:', err));
         }
     }
 
     function fetchCloudData() {
         if (!GOOGLE_SCRIPT_URL) return;
-        
         fetch(GOOGLE_SCRIPT_URL + "?action=getData")
             .then(res => res.json())
             .then(data => {
@@ -1019,7 +1316,6 @@
                     if (data.profile) userProfile = data.profile;
 
                     updateAutoStatuses();
-
                     localStorage.setItem('siprodi_officers', JSON.stringify(officers));
                     localStorage.setItem('siprodi_tasks', JSON.stringify(tasks));
                     localStorage.setItem('siprodi_profile', JSON.stringify(userProfile));
@@ -1041,50 +1337,151 @@
         document.getElementById('confirm-message').innerText = message;
         const okBtn = document.getElementById('confirm-ok-btn');
         okBtn.innerText = btnText;
-        if (isDanger) {
-            okBtn.className = "px-4 py-1.5 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 shadow-sm transition";
-        } else {
-            okBtn.className = "px-4 py-1.5 rounded-lg bg-protocol-500 text-white font-semibold hover:bg-protocol-600 shadow-sm transition";
-        }
+        okBtn.className = isDanger ? "px-4 py-1.5 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 shadow-sm transition" : "px-4 py-1.5 rounded-lg bg-protocol-500 text-white font-semibold hover:bg-protocol-600 shadow-sm transition";
         pendingConfirmCallback = callback;
         openModal('modalConfirm');
     }
 
     function closeConfirmModal(confirmed) {
         closeModal('modalConfirm');
-        if (confirmed && typeof pendingConfirmCallback === 'function') {
-            pendingConfirmCallback();
-        }
+        if (confirmed && typeof pendingConfirmCallback === 'function') pendingConfirmCallback();
         pendingConfirmCallback = null;
     }
 
-    function handleAddTask(e) {
+    async function handleAddTask(e) {
         e.preventDefault();
+        const roleCfg = getRoleConfig();
+        const cu = getCurrentUser();
+        if (!roleCfg || !cu) { showToast('Sesi tidak valid. Silakan login ulang.', 'error'); return; }
+
+        // Form yang sama dipakai untuk Tambah dan Edit.
+        const editId = document.getElementById('task-edit-id').value.trim();
+        const isEdit = !!editId;
+
+        if (isEdit && !canManage()) {
+            showToast('Hanya Admin yang dapat mengedit agenda penugasan.', 'error');
+            return;
+        }
+
+        const existingTask = isEdit ? tasks.find(t => String(t.id) === String(editId)) : null;
+        if (isEdit && !existingTask) {
+            showToast('Agenda yang akan diedit tidak ditemukan.', 'error');
+            return;
+        }
+
         const btnSubmit = document.getElementById('btn-submit');
         btnSubmit.disabled = true;
-        btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Menyimpan...';
+        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-1"></i> ${isEdit ? 'Menyimpan Perubahan...' : 'Menyimpan...'}`;
 
         const durationVal = parseFloat(document.getElementById('task-duration').value) || 2;
-        const nextNumber = tasks.length + 1;
+
+        let selectedOfficerIds = Array.from(document.querySelectorAll('input[name="selected_officers"]:checked')).map(el => parseInt(el.value));
+        let selectedSpecialRoleIds = Array.from(document.querySelectorAll('input[name="selected_special_roles"]:checked')).map(el => parseInt(el.value));
+
+        // Batasi petugas sesuai tim yang boleh ditugaskan oleh user ini.
+        const isAllowedOfficer = id => {
+            const o = officers.find(x => Number(x.id) === Number(id));
+            return !!o && roleCfg.createTeams.includes(normalizeTeam(o.team));
+        };
+        selectedOfficerIds = selectedOfficerIds.filter(isAllowedOfficer);
+        selectedSpecialRoleIds = selectedSpecialRoleIds.filter(isAllowedOfficer);
+
+        const taskTeams = cu.role === 'admin'
+            ? deriveTeamsFromIds([...selectedOfficerIds, ...selectedSpecialRoleIds])
+            : [...roleCfg.createTeams];
+
+        if (isEdit) {
+            // Pertahankan ID, status, dan metadata pembuatan; hanya perbarui isi agenda.
+            existingTask.title = document.getElementById('task-title').value.trim();
+            existingTask.category = document.getElementById('task-category').value;
+            existingTask.vip = document.getElementById('task-vip').value.trim();
+            existingTask.date = document.getElementById('task-date').value;
+            existingTask.durationHours = durationVal;
+            existingTask.location = document.getElementById('task-location').value.trim();
+            existingTask.officers = selectedOfficerIds;
+            existingTask.specialRoles = selectedSpecialRoleIds;
+            existingTask.teams = taskTeams;
+            existingTask.notes = document.getElementById('task-notes').value.trim();
+
+            updateAutoStatuses();
+            saveStateAndSync('UPDATE_TASK', existingTask);
+
+            renderDashboard();
+            renderAssignments();
+            renderOfficers();
+            renderFormOfficerCheckboxes();
+            updateCharts();
+
+            btnSubmit.disabled = false;
+            btnSubmit.innerText = 'Simpan & Perbarui Agenda';
+            closeModal('modalTask');
+            resetTaskForm();
+            showToast(`Agenda ${existingTask.id} berhasil diperbarui dan disinkronkan.`, 'success');
+            return;
+        }
+
+        const nextNumber = tasks.reduce((mx, t) => {
+            const m = /(\d+)$/.exec(String(t.id || ''));
+            return m ? Math.max(mx, parseInt(m[1], 10)) : mx;
+        }, 0) + 1;
         const formattedId = `PRT-2026-${String(nextNumber).padStart(3, '0')}`;
 
         const newTask = {
             id: formattedId,
-            title: document.getElementById('task-title').value,
+            title: document.getElementById('task-title').value.trim(),
             category: document.getElementById('task-category').value,
-            vip: document.getElementById('task-vip').value || '',
+            vip: document.getElementById('task-vip').value.trim(),
             date: document.getElementById('task-date').value,
             durationHours: durationVal,
-            location: document.getElementById('task-location').value,
+            location: document.getElementById('task-location').value.trim(),
             status: "Terjadwal",
-            officers: Array.from(document.querySelectorAll('input[name="selected_officers"]:checked')).map(el => parseInt(el.value)),
-            notes: document.getElementById('task-notes').value || ''
+            officers: selectedOfficerIds,
+            specialRoles: selectedSpecialRoleIds,
+            teams: taskTeams,
+            createdBy: cu.username,
+            createdByRole: cu.role,
+            notes: document.getElementById('task-notes').value.trim()
         };
 
         tasks.unshift(newTask);
         updateAutoStatuses();
         saveStateAndSync('ADD_TASK', newTask);
-        
+
+        btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Mengirim Notifikasi WA...';
+
+        const formattedDate = new Date(newTask.date).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
+        let waSuccessCount = 0;
+
+        const assignedAjudanObjects = selectedSpecialRoleIds
+            .map(id => officers.find(o => Number(o.id) === Number(id)))
+            .filter(o => o && /ajudan/i.test(o.role));
+
+        const assignedAjudanNames = assignedAjudanObjects.map(o => `${o.name} (${o.role})`).join(', ') || 'Tim Protokol Bertugas';
+
+        // Notifikasi individual saat membuat penugasan baru.
+        for (const officerId of selectedOfficerIds) {
+            const officer = officers.find(o => Number(o.id) === Number(officerId));
+            if (officer && officer.phone && officer.phone !== '-') {
+                const messageIndividual = `📌 *NOTIFIKASI PENUGASAN PROTOKOL INDIVIDUAL*\n______________________________________\nYth. *${officer.name}*, Anda telah dijadwalkan untuk bertugas pada kegiatan berikut:\n\n🆔 *ID Penugasan:* ${newTask.id}\n📌 *Acara:* ${newTask.title}\n🏷️ *Kategori:* ${newTask.category}\n👤 *Pejabat Pemerintah:* ${newTask.vip || '-'}\n🧑‍✈️ *Ajudan Pendamping Ditugaskan:* ${assignedAjudanNames}\n📅 *Waktu:* ${formattedDate} (${newTask.durationHours} jam)\n📍 *Lokasi:* ${newTask.location}\n📝 *Catatan:* ${newTask.notes || '-'}\n\nMohon persiapkan diri dan lakukan konfirmasi kehadiran. Terima kasih.\n_Sistem SIPRODI-DIGITAL Prokopim Kota Ambon_`;
+                const result = await sendWhatsAppNotification(officer.phone, messageIndividual);
+                if (result.success) waSuccessCount++;
+            }
+        }
+
+        // Tembusan otomatis ke Ajudan/Kabag/Kasubag/Koordinator yang dipilih.
+        const assignedSpecialOfficers = selectedSpecialRoleIds
+            .map(id => officers.find(o => Number(o.id) === Number(id)))
+            .filter(Boolean);
+        const summaryMessage = buildTeamSummaryMessage(newTask, assignedSpecialOfficers, selectedOfficerIds);
+        let waTembusanSuccessCount = 0;
+
+        for (const spOfficer of assignedSpecialOfficers) {
+            if (spOfficer.phone && spOfficer.phone !== '-') {
+                const result = await sendWhatsAppNotification(spOfficer.phone, summaryMessage);
+                if (result.success) waTembusanSuccessCount++;
+            }
+        }
+
         renderDashboard();
         renderAssignments();
         renderOfficers();
@@ -1093,11 +1490,90 @@
         btnSubmit.disabled = false;
         btnSubmit.innerText = 'Simpan & Terbitkan Penugasan';
         closeModal('modalTask');
-        document.getElementById('form-add-task').reset();
+        resetTaskForm();
+
+        showToast(`Penugasan tersimpan. WA Individual: ${waSuccessCount} terkirim, Tembusan Otomatis: ${waTembusanSuccessCount} terkirim.`, 'success');
+    }
+
+    function editTask(taskId) {
+        if (!canManage()) {
+            showToast('Hanya Admin yang dapat mengedit agenda penugasan.', 'error');
+            return;
+        }
+
+        const task = tasks.find(t => String(t.id) === String(taskId));
+        if (!task) {
+            showToast('Agenda penugasan tidak ditemukan.', 'error');
+            return;
+        }
+
+        // Pastikan daftar checkbox terbaru sudah tersedia sebelum mengisi pilihan petugas.
+        renderFormOfficerCheckboxes();
+
+        document.getElementById('task-edit-id').value = task.id;
+        document.getElementById('task-title').value = task.title || '';
+        document.getElementById('task-category').value = task.category || 'Kegiatan Seremonial & Protokol';
+        document.getElementById('task-vip').value = task.vip || '';
+
+        const dateInput = document.getElementById('task-date');
+        dateInput.value = toDatetimeLocalValue(task.date);
+
+        document.getElementById('task-duration').value = task.durationHours || 2;
+        document.getElementById('task-location').value = task.location || '';
+        document.getElementById('task-notes').value = task.notes || '';
+
+        const selectedOfficerSet = new Set((task.officers || []).map(Number));
+        const selectedSpecialSet = new Set((task.specialRoles || []).map(Number));
+
+        document.querySelectorAll('input[name="selected_officers"]').forEach(el => {
+            el.checked = selectedOfficerSet.has(Number(el.value));
+        });
+        document.querySelectorAll('input[name="selected_special_roles"]').forEach(el => {
+            el.checked = selectedSpecialSet.has(Number(el.value));
+        });
+
+        document.getElementById('task-modal-heading').innerText = `Edit Agenda Penugasan - ${task.id}`;
+        document.getElementById('btn-submit').innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> Simpan & Perbarui Agenda';
+
+        updateTaskLocationMap();
+        openModal('modalTask');
+    }
+
+    function toDatetimeLocalValue(value) {
+        if (!value) return '';
+        const d = new Date(value);
+        if (isNaN(d.getTime())) return String(value).slice(0, 16);
+
+        const pad = n => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    function resetTaskForm() {
+        const form = document.getElementById('form-add-task');
+        if (form) form.reset();
+
+        const editId = document.getElementById('task-edit-id');
+        if (editId) editId.value = '';
+
+        const heading = document.getElementById('task-modal-heading');
+        if (heading) heading.innerText = 'Formulir Penugasan Protokol Baru';
+
+        const btn = document.getElementById('btn-submit');
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = 'Simpan & Terbitkan Penugasan';
+        }
+
+        document.querySelectorAll('input[name="selected_officers"], input[name="selected_special_roles"]').forEach(el => {
+            el.checked = false;
+        });
+
+        resetTaskLocationMap();
     }
 
     function handleSaveTeamMember(e) {
         e.preventDefault();
+        if (!canManage()) return;
         const editId = document.getElementById('officer-edit-id').value;
         const name = document.getElementById('officer-name-input').value;
         const role = document.getElementById('officer-role-input').value;
@@ -1141,6 +1617,7 @@
     }
 
     function deleteOfficer(id) {
+        if (!canManage()) return;
         const off = officers.find(o => Number(o.id) === Number(id));
         if (!off) return;
 
@@ -1156,12 +1633,12 @@
                 renderDashboard();
                 renderManageTeamList();
                 updateCharts();
-                if (Number(document.getElementById('officer-edit-id').value) === Number(id)) resetOfficerForm();
             }
         );
     }
 
     function changeTaskStatus(taskId, newStatus) {
+        if (!canManage()) return;
         const task = tasks.find(t => t.id === taskId);
         if (task) {
             task.status = newStatus;
@@ -1174,6 +1651,7 @@
     }
 
     function deleteTask(taskId) {
+        if (!canManage()) return;
         const task = tasks.find(t => t.id === taskId);
         if (!task) return;
 
@@ -1194,6 +1672,7 @@
 
     function handleSaveProfile(e) {
         e.preventDefault();
+        if (!canManage()) return;
         userProfile.name = document.getElementById('input-profile-name').value;
         userProfile.role = document.getElementById('input-profile-role').value;
         const urlAvatar = document.getElementById('input-profile-avatar').value;
@@ -1204,54 +1683,149 @@
         closeModal('modalProfile');
     }
 
-    function checkAuth() {
-        const loginScreen = document.getElementById('login-screen');
-        const appContainer = document.getElementById('app-container');
-        if (authSession) {
-            loginScreen.classList.add('hidden');
-            appContainer.classList.remove('hidden');
-            resetAutoLogoutTimer();
-        } else {
-            loginScreen.classList.remove('hidden');
-            appContainer.classList.add('hidden');
-            if (autoLogoutTimer) clearTimeout(autoLogoutTimer);
-        }
-    }
-
-    function handleLogin(e) {
-        e.preventDefault();
-        const user = document.getElementById('login-username').value.trim();
-        const pass = document.getElementById('login-password').value.trim();
-        if (user === 'admin' && pass === 'protokol123') {
-            authSession = true;
-            saveStateAndSync();
-            document.getElementById('login-error-msg').classList.add('hidden');
-            document.getElementById('auto-logout-msg').classList.add('hidden');
-            document.getElementById('form-login').reset();
-            checkAuth();
-        } else {
-            document.getElementById('login-error-msg').classList.remove('hidden');
-        }
-    }
-
-    function handleLogout() {
-        showConfirm(
-            'Keluar dari Sistem',
-            'Apakah Anda yakin ingin keluar dari sistem SIPRODI-DIGITAL?',
-            () => {
-                authSession = false;
-                saveStateAndSync();
-                checkAuth();
-            },
-            'Ya, Keluar',
-            false
-        );
-    }
-
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
+    function updateTaskLocationMap() {
+        const locationInput = document.getElementById('task-location');
+        const wrapper = document.getElementById('task-map-preview-wrapper');
+        const iframe = document.getElementById('task-map-preview');
+        const link = document.getElementById('task-map-preview-link');
+        if (!locationInput || !wrapper || !iframe || !link) return;
+
+        const query = locationInput.value.trim();
+        if (query === '') {
+            wrapper.classList.add('hidden');
+            iframe.src = '';
+            return;
+        }
+
+        const fullQuery = /ambon/i.test(query) ? query : `${query}, Kota Ambon, Maluku`;
+        const encodedQuery = encodeURIComponent(fullQuery);
+
+        iframe.src = `https://www.google.com/maps?q=${encodedQuery}&output=embed`;
+        link.href = `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
+        wrapper.classList.remove('hidden');
+    }
+
+    function resetTaskLocationMap() {
+        const wrapper = document.getElementById('task-map-preview-wrapper');
+        const iframe = document.getElementById('task-map-preview');
+        if (wrapper) wrapper.classList.add('hidden');
+        if (iframe) iframe.src = '';
+    }
+
+    let waGatewayConfig = JSON.parse(localStorage.getItem('siprodi_wa_gateway')) || { endpoint: '', token: '', countryCode: '62' };
+
+    function openWaSettingsModal() {
+        if (!canManage()) return;
+        document.getElementById('wa-api-endpoint').value = waGatewayConfig.endpoint || '';
+        document.getElementById('wa-api-token').value = waGatewayConfig.token || '';
+        document.getElementById('wa-country-code').value = waGatewayConfig.countryCode || '62';
+        document.getElementById('wa-test-phone').value = '';
+        openModal('modalWaSettings');
+    }
+
+    function handleSaveWaSettings(e) {
+        e.preventDefault();
+        waGatewayConfig = {
+            endpoint: document.getElementById('wa-api-endpoint').value.trim(),
+            token: document.getElementById('wa-api-token').value.trim(),
+            countryCode: document.getElementById('wa-country-code').value.trim() || '62'
+        };
+        localStorage.setItem('siprodi_wa_gateway', JSON.stringify(waGatewayConfig));
+        showToast('Pengaturan WhatsApp Gateway berhasil disimpan.', 'success');
+        closeModal('modalWaSettings');
+    }
+
+    async function handleTestWaSend() {
+        const phone = document.getElementById('wa-test-phone').value.trim();
+        if (!phone) { showToast('Masukkan nomor WA tujuan untuk uji coba.', 'warning'); return; }
+        if (!document.getElementById('wa-api-endpoint').value.trim()) { showToast('Isi Endpoint API Gateway WA terlebih dahulu.', 'warning'); return; }
+
+        const tempConfig = {
+            endpoint: document.getElementById('wa-api-endpoint').value.trim(),
+            token: document.getElementById('wa-api-token').value.trim(),
+            countryCode: document.getElementById('wa-country-code').value.trim() || '62'
+        };
+
+        const btn = document.getElementById('btn-wa-test');
+        const originalLabel = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+
+        const result = await sendWhatsAppNotification(phone, '✅ Ini adalah pesan uji coba dari Sistem SIPRODI-DIGITAL Prokopim Kota Ambon.', tempConfig);
+
+        btn.disabled = false;
+        btn.innerHTML = originalLabel;
+
+        if (result.success) showToast('Pesan uji coba berhasil dikirim ke API Gateway WA.', 'success');
+        else showToast(`Gagal mengirim pesan uji coba: ${result.error}`, 'error');
+    }
+
+    function formatPhoneForWa(phone, config) {
+        const cfg = config || waGatewayConfig;
+        let digits = String(phone).replace(/\D/g, '');
+        const cc = (cfg.countryCode || '62').replace(/\D/g, '');
+        if (digits.startsWith('0')) digits = cc + digits.substring(1);
+        else if (!digits.startsWith(cc)) digits = cc + digits;
+        return digits;
+    }
+
+    async function sendWhatsAppNotification(phone, message, config) {
+        const cfg = config || waGatewayConfig;
+        if (!cfg.endpoint) return { success: false, error: 'Endpoint API Gateway WA belum diatur' };
+
+        const targetPhone = formatPhoneForWa(phone, cfg);
+        try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (cfg.token) headers['Authorization'] = cfg.token;
+
+            const response = await fetch(cfg.endpoint, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({ target: targetPhone, message: message })
+            });
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return { success: true };
+        } catch (err) {
+            return { success: false, error: err.message };
+        }
+    }
+
+    function showToast(message, type = 'success') {
+        const colors = { success: 'bg-emerald-600', warning: 'bg-amber-600', error: 'bg-red-600' };
+        const icons = { success: 'fa-circle-check', warning: 'fa-triangle-exclamation', error: 'fa-circle-xmark' };
+
+        const toast = document.createElement('div');
+        toast.className = `fixed bottom-5 right-5 z-[100] ${colors[type] || colors.success} text-white text-xs font-semibold px-4 py-3 rounded-lg shadow-lg flex items-start gap-2 max-w-xs`;
+        toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.success} mt-0.5"></i><span>${message}</span>`;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.transition = 'opacity 0.5s';
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 500);
+        }, 5000);
+    }
+
+    function buildTeamSummaryMessage(task, specialOfficers, assignedOfficerIds) {
+        const formattedDate = new Date(task.date).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
+        const recipientNames = specialOfficers.map(o => `${o.name} (${o.role})`).join(', ') || 'Pimpinan & Protokol';
+
+        // Susun daftar lengkap nama-nama petugas protokol yang bertugas
+        const assignedOfficersList = (assignedOfficerIds || []).map(id => {
+            const off = officers.find(o => Number(o.id) === Number(id));
+            return off ? `- ${off.name} (${off.role})` : '';
+        }).filter(Boolean).join('\n') || '- Belum ada petugas protokol ditugaskan';
+
+        return `📋 *TEMBUSAN OTOMATIS PENUGASAN PROTOKOL*\n______________________________________\nYth. Bapak/Ibu/Rekan (*${recipientNames}*),\n\nBerikut adalah tembusan ringkasan kegiatan penugasan protokol beserta daftar lengkap personel yang bertugas:\n\n🆔 *ID Penugasan:* ${task.id}\n📌 *Acara:* ${task.title}\n🏷️ *Kategori:* ${task.category}\n👤 *Pejabat Pemerintah:* ${task.vip || '-'}\n📅 *Waktu:* ${formattedDate} (${task.durationHours} jam)\n📍 *Lokasi:* ${task.location}\n\n👥 *DAFTAR PETUGAS PROTOKOL YANG BERTUGAS:*\n${assignedOfficersList}\n\n📝 *Catatan:* ${task.notes || '-'}\n\n_Pesan ini dikirim otomatis sebagai tembusan khusus dari Sistem SIPRODI-DIGITAL Prokopim Kota Ambon._`;
+    }
+
     function switchTab(tabId) {
+        const roleCfg = getRoleConfig();
+        if (roleCfg && !roleCfg.tabs.includes(tabId)) tabId = roleCfg.defaultTab;
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.classList.remove('bg-protocol-500', 'text-white', 'shadow-sm');
@@ -1274,12 +1848,20 @@
     }
 
     function initProfile() {
+        const u = getCurrentUser();
+        if (u && u.role !== 'admin') {
+            document.getElementById('user-display-name').innerText = u.displayName;
+            document.getElementById('user-display-role').innerText = u.title;
+            document.getElementById('user-display-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(u.displayName)}&background=102a43&color=fff`;
+            return;
+        }
         document.getElementById('user-display-name').innerText = userProfile.name;
         document.getElementById('user-display-role').innerText = userProfile.role;
         document.getElementById('user-display-avatar').src = userProfile.avatar;
     }
 
     function openProfileModal() {
+        if (!canManage()) return;
         document.getElementById('input-profile-name').value = userProfile.name;
         document.getElementById('input-profile-role').value = userProfile.role;
         document.getElementById('input-profile-avatar').value = userProfile.avatar;
@@ -1302,6 +1884,7 @@
     }
 
     function openManageTeamModal() {
+        if (!canManage()) return;
         resetOfficerForm();
         renderManageTeamList();
         openModal('modalManageTeam');
@@ -1392,21 +1975,22 @@
 
     function renderDashboard() {
         updateAutoStatuses();
-        document.getElementById('stat-total-tasks').innerText = tasks.length;
-        const activeTasks = tasks.filter(t => t.status === 'Berlangsung');
+        const dTasks = getScopedTasks('dashboard');
+        const dOfficers = getScopedOfficers('dashboard');
+        document.getElementById('stat-total-tasks').innerText = dTasks.length;
+        const activeTasks = dTasks.filter(t => t.status === 'Berlangsung');
         document.getElementById('stat-active-tasks').innerText = activeTasks.length;
-        document.getElementById('badge-active-count').innerText = activeTasks.length;
-        document.getElementById('stat-ready-officers').innerText = officers.filter(o => o.status === 'Standby').length;
+        document.getElementById('badge-active-count').innerText = getScopedTasks('assignments').filter(t => t.status === 'Berlangsung').length;
+        document.getElementById('stat-ready-officers').innerText = dOfficers.filter(o => o.status === 'Standby').length;
 
         updateCategoryChart();
 
         const tbody = document.getElementById('recent-tasks-body');
         tbody.innerHTML = '';
-        const sortedTasks = [...tasks].slice(0, 5);
+        const sortedTasks = dTasks.slice(0, 5);
 
         if (sortedTasks.length === 0) {
             tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Belum ada agenda penugasan.</td></tr>`;
-            return;
         }
 
         sortedTasks.forEach(task => {
@@ -1424,14 +2008,23 @@
                     <td class="p-3 text-slate-600">${formattedDate}<br><span class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot me-1"></i>${task.location}</span></td>
                     <td class="p-3 text-slate-700">${assignedNames || 'Belum ada petugas assigned'}</td>
                     <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeColor}">${task.status}</span></td>
-                    <td class="p-3 text-right"><button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold text-xs">Detail</button></td>
+                    <td class="p-3 text-right">
+                        <div class="inline-flex items-center gap-2">
+                            <button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold text-xs" title="Lihat Detail">
+                                <i class="fa-solid fa-eye me-1"></i>Detail
+                            </button>
+                            ${canManage() ? `<button onclick="editTask('${task.id}')" class="text-amber-600 hover:text-amber-800 font-semibold text-xs" title="Edit Agenda">
+                                <i class="fa-solid fa-pen-to-square me-1"></i>Edit
+                            </button>` : ''}
+                        </div>
+                    </td>
                 </tr>
             `;
         });
 
         const coordContainer = document.getElementById('today-coordinators-list');
         coordContainer.innerHTML = '';
-        const coords = officers.filter(o => o.role.toLowerCase().includes('koordinator'));
+        const coords = dOfficers.filter(o => o.role.toLowerCase().includes('koordinator'));
         if (coords.length === 0) {
             coordContainer.innerHTML = `<p class="text-xs text-slate-400 italic">Belum ada koordinator terdaftar.</p>`;
         } else {
@@ -1456,12 +2049,14 @@
         updateAutoStatuses();
         const tbody = document.getElementById('all-assignments-body');
         tbody.innerHTML = '';
-        if (tasks.length === 0) {
+        const aTasks = getScopedTasks('assignments');
+        const manage = canManage();
+        if (aTasks.length === 0) {
             tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada penugasan tercatat.</td></tr>`;
             return;
         }
 
-        tasks.forEach(task => {
+        aTasks.forEach(task => {
             const assignedNames = (task.officers || []).map(id => {
                 const off = officers.find(o => Number(o.id) === Number(id));
                 return off ? off.name : 'Unknown';
@@ -1475,11 +2070,11 @@
             tbody.innerHTML += `
                 <tr class="hover:bg-slate-50 transition border-b border-slate-100 task-row" data-status="${task.status}" data-search="${searchString}">
                     <td class="p-3 font-semibold text-slate-800"><span class="text-[10px] font-mono text-slate-400 block">${task.id}</span>${task.title}</td>
-                    <td class="p-3 text-slate-600"><span class="font-medium text-slate-800 block">${task.vip || 'Tidak Ada Tamu VIP'}</span><span class="text-[11px] text-slate-500">${formattedDate}</span></td>
+                    <td class="p-3 text-slate-600"><span class="font-medium text-slate-800 block">${task.vip || 'Tidak Ada Pejabat Pemerintah'}</span><span class="text-[11px] text-slate-500">${formattedDate}</span></td>
                     <td class="p-3 text-slate-600"><i class="fa-solid fa-location-dot me-1 text-red-400"></i>${task.location}</td>
                     <td class="p-3 text-slate-700 font-medium">${assignedNames || 'Belum Diisi'}</td>
                     <td class="p-3">
-                        <select onchange="changeTaskStatus('${task.id}', this.value)" class="text-xs px-2 py-1 rounded border border-slate-200 bg-white font-semibold ${badgeColor}">
+                        <select ${manage ? '' : 'disabled'} onchange="changeTaskStatus('${task.id}', this.value)" class="text-xs px-2 py-1 rounded border border-slate-200 bg-white font-semibold ${badgeColor}">
                             <option value="Terjadwal" ${task.status === 'Terjadwal' ? 'selected' : ''}>Terjadwal</option>
                             <option value="Berlangsung" ${task.status === 'Berlangsung' ? 'selected' : ''}>Berlangsung</option>
                             <option value="Selesai" ${task.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
@@ -1487,12 +2082,12 @@
                     </td>
                     <td class="p-3 text-center space-x-2">
                         <button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold" title="Detail"><i class="fa-solid fa-eye"></i></button>
-                        <button onclick="deleteTask('${task.id}')" class="text-red-500 hover:text-red-700 font-semibold" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                        ${manage ? `<button onclick="editTask('${task.id}')" class="text-amber-600 hover:text-amber-800 font-semibold" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                         <button onclick="deleteTask('${task.id}')" class="text-red-500 hover:text-red-700 font-semibold" title="Hapus"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </td>
                 </tr>
             `;
         });
-
         filterAssignments();
     }
 
@@ -1508,11 +2103,7 @@
             const matchesSearch = !query || searchData.includes(query);
             const matchesStatus = (statusFilter === 'ALL') || (taskStatus === statusFilter);
 
-            if (matchesSearch && matchesStatus) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
+            row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
         });
     }
 
@@ -1557,6 +2148,7 @@
     }
 
     function toggleOfficerStatus(id) {
+        if (!canManage()) return;
         const off = officers.find(o => Number(o.id) === Number(id));
         if (off) {
             off.status = off.status === 'Standby' ? 'Bertugas' : 'Standby';
@@ -1570,14 +2162,23 @@
         const containerWalikota = document.getElementById('container-officers-walikota');
         const containerWakil = document.getElementById('container-officers-wakil');
         const containerPenghubung = document.getElementById('container-officers-penghubung');
+        const containerSpecial = document.getElementById('container-special-roles');
 
-        if (!containerWalikota || !containerWakil || !containerPenghubung) return;
+        if (!containerWalikota || !containerWakil || !containerPenghubung || !containerSpecial) return;
 
         containerWalikota.innerHTML = '';
         containerWakil.innerHTML = '';
         containerPenghubung.innerHTML = '';
+        containerSpecial.innerHTML = '';
 
-        officers.forEach(off => {
+        const formCfg = getRoleConfig();
+        const formTeams = formCfg ? formCfg.createTeams : [];
+        [['walikota', containerWalikota], ['wakil', containerWakil], ['penghubung', containerPenghubung]].forEach(([t, c]) => {
+            if (c.parentElement) c.parentElement.classList.toggle('hidden', !formTeams.includes(t));
+        });
+        const formOfficers = officers.filter(o => formTeams.includes(normalizeTeam(o.team)));
+
+        formOfficers.forEach(off => {
             const item = `
                 <label class="flex items-center space-x-2 cursor-pointer text-xs">
                     <input type="checkbox" name="selected_officers" value="${off.id}" class="rounded border-slate-300 text-protocol-500 focus:ring-blue-500">
@@ -1589,7 +2190,26 @@
             if (teamKey === 'walikota') containerWalikota.innerHTML += item;
             else if (teamKey === 'wakil') containerWakil.innerHTML += item;
             else containerPenghubung.innerHTML += item;
+
+            const roleText = (off.role || '').toLowerCase();
+            const isSpecial = roleText.includes('ajudan') || roleText.includes('kabag') || roleText.includes('kasubag') || roleText.includes('koordinator');
+            
+            if (isSpecial) {
+                containerSpecial.innerHTML += `
+                    <label class="flex items-center space-x-2 bg-white p-2 rounded-lg border border-slate-200 cursor-pointer shadow-2xs hover:border-protocol-gold transition">
+                        <input type="checkbox" name="selected_special_roles" value="${off.id}" class="rounded border-slate-300 text-protocol-gold focus:ring-protocol-gold">
+                        <div>
+                            <span class="font-bold text-slate-800 block">${off.name}</span>
+                            <span class="text-[10px] text-slate-500">${off.role}</span>
+                        </div>
+                    </label>
+                `;
+            }
         });
+
+        if (containerSpecial.innerHTML === '') {
+            containerSpecial.innerHTML = `<p class="col-span-3 text-slate-400 italic text-xs">Belum ada personel dengan jabatan Ajudan, Kabag, Kasubag, atau Koordinator terdaftar.</p>`;
+        }
     }
 
     function viewTaskDetail(taskId) {
@@ -1601,6 +2221,11 @@
             return off ? `${off.name} (${off.role})` : 'Unknown';
         }).join('<br>• ');
 
+        const specialNames = (task.specialRoles || []).map(id => {
+            const off = officers.find(o => Number(o.id) === Number(id));
+            return off ? `${off.name} (${off.role})` : '';
+        }).filter(Boolean).join(', ') || '-';
+
         const body = document.getElementById('detail-modal-body');
         document.getElementById('detail-modal-title').innerText = `Detail - ${task.id}`;
 
@@ -1610,9 +2235,22 @@
                 <p class="text-slate-500 text-xs">${task.category}</p>
             </div>
             <div class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
-                <div><span class="text-slate-400 block font-semibold">Tamu VIP:</span><span class="font-bold text-slate-800">${task.vip || '-'}</span></div>
+                <div><span class="text-slate-400 block font-semibold">Pejabat Pemerintah:</span><span class="font-bold text-slate-800">${task.vip || '-'}</span></div>
                 <div><span class="text-slate-400 block font-semibold">Waktu:</span><span class="font-bold text-slate-800">${new Date(task.date).toLocaleString('id-ID')}</span></div>
                 <div class="col-span-2"><span class="text-slate-400 block font-semibold">Lokasi:</span><span class="font-bold text-slate-800">${task.location}</span></div>
+            </div>
+            <div>
+                <span class="font-bold text-slate-700 block mb-1">Peta Lokasi:</span>
+                <div class="rounded-lg overflow-hidden border border-slate-300">
+                    <iframe class="w-full h-48" style="border:0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=${encodeURIComponent(/ambon/i.test(task.location || '') ? task.location : `${task.location}, Kota Ambon, Maluku`)}&output=embed"></iframe>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(/ambon/i.test(task.location || '') ? task.location : `${task.location}, Kota Ambon, Maluku`)}" target="_blank" rel="noopener noreferrer" class="block text-center text-[11px] font-semibold text-blue-700 bg-blue-50 py-1.5 hover:bg-blue-100">
+                        <i class="fa-solid fa-up-right-from-square me-1"></i> Buka di Google Maps
+                    </a>
+                </div>
+            </div>
+            <div>
+                <span class="font-bold text-slate-700 block mb-1">Tembusan (Ajudan/Kabag/Kasubag/Koordinator):</span>
+                <div class="bg-amber-50/50 border border-amber-100 p-2.5 rounded-lg text-amber-900 font-medium">${specialNames}</div>
             </div>
             <div>
                 <span class="font-bold text-slate-700 block mb-1">Petugas Bertugas:</span>
@@ -1620,7 +2258,7 @@
             </div>
             <div>
                 <span class="font-bold text-slate-700 block mb-1">Catatan / SOP:</span>
-                <p class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-amber-900">${task.notes || 'Tidak ada catatan tambahan.'}</p>
+                <p class="bg-slate-100 border border-slate-200 p-2.5 rounded-lg text-slate-700">${task.notes || 'Tidak ada catatan tambahan.'}</p>
             </div>
         `;
         openModal('modalDetail');
@@ -1659,16 +2297,7 @@
                         backgroundColor: ['#d4af37', '#102a43', '#0bcc94', '#627d98', '#e11d48', '#8b5cf6', '#f59e0b', '#06b6d4']
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { 
-                            position: 'bottom', 
-                            labels: { boxWidth: 10, font: { size: 10 } } 
-                        }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
             });
         }
 
@@ -1685,19 +2314,10 @@
                         tension: 0.3, 
                         fill: true,
                         pointBackgroundColor: '#0bcc94',
-                        pointRadius: 4,
-                        pointHoverRadius: 6
+                        pointRadius: 4
                     }]
                 },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top', labels: { font: { size: 11 } } },
-                        tooltip: { callbacks: { label: (ctx) => ` Total Penugasan: ${ctx.raw} Agenda` } }
-                    },
-                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } } }
-                }
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } } } }
             });
         }
 
@@ -1706,9 +2326,8 @@
 
     function updateCategoryChart() {
         if (!chartCategoryInstance) return;
-
         const categoryCounts = {};
-        tasks.forEach(task => {
+        getScopedTasks('dashboard').forEach(task => {
             const cat = task.category || 'Lainnya';
             categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
         });
@@ -1717,40 +2336,25 @@
         const data = Object.values(categoryCounts);
         const colors = ['#102a43', '#0bcc94', '#d4af37', '#627d98', '#e11d48', '#8b5cf6', '#f59e0b', '#06b6d4'];
 
-        if (labels.length === 0) {
-            chartCategoryInstance.data.labels = ['Belum ada penugasan'];
-            chartCategoryInstance.data.datasets[0].data = [0];
-            chartCategoryInstance.data.datasets[0].backgroundColor = ['#e2e8f0'];
-        } else {
-            chartCategoryInstance.data.labels = labels;
-            chartCategoryInstance.data.datasets[0].data = data;
-            chartCategoryInstance.data.datasets[0].backgroundColor = colors.slice(0, labels.length);
-        }
-
+        chartCategoryInstance.data.labels = labels.length === 0 ? ['Belum ada penugasan'] : labels;
+        chartCategoryInstance.data.datasets[0].data = data.length === 0 ? [0] : data;
+        chartCategoryInstance.data.datasets[0].backgroundColor = labels.length === 0 ? ['#e2e8f0'] : colors.slice(0, labels.length);
         chartCategoryInstance.update();
     }
 
     function updateWorkloadChart() {
         if (!chartWorkloadInstance) return;
-
-        if (officers.length === 0) {
-            chartWorkloadInstance.data.labels = ['Belum ada petugas'];
-            chartWorkloadInstance.data.datasets[0].data = [0];
-        } else {
-            chartWorkloadInstance.data.labels = officers.map(o => o.name.split(' ')[0]);
-            chartWorkloadInstance.data.datasets[0].data = officers.map(o => 
-                tasks.filter(t => t.officers && t.officers.map(Number).includes(Number(o.id))).length
-            );
-        }
-
+        const wOfficers = getScopedOfficers('dashboard');
+        const wTasks = getScopedTasks('dashboard');
+        chartWorkloadInstance.data.labels = wOfficers.length === 0 ? ['Belum ada petugas'] : wOfficers.map(o => o.name.split(' ')[0]);
+        chartWorkloadInstance.data.datasets[0].data = wOfficers.length === 0 ? [0] : wOfficers.map(o => wTasks.filter(t => t.officers && t.officers.map(Number).includes(Number(o.id))).length);
         chartWorkloadInstance.update();
     }
 
     function updateVipChart() {
         if (!chartVipInstance) return;
-
         const vipCounts = {};
-        tasks.forEach(task => {
+        getScopedTasks('dashboard').forEach(task => {
             const vipName = task.vip && task.vip.trim() !== '' ? task.vip.trim() : 'Tanpa VIP / Umum';
             vipCounts[vipName] = (vipCounts[vipName] || 0) + 1;
         });
@@ -1759,32 +2363,21 @@
         const data = Object.values(vipCounts);
         const colors = ['#d4af37', '#102a43', '#0bcc94', '#627d98', '#e11d48', '#8b5cf6', '#f59e0b', '#06b6d4', '#ec4899', '#3b82f6'];
 
-        if (labels.length === 0) {
-            chartVipInstance.data.labels = ['Belum Ada Data'];
-            chartVipInstance.data.datasets[0].data = [0];
-            chartVipInstance.data.datasets[0].backgroundColor = ['#e2e8f0'];
-        } else {
-            chartVipInstance.data.labels = labels;
-            chartVipInstance.data.datasets[0].data = data;
-            chartVipInstance.data.datasets[0].backgroundColor = colors.slice(0, labels.length);
-        }
-
+        chartVipInstance.data.labels = labels.length === 0 ? ['Belum Ada Data'] : labels;
+        chartVipInstance.data.datasets[0].data = data.length === 0 ? [0] : data;
+        chartVipInstance.data.datasets[0].backgroundColor = labels.length === 0 ? ['#e2e8f0'] : colors.slice(0, labels.length);
         chartVipInstance.update();
     }
 
     function updateTrendChart() {
         if (!chartTrendInstance) return;
-
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
         const monthlyCounts = new Array(12).fill(0);
 
-        tasks.forEach(task => {
+        getScopedTasks('dashboard').forEach(task => {
             if (!task.date) return;
             const d = new Date(task.date);
-            if (!isNaN(d.getTime())) {
-                const monthIndex = d.getMonth();
-                monthlyCounts[monthIndex]++;
-            }
+            if (!isNaN(d.getTime())) monthlyCounts[d.getMonth()]++;
         });
 
         chartTrendInstance.data.labels = months;
@@ -1799,11 +2392,11 @@
         const compEl = document.getElementById('analytics-completed-count');
 
         if (!totalEl) return;
-
-        totalEl.innerText = tasks.length;
-        schedEl.innerText = tasks.filter(t => t.status === 'Terjadwal').length;
-        activeEl.innerText = tasks.filter(t => t.status === 'Berlangsung').length;
-        compEl.innerText = tasks.filter(t => t.status === 'Selesai').length;
+        const sTasks = getScopedTasks('dashboard');
+        totalEl.innerText = sTasks.length;
+        schedEl.innerText = sTasks.filter(t => t.status === 'Terjadwal').length;
+        activeEl.innerText = sTasks.filter(t => t.status === 'Berlangsung').length;
+        compEl.innerText = sTasks.filter(t => t.status === 'Selesai').length;
     }
 
     function updateCharts() {
