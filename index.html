@@ -1014,7 +1014,7 @@
         if (autoLogoutTimer) clearTimeout(autoLogoutTimer);
 
         autoLogoutTimer = setTimeout(() => {
-            triggerAutoLogout("Sesi Anda telah berakhir secara aman karena tidak ada aktivitas selama 10 menit.");
+            triggerAutoLogout("Sesi Anda telah berakhir, silakan login kembali.");
         }, AUTO_LOGOUT_TIME);
     }
 
