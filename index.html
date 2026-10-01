@@ -994,7 +994,7 @@
     // Sinkronisasi berkala dengan data induk di cloud agar angka dashboard semua user sama dengan Admin
     setInterval(() => {
         if (!authSession || !getCurrentUser()) return;
-        if (cloudSyncInProgress || Date.now() - lastSaveAt < 20000) return;
+        if (Date.now() - lastSaveAt < 20000) return;
         const busy = ['modalTask', 'modalManageTeam', 'modalProfile'].some(id => {
             const el = document.getElementById(id);
             return el && !el.classList.contains('hidden');
@@ -1205,8 +1205,6 @@
             checkAuth();
             initProfile();
             refreshAllViews();
-            // Setelah login, server menjadi sumber data utama.
-            fetchCloudData({ silent: false });
             showToast(`Login berhasil sebagai ${matchedUser.displayName}.`, 'success');
         } else {
             loginAttempts.count++;
@@ -1289,131 +1287,49 @@
         return statusUpdated;
     }
 
-    // ============================================
-    // SINKRONISASI CLOUD — VERSI STABIL
-    // ============================================
-    let cloudSyncInProgress = false;
-    let cloudSyncTimer = null;
-
-    function persistLocalState() {
+    function saveStateAndSync(actionType = 'SYNC', payload = {}) {
+        lastSaveAt = Date.now();
+        updateAutoStatuses();
         localStorage.setItem('siprodi_officers', JSON.stringify(officers));
         localStorage.setItem('siprodi_tasks', JSON.stringify(tasks));
         localStorage.setItem('siprodi_profile', JSON.stringify(userProfile));
         localStorage.setItem('siprodi_auth', JSON.stringify(authSession));
-    }
 
-    async function postToCloud(actionType = 'SYNC', payload = {}, options = {}) {
-        if (!GOOGLE_SCRIPT_URL) return { success: false, message: 'URL Apps Script belum diatur.' };
-
-        const body = JSON.stringify({
-            action: actionType,
-            payload: payload || {},
-            allTasks: options.includeSnapshot === false ? undefined : tasks,
-            allOfficers: options.includeSnapshot === false ? undefined : officers,
-            profile: options.includeProfile === false ? undefined : userProfile,
-            clientTime: new Date().toISOString()
-        });
-
-        try {
-            // text/plain menghindari preflight CORS. Apps Script tetap menerima JSON dari postData.contents.
-            await fetch(GOOGLE_SCRIPT_URL, {
+        if (GOOGLE_SCRIPT_URL) {
+            fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: body,
-                keepalive: true
-            });
-
-            // Karena respons no-cors bersifat opaque, verifikasi dilakukan melalui GET setelah POST.
-            return { success: true, opaque: true };
-        } catch (err) {
-            console.error('POST Apps Script gagal:', err);
-            return { success: false, message: err.message || String(err) };
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: actionType, payload: payload, allTasks: tasks, allOfficers: officers, profile: userProfile })
+            }).catch(err => console.error('Gagal sinkronisasi cloud:', err));
         }
     }
 
-    async function syncAndVerify(actionType = 'SYNC', payload = {}, options = {}) {
-        if (cloudSyncInProgress) {
-            return { success: false, message: 'Sinkronisasi lain masih berlangsung.' };
-        }
+    function fetchCloudData() {
+        if (!GOOGLE_SCRIPT_URL) return;
+        fetch(GOOGLE_SCRIPT_URL + "?action=getData")
+            .then(res => res.json())
+            .then(data => {
+                if (data) {
+                    if (data.tasks) tasks = data.tasks;
+                    if (data.officers) officers = data.officers;
+                    if (data.profile) userProfile = data.profile;
 
-        cloudSyncInProgress = true;
-        lastSaveAt = Date.now();
-        persistLocalState();
+                    updateAutoStatuses();
+                    localStorage.setItem('siprodi_officers', JSON.stringify(officers));
+                    localStorage.setItem('siprodi_tasks', JSON.stringify(tasks));
+                    localStorage.setItem('siprodi_profile', JSON.stringify(userProfile));
 
-        try {
-            const postResult = await postToCloud(actionType, payload, options);
-            if (!postResult.success) return postResult;
-
-            // Beri Apps Script waktu menyelesaikan write/flush sebelum verifikasi.
-            await new Promise(resolve => setTimeout(resolve, 450));
-
-            const cloud = await fetchCloudData({ silent: true, returnData: true });
-            if (!cloud || cloud.status !== 'success') {
-                return { success: false, message: 'Data dikirim tetapi verifikasi cloud gagal.' };
-            }
-
-            return { success: true, data: cloud };
-        } finally {
-            cloudSyncInProgress = false;
-        }
-    }
-
-    function saveStateAndSync(actionType = 'SYNC', payload = {}) {
-        // Kompatibilitas fungsi lama: perubahan lokal langsung tersimpan,
-        // kemudian dikirim ke Apps Script. Untuk aksi penting (edit/hapus/status),
-        // handler terkait menggunakan syncAndVerify() agar dapat memverifikasi ulang.
-        lastSaveAt = Date.now();
-        updateAutoStatuses();
-        persistLocalState();
-
-        postToCloud(actionType, payload).catch(err => {
-            console.error('Gagal sinkronisasi cloud:', err);
-        });
-    }
-
-    async function fetchCloudData(options = {}) {
-        if (!GOOGLE_SCRIPT_URL) return null;
-
-        try {
-            const res = await fetch(GOOGLE_SCRIPT_URL + '?action=getData&_=' + Date.now(), {
-                cache: 'no-store'
-            });
-            const data = await res.json();
-
-            if (data && data.status === 'error') {
-                throw new Error(data.message || 'Apps Script mengembalikan error.');
-            }
-
-            if (data) {
-                if (Array.isArray(data.tasks)) tasks = data.tasks;
-                if (Array.isArray(data.officers)) officers = data.officers;
-                if (data.profile) userProfile = data.profile;
-
-                updateAutoStatuses();
-                persistLocalState();
-
-                if (!options.silent) {
                     initProfile();
-                    refreshAllViews();
+                    renderDashboard();
+                    renderAssignments();
+                    renderOfficers();
+                    renderFormOfficerCheckboxes();
+                    updateCharts();
                     if (typeof renderManageTeamList === 'function') renderManageTeamList();
                 }
-            }
-
-            return data;
-        } catch (err) {
-            console.warn('Gagal mengambil data cloud; menggunakan cache lokal.', err);
-            return null;
-        }
-    }
-
-    function scheduleCloudRefresh(delay = 1200) {
-        clearTimeout(cloudSyncTimer);
-        cloudSyncTimer = setTimeout(() => {
-            if (authSession && getCurrentUser() && !cloudSyncInProgress) {
-                fetchCloudData({ silent: false });
-            }
-        }, delay);
+            })
+            .catch(err => console.log('Menggunakan data cache lokal (Offline/Initial mode)'));
     }
 
     function showConfirm(title, message, callback, btnText = 'Ya, Lanjutkan', isDanger = true) {
@@ -1488,28 +1404,19 @@
             existingTask.notes = document.getElementById('task-notes').value.trim();
 
             updateAutoStatuses();
-            persistLocalState();
+            saveStateAndSync('UPDATE_TASK', existingTask);
 
-            const syncResult = await syncAndVerify('UPDATE_TASK', existingTask, {
-                includeSnapshot: false,
-                includeProfile: false
-            });
-
-            if (!syncResult.success) {
-                btnSubmit.disabled = false;
-                btnSubmit.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> Simpan & Perbarui Agenda';
-                showToast('Perubahan belum dapat diverifikasi tersimpan di server. Periksa koneksi lalu coba lagi.', 'error');
-                return;
-            }
-
-            // Ambil ulang data server agar state browser sama persis dengan Spreadsheet.
-            await fetchCloudData({ silent: false });
+            renderDashboard();
+            renderAssignments();
+            renderOfficers();
+            renderFormOfficerCheckboxes();
+            updateCharts();
 
             btnSubmit.disabled = false;
             btnSubmit.innerText = 'Simpan & Perbarui Agenda';
             closeModal('modalTask');
             resetTaskForm();
-            showToast(`Agenda ${existingTask.id} berhasil diperbarui dan tersimpan di server.`, 'success');
+            showToast(`Agenda ${existingTask.id} berhasil diperbarui dan disinkronkan.`, 'success');
             return;
         }
 
@@ -1538,21 +1445,7 @@
 
         tasks.unshift(newTask);
         updateAutoStatuses();
-        persistLocalState();
-
-        const addSyncResult = await syncAndVerify('ADD_TASK', newTask, {
-            includeSnapshot: false,
-            includeProfile: false
-        });
-
-        if (!addSyncResult.success) {
-            tasks = tasks.filter(t => String(t.id) !== String(newTask.id));
-            persistLocalState();
-            btnSubmit.disabled = false;
-            btnSubmit.innerHTML = 'Simpan & Terbitkan Penugasan';
-            showToast('Penugasan gagal disimpan ke server. Notifikasi WhatsApp tidak dikirim.', 'error');
-            return;
-        }
+        saveStateAndSync('ADD_TASK', newTask);
 
         btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Mengirim Notifikasi WA...';
 
@@ -1678,66 +1571,49 @@
         resetTaskLocationMap();
     }
 
-    async function handleSaveTeamMember(e) {
+    function handleSaveTeamMember(e) {
         e.preventDefault();
         if (!canManage()) return;
-        if (syncInProgress) { showToast('Masih ada sinkronisasi yang berjalan. Tunggu sebentar.', 'warning'); return; }
-
         const editId = document.getElementById('officer-edit-id').value;
-        const name = document.getElementById('officer-name-input').value.trim();
-        const role = document.getElementById('officer-role-input').value.trim();
+        const name = document.getElementById('officer-name-input').value;
+        const role = document.getElementById('officer-role-input').value;
         const team = document.getElementById('team-select').value.toLowerCase();
-        const phone = document.getElementById('officer-phone-input').value.trim();
-        const photoUrl = document.getElementById('officer-photo-input').value.trim();
-        if (!name || !role) { showToast('Nama dan jabatan/peran wajib diisi.', 'warning'); return; }
+        const phone = document.getElementById('officer-phone-input').value;
+        const photoUrl = document.getElementById('officer-photo-input').value;
 
         const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=102a43&color=fff`;
         const finalPhoto = tempOfficerPhoto || photoUrl || fallbackAvatar;
-        const id = editId ? Number(editId) : Date.now();
-        const existing = officers.find(o => Number(o.id) === Number(id));
-        const officer = {
-            id, name, role, team,
-            status: existing?.status || 'Standby',
-            tasksCount: existing?.tasksCount || 0,
-            phone: phone || '-',
-            photo: finalPhoto
-        };
 
-        const backup = officers.map(o => ({...o}));
         if (editId) {
-            const idx = officers.findIndex(o => Number(o.id) === Number(id));
-            if (idx < 0) { showToast('Data petugas yang akan diedit tidak ditemukan.', 'error'); return; }
-            officers[idx] = officer;
+            const off = officers.find(o => Number(o.id) === Number(editId));
+            if (off) {
+                off.team = team;
+                off.name = name;
+                off.role = role;
+                off.phone = phone || '-';
+                off.photo = finalPhoto;
+            }
         } else {
-            officers.push(officer);
+            officers.push({
+                id: Date.now(),
+                name: name,
+                role: role,
+                team: team,
+                status: "Standby",
+                tasksCount: 0,
+                phone: phone || '-',
+                photo: finalPhoto
+            });
         }
 
         updateAutoStatuses();
-        persistLocalState();
-        renderOfficers(); renderFormOfficerCheckboxes(); renderDashboard(); renderManageTeamList(); updateCharts();
-
-        const btn = document.getElementById('btn-submit-officer');
-        const oldText = document.getElementById('btn-submit-officer-text').innerText;
-        btn.disabled = true;
-        document.getElementById('btn-submit-officer-text').innerText = 'Menyimpan...';
-
-        const result = await saveStateAndSync(editId ? 'UPDATE_OFFICER' : 'SAVE_OFFICER', officer, {includeSnapshot:false});
-
-        btn.disabled = false;
-        document.getElementById('btn-submit-officer-text').innerText = oldText;
-
-        if (!result || !result.success) {
-            officers = backup;
-            persistLocalState();
-            refreshAllViews();
-            renderManageTeamList();
-            showToast('Data Kabag/Kasubag/Ajudan gagal disimpan ke server: ' + (result?.error || 'tidak ada respons'), 'error');
-            return;
-        }
-
-        resetOfficerForm();
+        saveStateAndSync('SAVE_OFFICER');
+        renderOfficers();
+        renderFormOfficerCheckboxes();
+        renderDashboard();
         renderManageTeamList();
-        showToast(editId ? 'Data petugas berhasil diperbarui dan tersimpan di server.' : 'Petugas baru berhasil ditambahkan dan tersimpan di server.', 'success');
+        updateCharts();
+        resetOfficerForm();
     }
 
     function deleteOfficer(id) {
@@ -1765,21 +1641,8 @@
         if (!canManage()) return;
         const task = tasks.find(t => t.id === taskId);
         if (task) {
-            const previousStatus = task.status;
             task.status = newStatus;
-            persistLocalState();
-            syncAndVerify('UPDATE_TASK_STATUS', { id: taskId, status: newStatus }, { includeSnapshot: false, includeProfile: false })
-                .then(result => {
-                    if (result.success) {
-                        refreshAllViews();
-                        showToast('Status agenda berhasil disimpan.', 'success');
-                    } else {
-                        task.status = previousStatus;
-                        persistLocalState();
-                        refreshAllViews();
-                        showToast('Status gagal disimpan ke server.', 'error');
-                    }
-                });
+            saveStateAndSync('UPDATE_TASK_STATUS', { id: taskId, status: newStatus });
             renderDashboard();
             renderAssignments();
             renderOfficers();
@@ -1796,22 +1659,9 @@
             'Hapus Agenda Penugasan',
             `Apakah Anda yakin ingin menghapus penugasan "${task.title}"?`,
             () => {
-                const backupTasks = tasks.slice();
-                tasks = tasks.filter(t => String(t.id) !== String(taskId));
+                tasks = tasks.filter(t => t.id !== taskId);
                 updateAutoStatuses();
-                persistLocalState();
-                syncAndVerify('DELETE_TASK', { id: taskId }, { includeSnapshot: false, includeProfile: false })
-                    .then(result => {
-                        if (result.success) {
-                            refreshAllViews();
-                            showToast('Agenda berhasil dihapus dari server.', 'success');
-                        } else {
-                            tasks = backupTasks;
-                            persistLocalState();
-                            refreshAllViews();
-                            showToast('Agenda gagal dihapus dari server.', 'error');
-                        }
-                    });
+                saveStateAndSync('DELETE_TASK', { id: taskId });
                 renderDashboard();
                 renderAssignments();
                 renderOfficers();
@@ -2297,22 +2147,14 @@
         });
     }
 
-    async function toggleOfficerStatus(id) {
+    function toggleOfficerStatus(id) {
         if (!canManage()) return;
         const off = officers.find(o => Number(o.id) === Number(id));
-        if (!off || syncInProgress) return;
-        const previous = off.status;
-        off.status = previous === 'Standby' ? 'Bertugas' : 'Standby';
-        persistLocalState();
-        renderOfficers(); renderDashboard();
-        const result = await saveStateAndSync('UPDATE_OFFICER_STATUS', { id: id, status: off.status }, {includeSnapshot:false});
-        if (!result?.success) {
-            off.status = previous;
-            persistLocalState();
-            refreshAllViews();
-            showToast('Status petugas gagal disimpan ke server.', 'error');
-        } else {
-            showToast('Status petugas berhasil disimpan.', 'success');
+        if (off) {
+            off.status = off.status === 'Standby' ? 'Bertugas' : 'Standby';
+            saveStateAndSync('UPDATE_OFFICER_STATUS', { id: id, status: off.status });
+            renderOfficers();
+            renderDashboard();
         }
     }
 
