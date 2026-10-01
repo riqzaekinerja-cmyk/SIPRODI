@@ -1678,49 +1678,66 @@
         resetTaskLocationMap();
     }
 
-    function handleSaveTeamMember(e) {
+    async function handleSaveTeamMember(e) {
         e.preventDefault();
         if (!canManage()) return;
+        if (syncInProgress) { showToast('Masih ada sinkronisasi yang berjalan. Tunggu sebentar.', 'warning'); return; }
+
         const editId = document.getElementById('officer-edit-id').value;
-        const name = document.getElementById('officer-name-input').value;
-        const role = document.getElementById('officer-role-input').value;
+        const name = document.getElementById('officer-name-input').value.trim();
+        const role = document.getElementById('officer-role-input').value.trim();
         const team = document.getElementById('team-select').value.toLowerCase();
-        const phone = document.getElementById('officer-phone-input').value;
-        const photoUrl = document.getElementById('officer-photo-input').value;
+        const phone = document.getElementById('officer-phone-input').value.trim();
+        const photoUrl = document.getElementById('officer-photo-input').value.trim();
+        if (!name || !role) { showToast('Nama dan jabatan/peran wajib diisi.', 'warning'); return; }
 
         const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=102a43&color=fff`;
         const finalPhoto = tempOfficerPhoto || photoUrl || fallbackAvatar;
+        const id = editId ? Number(editId) : Date.now();
+        const existing = officers.find(o => Number(o.id) === Number(id));
+        const officer = {
+            id, name, role, team,
+            status: existing?.status || 'Standby',
+            tasksCount: existing?.tasksCount || 0,
+            phone: phone || '-',
+            photo: finalPhoto
+        };
 
+        const backup = officers.map(o => ({...o}));
         if (editId) {
-            const off = officers.find(o => Number(o.id) === Number(editId));
-            if (off) {
-                off.team = team;
-                off.name = name;
-                off.role = role;
-                off.phone = phone || '-';
-                off.photo = finalPhoto;
-            }
+            const idx = officers.findIndex(o => Number(o.id) === Number(id));
+            if (idx < 0) { showToast('Data petugas yang akan diedit tidak ditemukan.', 'error'); return; }
+            officers[idx] = officer;
         } else {
-            officers.push({
-                id: Date.now(),
-                name: name,
-                role: role,
-                team: team,
-                status: "Standby",
-                tasksCount: 0,
-                phone: phone || '-',
-                photo: finalPhoto
-            });
+            officers.push(officer);
         }
 
         updateAutoStatuses();
-        saveStateAndSync('SAVE_OFFICER');
-        renderOfficers();
-        renderFormOfficerCheckboxes();
-        renderDashboard();
-        renderManageTeamList();
-        updateCharts();
+        persistLocalState();
+        renderOfficers(); renderFormOfficerCheckboxes(); renderDashboard(); renderManageTeamList(); updateCharts();
+
+        const btn = document.getElementById('btn-submit-officer');
+        const oldText = document.getElementById('btn-submit-officer-text').innerText;
+        btn.disabled = true;
+        document.getElementById('btn-submit-officer-text').innerText = 'Menyimpan...';
+
+        const result = await saveStateAndSync(editId ? 'UPDATE_OFFICER' : 'SAVE_OFFICER', officer, {includeSnapshot:false});
+
+        btn.disabled = false;
+        document.getElementById('btn-submit-officer-text').innerText = oldText;
+
+        if (!result || !result.success) {
+            officers = backup;
+            persistLocalState();
+            refreshAllViews();
+            renderManageTeamList();
+            showToast('Data Kabag/Kasubag/Ajudan gagal disimpan ke server: ' + (result?.error || 'tidak ada respons'), 'error');
+            return;
+        }
+
         resetOfficerForm();
+        renderManageTeamList();
+        showToast(editId ? 'Data petugas berhasil diperbarui dan tersimpan di server.' : 'Petugas baru berhasil ditambahkan dan tersimpan di server.', 'success');
     }
 
     function deleteOfficer(id) {
@@ -2280,14 +2297,22 @@
         });
     }
 
-    function toggleOfficerStatus(id) {
+    async function toggleOfficerStatus(id) {
         if (!canManage()) return;
         const off = officers.find(o => Number(o.id) === Number(id));
-        if (off) {
-            off.status = off.status === 'Standby' ? 'Bertugas' : 'Standby';
-            saveStateAndSync('UPDATE_OFFICER_STATUS', { id: id, status: off.status });
-            renderOfficers();
-            renderDashboard();
+        if (!off || syncInProgress) return;
+        const previous = off.status;
+        off.status = previous === 'Standby' ? 'Bertugas' : 'Standby';
+        persistLocalState();
+        renderOfficers(); renderDashboard();
+        const result = await saveStateAndSync('UPDATE_OFFICER_STATUS', { id: id, status: off.status }, {includeSnapshot:false});
+        if (!result?.success) {
+            off.status = previous;
+            persistLocalState();
+            refreshAllViews();
+            showToast('Status petugas gagal disimpan ke server.', 'error');
+        } else {
+            showToast('Status petugas berhasil disimpan.', 'success');
         }
     }
 
