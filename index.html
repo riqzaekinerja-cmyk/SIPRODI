@@ -523,12 +523,11 @@
             <div class="bg-protocol-500 text-white px-6 py-4 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <i class="fa-solid fa-calendar-plus text-protocol-gold text-lg"></i>
-                    <h3 class="font-bold text-base" id="task-modal-heading">Formulir Penugasan Protokol Baru</h3>
+                    <h3 class="font-bold text-base">Formulir Penugasan Protokol Baru</h3>
                 </div>
                 <button onclick="closeModal('modalTask')" class="text-slate-300 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="form-add-task" onsubmit="handleAddTask(event)" class="p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1 text-xs">
-                <input type="hidden" id="task-edit-id" value="">
                 <div id="task-scope-note" class="hidden bg-amber-50 border border-amber-200 text-amber-900 rounded-lg px-3 py-2"></div>
                 <div>
                     <label class="block font-semibold text-slate-700 mb-1">Nama Acara / Kegiatan <span class="text-red-500">*</span></label>
@@ -1014,7 +1013,7 @@
         if (autoLogoutTimer) clearTimeout(autoLogoutTimer);
 
         autoLogoutTimer = setTimeout(() => {
-            triggerAutoLogout("Sesi Anda telah berakhir, silakan login kembali.");
+            triggerAutoLogout("Sesi Anda telah berakhir secara aman karena tidak ada aktivitas selama 10 menit.");
         }, AUTO_LOGOUT_TIME);
     }
 
@@ -1353,94 +1352,43 @@
         const roleCfg = getRoleConfig();
         const cu = getCurrentUser();
         if (!roleCfg || !cu) { showToast('Sesi tidak valid. Silakan login ulang.', 'error'); return; }
-
-        // Form yang sama dipakai untuk Tambah dan Edit.
-        const editId = document.getElementById('task-edit-id').value.trim();
-        const isEdit = !!editId;
-
-        if (isEdit && !canManage()) {
-            showToast('Hanya Admin yang dapat mengedit agenda penugasan.', 'error');
-            return;
-        }
-
-        const existingTask = isEdit ? tasks.find(t => String(t.id) === String(editId)) : null;
-        if (isEdit && !existingTask) {
-            showToast('Agenda yang akan diedit tidak ditemukan.', 'error');
-            return;
-        }
-
         const btnSubmit = document.getElementById('btn-submit');
         btnSubmit.disabled = true;
-        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-1"></i> ${isEdit ? 'Menyimpan Perubahan...' : 'Menyimpan...'}`;
+        btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Menyimpan...';
 
         const durationVal = parseFloat(document.getElementById('task-duration').value) || 2;
+        const nextNumber = tasks.reduce((mx, t) => { const m = /(\d+)$/.exec(String(t.id || '')); return m ? Math.max(mx, parseInt(m[1], 10)) : mx; }, 0) + 1;
+        const formattedId = `PRT-2026-${String(nextNumber).padStart(3, '0')}`;
 
         let selectedOfficerIds = Array.from(document.querySelectorAll('input[name="selected_officers"]:checked')).map(el => parseInt(el.value));
         let selectedSpecialRoleIds = Array.from(document.querySelectorAll('input[name="selected_special_roles"]:checked')).map(el => parseInt(el.value));
 
-        // Batasi petugas sesuai tim yang boleh ditugaskan oleh user ini.
+        // Batasi petugas sesuai tim yang boleh ditugaskan oleh user ini
         const isAllowedOfficer = id => {
             const o = officers.find(x => Number(x.id) === Number(id));
             return !!o && roleCfg.createTeams.includes(normalizeTeam(o.team));
         };
         selectedOfficerIds = selectedOfficerIds.filter(isAllowedOfficer);
         selectedSpecialRoleIds = selectedSpecialRoleIds.filter(isAllowedOfficer);
-
         const taskTeams = cu.role === 'admin'
             ? deriveTeamsFromIds([...selectedOfficerIds, ...selectedSpecialRoleIds])
             : [...roleCfg.createTeams];
 
-        if (isEdit) {
-            // Pertahankan ID, status, dan metadata pembuatan; hanya perbarui isi agenda.
-            existingTask.title = document.getElementById('task-title').value.trim();
-            existingTask.category = document.getElementById('task-category').value;
-            existingTask.vip = document.getElementById('task-vip').value.trim();
-            existingTask.date = document.getElementById('task-date').value;
-            existingTask.durationHours = durationVal;
-            existingTask.location = document.getElementById('task-location').value.trim();
-            existingTask.officers = selectedOfficerIds;
-            existingTask.specialRoles = selectedSpecialRoleIds;
-            existingTask.teams = taskTeams;
-            existingTask.notes = document.getElementById('task-notes').value.trim();
-
-            updateAutoStatuses();
-            saveStateAndSync('UPDATE_TASK', existingTask);
-
-            renderDashboard();
-            renderAssignments();
-            renderOfficers();
-            renderFormOfficerCheckboxes();
-            updateCharts();
-
-            btnSubmit.disabled = false;
-            btnSubmit.innerText = 'Simpan & Perbarui Agenda';
-            closeModal('modalTask');
-            resetTaskForm();
-            showToast(`Agenda ${existingTask.id} berhasil diperbarui dan disinkronkan.`, 'success');
-            return;
-        }
-
-        const nextNumber = tasks.reduce((mx, t) => {
-            const m = /(\d+)$/.exec(String(t.id || ''));
-            return m ? Math.max(mx, parseInt(m[1], 10)) : mx;
-        }, 0) + 1;
-        const formattedId = `PRT-2026-${String(nextNumber).padStart(3, '0')}`;
-
         const newTask = {
             id: formattedId,
-            title: document.getElementById('task-title').value.trim(),
+            title: document.getElementById('task-title').value,
             category: document.getElementById('task-category').value,
-            vip: document.getElementById('task-vip').value.trim(),
+            vip: document.getElementById('task-vip').value || '',
             date: document.getElementById('task-date').value,
             durationHours: durationVal,
-            location: document.getElementById('task-location').value.trim(),
+            location: document.getElementById('task-location').value,
             status: "Terjadwal",
             officers: selectedOfficerIds,
             specialRoles: selectedSpecialRoleIds,
             teams: taskTeams,
             createdBy: cu.username,
             createdByRole: cu.role,
-            notes: document.getElementById('task-notes').value.trim()
+            notes: document.getElementById('task-notes').value || ''
         };
 
         tasks.unshift(newTask);
@@ -1451,27 +1399,27 @@
 
         const formattedDate = new Date(newTask.date).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
         let waSuccessCount = 0;
+        let waFailCount = 0;
 
+        // Ambil daftar nama Ajudan yang ditugaskan atau dichecklist
         const assignedAjudanObjects = selectedSpecialRoleIds
             .map(id => officers.find(o => Number(o.id) === Number(id)))
             .filter(o => o && /ajudan/i.test(o.role));
-
+        
         const assignedAjudanNames = assignedAjudanObjects.map(o => `${o.name} (${o.role})`).join(', ') || 'Tim Protokol Bertugas';
 
-        // Notifikasi individual saat membuat penugasan baru.
+        // 1. Kirim pesan individu ke petugas protokol dengan menyertakan nama ajudan yang ditugaskan
         for (const officerId of selectedOfficerIds) {
             const officer = officers.find(o => Number(o.id) === Number(officerId));
             if (officer && officer.phone && officer.phone !== '-') {
                 const messageIndividual = `📌 *NOTIFIKASI PENUGASAN PROTOKOL INDIVIDUAL*\n______________________________________\nYth. *${officer.name}*, Anda telah dijadwalkan untuk bertugas pada kegiatan berikut:\n\n🆔 *ID Penugasan:* ${newTask.id}\n📌 *Acara:* ${newTask.title}\n🏷️ *Kategori:* ${newTask.category}\n👤 *Pejabat Pemerintah:* ${newTask.vip || '-'}\n🧑‍✈️ *Ajudan Pendamping Ditugaskan:* ${assignedAjudanNames}\n📅 *Waktu:* ${formattedDate} (${newTask.durationHours} jam)\n📍 *Lokasi:* ${newTask.location}\n📝 *Catatan:* ${newTask.notes || '-'}\n\nMohon persiapkan diri dan lakukan konfirmasi kehadiran. Terima kasih.\n_Sistem SIPRODI-DIGITAL Prokopim Kota Ambon_`;
                 const result = await sendWhatsAppNotification(officer.phone, messageIndividual);
-                if (result.success) waSuccessCount++;
+                if (result.success) waSuccessCount++; else waFailCount++;
             }
         }
 
-        // Tembusan otomatis ke Ajudan/Kabag/Kasubag/Koordinator yang dipilih.
-        const assignedSpecialOfficers = selectedSpecialRoleIds
-            .map(id => officers.find(o => Number(o.id) === Number(id)))
-            .filter(Boolean);
+        // 2. Kirim teks otomatis tembusan beserta nama-nama lengkap petugas protokol yang bertugas ke nomor Ajudan, Kabag, Kasubag, Koordinator & Wakil Koordinator yang di-check list
+        const assignedSpecialOfficers = selectedSpecialRoleIds.map(id => officers.find(o => Number(o.id) === Number(id))).filter(Boolean);
         const summaryMessage = buildTeamSummaryMessage(newTask, assignedSpecialOfficers, selectedOfficerIds);
         let waTembusanSuccessCount = 0;
 
@@ -1490,85 +1438,10 @@
         btnSubmit.disabled = false;
         btnSubmit.innerText = 'Simpan & Terbitkan Penugasan';
         closeModal('modalTask');
-        resetTaskForm();
+        document.getElementById('form-add-task').reset();
+        resetTaskLocationMap();
 
         showToast(`Penugasan tersimpan. WA Individual: ${waSuccessCount} terkirim, Tembusan Otomatis: ${waTembusanSuccessCount} terkirim.`, 'success');
-    }
-
-    function editTask(taskId) {
-        if (!canManage()) {
-            showToast('Hanya Admin yang dapat mengedit agenda penugasan.', 'error');
-            return;
-        }
-
-        const task = tasks.find(t => String(t.id) === String(taskId));
-        if (!task) {
-            showToast('Agenda penugasan tidak ditemukan.', 'error');
-            return;
-        }
-
-        // Pastikan daftar checkbox terbaru sudah tersedia sebelum mengisi pilihan petugas.
-        renderFormOfficerCheckboxes();
-
-        document.getElementById('task-edit-id').value = task.id;
-        document.getElementById('task-title').value = task.title || '';
-        document.getElementById('task-category').value = task.category || 'Kegiatan Seremonial & Protokol';
-        document.getElementById('task-vip').value = task.vip || '';
-
-        const dateInput = document.getElementById('task-date');
-        dateInput.value = toDatetimeLocalValue(task.date);
-
-        document.getElementById('task-duration').value = task.durationHours || 2;
-        document.getElementById('task-location').value = task.location || '';
-        document.getElementById('task-notes').value = task.notes || '';
-
-        const selectedOfficerSet = new Set((task.officers || []).map(Number));
-        const selectedSpecialSet = new Set((task.specialRoles || []).map(Number));
-
-        document.querySelectorAll('input[name="selected_officers"]').forEach(el => {
-            el.checked = selectedOfficerSet.has(Number(el.value));
-        });
-        document.querySelectorAll('input[name="selected_special_roles"]').forEach(el => {
-            el.checked = selectedSpecialSet.has(Number(el.value));
-        });
-
-        document.getElementById('task-modal-heading').innerText = `Edit Agenda Penugasan - ${task.id}`;
-        document.getElementById('btn-submit').innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> Simpan & Perbarui Agenda';
-
-        updateTaskLocationMap();
-        openModal('modalTask');
-    }
-
-    function toDatetimeLocalValue(value) {
-        if (!value) return '';
-        const d = new Date(value);
-        if (isNaN(d.getTime())) return String(value).slice(0, 16);
-
-        const pad = n => String(n).padStart(2, '0');
-        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-    }
-
-    function resetTaskForm() {
-        const form = document.getElementById('form-add-task');
-        if (form) form.reset();
-
-        const editId = document.getElementById('task-edit-id');
-        if (editId) editId.value = '';
-
-        const heading = document.getElementById('task-modal-heading');
-        if (heading) heading.innerText = 'Formulir Penugasan Protokol Baru';
-
-        const btn = document.getElementById('btn-submit');
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = 'Simpan & Terbitkan Penugasan';
-        }
-
-        document.querySelectorAll('input[name="selected_officers"], input[name="selected_special_roles"]').forEach(el => {
-            el.checked = false;
-        });
-
-        resetTaskLocationMap();
     }
 
     function handleSaveTeamMember(e) {
@@ -2008,16 +1881,7 @@
                     <td class="p-3 text-slate-600">${formattedDate}<br><span class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot me-1"></i>${task.location}</span></td>
                     <td class="p-3 text-slate-700">${assignedNames || 'Belum ada petugas assigned'}</td>
                     <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeColor}">${task.status}</span></td>
-                    <td class="p-3 text-right">
-                        <div class="inline-flex items-center gap-2">
-                            <button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold text-xs" title="Lihat Detail">
-                                <i class="fa-solid fa-eye me-1"></i>Detail
-                            </button>
-                            ${canManage() ? `<button onclick="editTask('${task.id}')" class="text-amber-600 hover:text-amber-800 font-semibold text-xs" title="Edit Agenda">
-                                <i class="fa-solid fa-pen-to-square me-1"></i>Edit
-                            </button>` : ''}
-                        </div>
-                    </td>
+                    <td class="p-3 text-right"><button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold text-xs">Detail</button></td>
                 </tr>
             `;
         });
@@ -2082,8 +1946,7 @@
                     </td>
                     <td class="p-3 text-center space-x-2">
                         <button onclick="viewTaskDetail('${task.id}')" class="text-blue-600 hover:text-blue-800 font-semibold" title="Detail"><i class="fa-solid fa-eye"></i></button>
-                        ${manage ? `<button onclick="editTask('${task.id}')" class="text-amber-600 hover:text-amber-800 font-semibold" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                         <button onclick="deleteTask('${task.id}')" class="text-red-500 hover:text-red-700 font-semibold" title="Hapus"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        ${manage ? `<button onclick="deleteTask('${task.id}')" class="text-red-500 hover:text-red-700 font-semibold" title="Hapus"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </td>
                 </tr>
             `;
